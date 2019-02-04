@@ -1,6 +1,8 @@
 % AER-Article.tex for AEA last revised 22 June 2011
 \documentclass[AER]{AEA}
 
+\usepackage{graphicx}
+
 % The mathtime package uses a Times font instead of Computer Modern.
 % Uncomment the line below if you wish to use the mathtime package:
 %\usepackage[cmbold]{mathtime}
@@ -126,14 +128,13 @@ Lindo, Marcotte, Palmer, and Swensen, (2018) considers the effects of a Title IX
 
 \section{Data Summary and Initial Regressions}
 
-The most important data source that this paper will use is Campus Safety and Security (CSS) data collected and distributed by the Department of Education . Under the Clery act, any university that uses federal student financial aid - which is almost every university in the US - must disclose details about the reports of crime that it receives every year. This data catalogues these reports by school, year and type of crime from 2005 to 2016. There are 7,663 unique universities that span the entire timespan, including 1,096 with more than 5000 students and 563 with more than 10,000. In 2016, 8,991 sexual crimes were reported in total. Figure 1 and Figure 2 show the general trend of reports by year.  
+The most important data source that this paper will use is Campus Safety and Security (CSS) data collected and distributed by the Department of Education . Under the Clery act, any university that uses federal student financial aid - which is almost every university in the US - must disclose details about the reports of crime that it receives every year. This data catalogues these reports by school, year and type of crime from 2005 to 2016. There are 7,663 unique universities that span the entire time span, including 1,096 with more than 5000 students and 563 with more than 10,000. In 2016, 8,991 sexual crimes were reported in total. Figure 1 and Figure 2 show the general trend of reports by year.  
 
-
-
-Sample figure:
+\section{Figures}
 
 \begin{figure}
-Figure here.
+
+\includegraphics[width=4.9in]{figures/school_reports.eps}
 
 \caption{Caption for figure below.}
 \begin{figurenotes}
@@ -144,16 +145,13 @@ Figure notes with optional leadin (Source, in this case).
 \end{figurenotes}
 \end{figure}
 
-Sample table:
+\section{Tables}
 
 \begin{table}
 \caption{Caption for table above.}
 
-\begin{tabular}{lll}
-& Heading 1 & Heading 2 \\ 
-Row 1 & 1 & 2 \\ 
-Row 2 & 3 & 4%
-\end{tabular}
+\input{figures/county_school_police_reports.tex}
+
 \begin{tablenotes}
 Table notes environment without optional leadin.
 \end{tablenotes}
@@ -161,6 +159,72 @@ Table notes environment without optional leadin.
 Table notes environment with optional leadin (Source, in this case).
 \end{tablenotes}
 \end{table}
+
+\begin{table}
+\caption{Caption for table above.}
+
+\input{figures/same_school_cases_reports.tex}
+
+\begin{tablenotes}
+Table notes environment without optional leadin.
+\end{tablenotes}
+\begin{tablenotes}[Source]
+Table notes environment with optional leadin (Source, in this case).
+\end{tablenotes}
+\end{table}
+
+\begin{table}
+\caption{Caption for table above.}
+
+\input{figures/same_county_schools_cases_reports.tex}
+
+\begin{tablenotes}
+Table notes environment without optional leadin.
+\end{tablenotes}
+\begin{tablenotes}[Source]
+Table notes environment with optional leadin (Source, in this case).
+\end{tablenotes}
+\end{table}
+
+\begin{table}
+\caption{Caption for table above.}
+
+\input{figures/same_county_police_cases_reports.tex}
+
+\begin{tablenotes}
+Table notes environment without optional leadin.
+\end{tablenotes}
+\begin{tablenotes}[Source]
+Table notes environment with optional leadin (Source, in this case).
+\end{tablenotes}
+\end{table}
+
+\begin{table}
+\caption{Caption for table above.}
+
+\input{figures/trends_reports_with_lags_extra_terms.tex}
+
+\begin{tablenotes}
+Table notes environment without optional leadin.
+\end{tablenotes}
+\begin{tablenotes}[Source]
+Table notes environment with optional leadin (Source, in this case).
+\end{tablenotes}
+\end{table}
+
+\begin{table}
+\caption{Caption for table above.}
+
+\input{figures/trends_reports_earlier_events.tex}
+
+\begin{tablenotes}
+Table notes environment without optional leadin.
+\end{tablenotes}
+\begin{tablenotes}[Source]
+Table notes environment with optional leadin (Source, in this case).
+\end{tablenotes}
+\end{table}
+
 
 References here (manual or bibTeX). If you are using bibTeX, add your bib file 
 name in place of BibFile in the bibliography command.
