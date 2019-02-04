@@ -1,0 +1,32 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{3}{c}}
+\hline\hline
+            &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}\\
+            &\multicolumn{1}{c}{reports}&\multicolumn{1}{c}{reports}&\multicolumn{1}{c}{reports}\\
+\hline
+b\_norm      &      -0.119         &     -0.0314         &      -0.319         \\
+            &    (0.0640)         &    (0.0757)         &     (0.250)         \\
+[1em]
+lag1        &                     &      -0.130         &                     \\
+            &                     &    (0.0915)         &                     \\
+[1em]
+lag2        &                     &      -0.102         &                     \\
+            &                     &    (0.0812)         &                     \\
+[1em]
+r\_norm      &                     &                     &       0.175         \\
+            &                     &                     &     (0.234)         \\
+[1em]
+SA\_norm     &                     &                     &      0.0673         \\
+            &                     &                     &    (0.0662)         \\
+[1em]
+\_cons      &       29.46\sym{***}&       37.83\sym{***}&       27.60\sym{***}\\
+            &     (5.576)         &     (7.134)         &     (5.916)         \\
+\hline
+\(N\)       &         470         &         468         &         470         \\
+adj. \(R^{2}\)&       0.404         &       0.401         &       0.403         \\
+\hline\hline
+\multicolumn{4}{l}{\footnotesize Standard errors in parentheses}\\
+\multicolumn{4}{l}{\footnotesize \sym{*} \(p<0.05\), \sym{**} \(p<0.01\), \sym{***} \(p<0.001\)}\\
+\end{tabular}
+}
