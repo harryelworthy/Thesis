@@ -9,6 +9,8 @@ drop tmp
 
 merge m:1 id6s using "clean/first_cases"
 
+drop if total < 5000
+
 save "processed/school_full_cases", replace
 
 
@@ -17,6 +19,8 @@ save "processed/school_full_cases", replace
 
 clear
 use "processed/school_full_cases"
+
+drop if total < 5000
 
 tostring countycd, gen(cstring)
 rename state stabb
@@ -45,6 +49,8 @@ save "processed/county_other_schools_cases", replace
 
 clear
 use "processed/school_full_cases"
+
+drop if total < 5000
 
 tostring countycd, gen(cstring)
 rename state stabb
