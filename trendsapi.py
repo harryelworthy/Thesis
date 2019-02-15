@@ -127,12 +127,93 @@ def full_search(term, state='', property=''):
 
     return df1
 
-df = full_search('apples')
 
-for s in statecodes:
-    for p in properties:
-        for t in terms:
-            df = df.append(full_search(t,s,p))
-            print(t + ', ' + s + ', ' + p)
+def daily_search(term, state='', property=''):
+    """
+    Searches over whole time period, readjusts values, pastes dictionaries together
+    """
+    geo = ""
+    if state == '':
+        geo = state = 'US'
+    else:
+        geo = 'US-' + state
 
-df.to_csv('raw/trends.csv')
+    out = service.getGraph(terms=term,
+                              restrictions_startDate='2008-01',
+                              restrictions_endDate='2008-07',
+                              restrictions_geo=geo,
+                              restrictions_property=property).execute().get('lines')[0].get('points')
+
+    next = service.getGraph(terms=term,
+                              restrictions_startDate='2008-07',
+                              restrictions_endDate='2009-01',
+                              restrictions_geo=geo,
+                              restrictions_property=property).execute().get('lines')[0].get('points')
+
+    multiplier = 1
+    if next[30].get('value') != 0:
+        multiplier = out[-1].get('value')/next[30].get('value')
+    if multiplier == 0:
+        multiplier = 1
+
+    for i in next:
+        i['value'] = i['value']*multiplier
+
+    out = out + next[31:]
+
+    for i in range(2009,2019):
+        print(term + ', ' + property + ', ' + str(i))
+        n = i + 1
+        for j in range(1,3):
+            if j == 1:
+                s = str(i) + '-01'
+                e = str(i) + '-07'
+            else:
+                s = str(i) + '-07'
+                e = str(i + 1) + '-01'
+
+            next = service.getGraph(terms=term,
+                                      restrictions_startDate=s,
+                                      restrictions_endDate=e,
+                                      restrictions_geo=geo,
+                                      restrictions_property=property).execute().get('lines')[0].get('points')
+            multiplier = 1
+            if next[30].get('value') != 0:
+                multiplier = out[-1].get('value')/next[30].get('value')
+            if multiplier == 0:
+                multiplier = 1
+
+            for k in next:
+                k['value'] = k['value']*multiplier
+
+            out = out + next[31:]
+
+
+
+
+    if property == '':
+        property = 'web'
+
+    df1 = pd.DataFrame(out)
+
+    df1['term'] = term
+    df1['state'] = state
+    df1['property'] = property
+
+    return df1
+
+df = daily_search('rape')
+df = df.append(daily_search('rape', property='news'))
+df = df.append(daily_search('sexual assault'))
+df = df.append(daily_search('sexual assault', property='news'))
+
+#for s in statecodes:
+#    for p in properties:
+#        for t in terms:
+#            df = df.append(full_search(t,s,p))
+#            print(t + ', ' + s + ', ' + p)
+
+
+#print(daily_search('rape'))
+
+df.to_csv('raw/daily_trends.csv')

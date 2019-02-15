@@ -7,11 +7,29 @@ tostring id, gen(tmp)
 gen id6s = substr(tmp, 1, 6)
 drop tmp
 
+preserve
+keep id6s state
+collapse (firstnm) state, by (id6s)
+save "processed/school_state_id6s", replace
+restore
+
 merge m:1 id6s using "clean/first_cases"
 
 * drop if total < 5000
 
 save "processed/school_full_cases", replace
+
+
+
+****** CASES WITH STATES
+
+clear
+use "clean/all_cases"
+merge m:1 id6s using "processed/school_state_id6s"
+drop if _merge != 3
+drop _merge
+save "processed/all_cases_states", replace
+
 
 
 
@@ -103,7 +121,7 @@ save "processed/county_police_cases", replace
 
 
 
-***** ALL CASES
+***** ALL CASES 
 
 clear
 use "clean/all_cases"

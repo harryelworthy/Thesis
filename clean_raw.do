@@ -779,7 +779,6 @@ save "clean/school_full_plus", replace
 clear
 use "raw/cases"
 
-estimates clear
 split opened ,g(part) p("-")
 
 g tmp = part1 + part2 + part3
@@ -898,3 +897,24 @@ drop _merge
 save "clean/combtrends", replace
 
 
+*** NEW TRENDS
+
+clear
+import delimited "raw/daily_trends.csv", varnames(1) 
+drop v1
+
+split date ,g(part) p("-")
+g tmp = part1 + part2 + part3
+drop date
+// transfer to date
+g date = date(tmp, "YMD")
+form date %td
+// clean up
+drop part? tmp
+
+g rapeweb = value if ((term=="rape") & (property =="web"))
+g rapenews = value if ((term=="rape") & (property =="news"))
+g SAweb = value if ((term=="assault") & (property =="web"))
+g SAnews = value if ((term=="sexual assault") & (property =="news"))
+
+line rapeweb rapenews SAweb SAnews date
