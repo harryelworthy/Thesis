@@ -9,7 +9,7 @@ drop tmp
 
 merge m:1 id6s using "clean/first_cases"
 
-drop if total < 5000
+* drop if total < 5000
 
 save "processed/school_full_cases", replace
 
@@ -60,7 +60,7 @@ gen cfips1 = substr(cstring, 3, 3)
 rename rape rape_s
 
 drop _merge
-merge m:m stabb cfips1 year using "clean/yearly_xw"
+merge m:m stabb cfips1 year using "clean/police_yearly_xw"
 drop if _merge != 3
 
 /*
@@ -90,7 +90,7 @@ save "clean/school_police_county_cross", replace
 
 
 clear
-use "clean/yearly_xw"
+use "clean/police_yearly_xw"
 
 gen county = stabb + cfips1
 
@@ -231,7 +231,7 @@ save "clean/f_cases_with_lags", replace
 
 
 clear
-use "clean/b"
+use "clean/combtrends"
 drop lag*
 merge 1:1 week using "clean/f_cases_with_lags"
 save "processed/trends_first_cases_lags", replace

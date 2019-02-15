@@ -850,6 +850,24 @@ rename normalized r_norm
 save "clean/r", replace
 
 clear
+import delimited "raw/bn.csv", varnames(3) 
+
+split week ,g(part) p("/")
+g tmp = part1 + part2 + part3
+drop week
+// transfer to date
+g week = date(tmp, "DMY")
+form week %td
+// clean up
+drop part? tmp
+
+duplicates drop week, force
+
+rename normalized bn_norm
+
+save "clean/bn", replace
+
+clear
 import delimited "raw/b.csv", varnames(3) 
 
 split week ,g(part) p("/")
@@ -874,8 +892,9 @@ drop _merge
 merge 1:1 week using "clean/SA"
 drop _merge
 
+merge 1:1 week using "clean/bn"
+drop _merge
+
 save "clean/combtrends", replace
-
-
 
 

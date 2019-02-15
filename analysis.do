@@ -32,8 +32,12 @@ encode county, gen(ci)
 xtset ci year
 
 eststo: qui xtreg police_pc school_pc i.year, fe
+/*
+qui testparm*
+estadd scalar p_value = r(p)
+*/
 
-esttab using "figures/county_school_police_reports.tex", se ar2 drop (*year*) replace
+esttab using "figures/county_school_police_reports.tex", se ar2 drop(*year*) replace
 
 
 * SAME SCHOOL CASES REPORTS
@@ -73,7 +77,7 @@ g school_pc = comb/total
 gen year_op = year(fd - 182)
 
 gen after_2011 = 0
-replace after_2011 = 1 if year > 11
+replace after_2011 = 1 if year > 2011
 //year_op = year_t + 1 if month(date_op) <7
 
 g lead2 = (year == year_op - 2)
@@ -102,7 +106,7 @@ use "processed/county_police_cases"
 gen county_pc = rape/population1
 
 gen after_2011 = 0
-replace after_2011 = 1 if year > 11
+replace after_2011 = 1 if year > 2011
 
 gen year_op = year(fd - 182)
 //year_op = year_t + 1 if month(date_op) <7
@@ -180,6 +184,7 @@ scatter r_normalized t_normalized week
 
 */
 
+
 ** TRENDS WITH POLICE REPORTS
 
 clear
@@ -187,22 +192,21 @@ use "processed/trends_police_reports"
 
 
 estimates clear
-eststo: qui reg reports b_norm 
 
 gen woy = week(week)
 gen year = year(week)
 
 eststo: qui reg reports b_norm i.year i.woy
 
-eststo: qui reg reports b_norm lag1 lag2 i.year i.woy
+eststo: qui reg reports b_norm bn_norm i.year i.woy
 
-test b_norm lag1 lag2
+eststo: qui reg reports b_norm bn_norm lag1 lag2 n_lag1 n_lag2 i.year i.woy
 
-eststo: qui reg reports b_norm r_norm SA_norm i.year i.woy
-
-test b_norm r_norm SA_norm
+test b_norm lag1 lag2 bn_norm n_lag1 n_lag2
 
 esttab using "figures/trends_reports_with_lags_extra_terms.tex", se ar2 drop (*year* *woy*) replace
+
+
 
 ** TRENDS WITH REPORTS OF PREVIOUS EVENTS
 
@@ -219,16 +223,13 @@ gen year = year(week)
 
 eststo: qui reg reports b_norm i.year i.woy
 
-eststo: qui reg reports b_norm lag1 lag2 i.year i.woy
+eststo: qui reg reports b_norm bn_norm i.year i.woy
 
-test b_norm lag1 lag2
+eststo: qui reg reports b_norm bn_norm lag1 lag2 n_lag1 n_lag2 i.year i.woy
 
-eststo: qui reg reports b_norm r_norm SA_norm i.year i.woy
+test b_norm lag1 lag2 bn_norm n_lag1 n_lag2
 
-test b_norm r_norm SA_norm
-
-esttab /*using "figures/trends_reports_earlier_events.tex"*/, se ar2 drop (*year* *woy*) replace
-
+esttab using "figures/trends_reports_earlier_events.tex", se ar2 drop (*year* *woy*) replace
 
 
 
