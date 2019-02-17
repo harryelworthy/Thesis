@@ -231,5 +231,101 @@ test b_norm lag1 lag2 bn_norm n_lag1 n_lag2
 
 esttab using "figures/trends_reports_earlier_events.tex", se ar2 drop (*year* *woy*) replace
 
+** DAILY TRENDS NEW WITH CASES
+
+clear
+use "processed/daily_cases_lags"
+
+g tmp = dofc(date)
+
+form tmp %td
+
+drop date
+g date = tmp
+drop tmp
+
+
+g saweb = value if ((term == "sexual assault") & (property == "web"))
+g sanews = value if ((term == "sexual assault") & (property == "news"))
+g rapeweb = value if ((term == "rape") & (property == "web"))
+g rapenews = value if ((term == "rape") & (property == "news"))
+
+estimates clear
+
+gen woy = week(date)
+gen year = year(date)
+
+eststo: qui reg saweb casedate lag* lead* i.year i.woy date
+eststo: qui reg sanews casedate lag* lead* i.year i.woy date
+eststo: qui reg rapeweb casedate lag* lead* i.year i.woy date
+eststo: qui reg rapenews casedate lag* lead* i.year i.woy date
+
+
+
+esttab, se ar2 drop (*year* *woy* date) replace
+
+
+** STATE TRENDS NEW WITH CASES
+
+clear
+use "processed/states_trends_cases_lags"
+
+g tmp = dofc(date)
+
+form tmp %td
+
+drop date
+g date = tmp
+drop tmp
+
+
+g saweb = value if ((term == "sexual assault") & (property == "web"))
+g sanews = value if ((term == "sexual assault") & (property == "news"))
+g rapeweb = value if ((term == "rape") & (property == "web"))
+g rapenews = value if ((term == "rape") & (property == "news"))
+
+estimates clear
+
+encode state, gen(si)
+
+gen woy = week(date)
+gen year = year(date)
+
+
+preserve
+drop if saweb == .
+xtset si date
+eststo: qui xtreg saweb casedate lag* lead* i.year i.woy 
+restore
+
+preserve
+drop if sanews == .
+xtset si date
+eststo: qui xtreg sanews casedate lag* lead* i.year i.woy 
+restore
+
+preserve
+drop if rapeweb == .
+xtset si date
+eststo: qui xtreg rapeweb casedate lag* lead* i.year i.woy 
+restore
+
+preserve
+drop if rapenews == .
+xtset si date
+eststo: qui xtreg rapenews casedate lag* lead* i.year i.woy 
+restore
+
+/*
+
+eststo: qui xtreg saweb casedate lead* lag* i.year i.woy 
+eststo: qui xtreg sanews casedate lead* lag* i.year i.woy 
+eststo: qui xtreg rapeweb casedate lead* lag* i.year i.woy 
+eststo: qui xtreg rapenews casedate lead* lag* i.year i.woy
+
+*/
+
+esttab, se ar2 drop (*year* *woy*) replace
+
 
 

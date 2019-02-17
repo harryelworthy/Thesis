@@ -792,6 +792,9 @@ drop part? tmp opened
 
 rename college_unitid id6s
 
+gen weekof = cond(dow(date_op) == 0, date_op, date_op - dow(date_op)) 
+form weekof %td
+
 save "clean/all_cases", replace
 
 
@@ -912,9 +915,20 @@ form date %td
 // clean up
 drop part? tmp
 
-g rapeweb = value if ((term=="rape") & (property =="web"))
-g rapenews = value if ((term=="rape") & (property =="news"))
-g SAweb = value if ((term=="assault") & (property =="web"))
-g SAnews = value if ((term=="sexual assault") & (property =="news"))
+save "clean/daily_trends", replace
 
-line rapeweb rapenews SAweb SAnews date
+clear
+import delimited "raw/trends.csv", varnames(1) 
+drop v1
+
+split date ,g(part) p("-")
+g tmp = part1 + part2 + part3
+drop date
+// transfer to date
+g date = date(tmp, "YMD")
+form date %td
+// clean up
+drop part? tmp
+
+
+save "clean/trends", replace
