@@ -45,23 +45,30 @@ esttab using "figures/county_school_police_reports.tex", se ar2 drop(*year*) rep
 estimates clear
 
 clear
-use "processed/school_full_cases"
-gen year_op = year(date_op - 182)
-//year_op = year_t + 1 if month(date_op) <7
+use "processed/schools_cases_lags"
 
-g lead2 = (year == year_op - 2)
-g lead1 = (year == year_op - 1)
-g yof = (year == year_op)
-g lag1 = (year == year_op + 1)
-g lag2 = (year == year_op + 2)
 
 xtset id year
 
-eststo: qui xtreg percap lead2 lead1 yof lag1 lag2 i.year, fe
+eststo: qui xtreg percap lead2 lead1 casedate lag1 lag2 lag3 lag4 lag5 i.year, fe
 eststo: qui xtreg percap after_2011 i.year, fe
-eststo: qui xtreg percap lead2 lead1 yof lag1 lag2 after_2011 i.year, fe
+eststo: qui xtreg percap lead2 lead1 casedate lag1 lag2 lag3 lag4 lag5 after_2011 i.year, fe
 
 esttab using "figures/same_school_cases_reports.tex", se ar2 drop (*year*) replace
+
+estimates clear
+
+clear
+use "processed/schools_cases_lags_new"
+
+
+xtset id year
+
+eststo: qui xtreg percap lead* casedate* lag* i.year, fe
+eststo: qui xtreg percap after_2011 i.year, fe
+eststo: qui xtreg percap lead* casedate* lag* after_2011 i.year, fe
+
+esttab using "figures/same_school_cases_reports_numbered.tex", se ar2 drop (*year*) replace
 
 
 * SAME COUNTY SCHOOLS CASES REPORTS
