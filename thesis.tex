@@ -27,9 +27,9 @@
 
 \begin{document}
 
-\title{Can We Ease the Reporting Decision? Investigating the Effects of Prominent Assault Cases on Sexual Assault Reporting}
+\title{Do Prominent Sexual Assault Cases Ease the Reporting Decision? Evidence from National Police and School Data}
 \shortTitle{Sexual Assault Reporting}
-\author{Harry Elworthy\thanks{Elworthy: Duke University, 837 Clarendon St Durham NC, harryelworthy@gmail.com.}}
+\author{Harry Elworthy\thanks{Duke University, 837 Clarendon St Durham NC, harryelworthy@gmail.com.}}
 \date{\today}
 \pubMonth{}
 \pubYear{}
@@ -45,41 +45,41 @@ Your abstract here.
 
 \maketitle
 
-American Economic Review Pointers:
+%American Economic Review Pointers:
 
-\begin{itemize}
-\item Do not use an "Introduction" heading. Begin your introductory material
-before the first section heading.
+%\begin{itemize}
+%\item Do not use an "Introduction" heading. Begin your introductory material
+%before the first section heading.
 
-\item Avoid style markup (except sparingly for emphasis).
+%\item Avoid style markup (except sparingly for emphasis).
 
-\item Avoid using explicit vertical or horizontal space.
+%\item Avoid using explicit vertical or horizontal space.
 
-\item Captions are short and go below figures but above tables.
+%\item Captions are short and go below figures but above tables.
 
-\item The tablenotes or figurenotes environments may be used below tables
-or figures, respectively, as demonstrated below.
+%\item The tablenotes or figurenotes environments may be used below tables
+%or figures, respectively, as demonstrated below.
 
-\item If you have difficulties with the mathtime package, adjust the package
-options appropriately for your platform. If you can't get it to work, just
-remove the package or see our technical support document online (please
-refer to the author instructions).
+%\item If you have difficulties with the mathtime package, adjust the package
+%options appropriately for your platform. If you can't get it to work, just
+%remove the package or see our technical support document online (please
+%refer to the author instructions).
 
-\item If you are using an appendix, it goes last, after the bibliography.
-Use regular section headings to make the appendix headings.
+%\item If you are using an appendix, it goes last, after the bibliography.
+%Use regular section headings to make the appendix headings.
 
-\item If you are not using an appendix, you may delete the appendix command
-and sample appendix section heading.
+%\item If you are not using an appendix, you may delete the appendix command
+%and sample appendix section heading.
 
-\item Either the natbib package or the harvard package may be used with bibtex.
-To include one of these packages, uncomment the appropriate usepackage command
-above. Note: you can't use both packages at once or compile-time errors will result.
+%\item Either the natbib package or the harvard package may be used with bibtex.
+%To include one of these packages, uncomment the appropriate usepackage command
+%above. Note: you can't use both packages at once or compile-time errors will result.
 
-\end{itemize}
+%\end{itemize}
 
 \clearpage
 
-College sexual assault is an unavoidable topic on any campus. It is estimated that 20 - 25\% of women nationally report being sexually assaulted at some point during their college careers (Fisher, Cullen and Turner, 2000). At Duke, this figure is closer to 40\%, as well as 10\% of men (Fox, 2017). Despite this, very few assaults are reported to police or to universities, for a number of reasons. A number of different measures have been taken by many schools to address campus sexual assault, but there is little evidence on how effective these reforms have been at reducing assault or creating a better environment for victims. 
+College sexual assault is an unavoidable topic on any campus. It is estimated that 20 - 25\% of women nationally report being sexually assaulted at some point during their college careers \cite{fisher_sexual_2000}. At Duke, this figure is closer to 40\%, as well as 10\% of men (Fox, 2017). Despite this, very few assaults are reported to police or to universities, for a number of reasons. A number of different measures have been taken by many schools to address campus sexual assault, but there is little evidence on how effective these reforms have been at reducing assault or creating a better environment for victims. 
 
 The 'Dear Colleague' letter of 2011 , released by the Office of Civil Rights (OCR), was a sizable shift in federal policy around campus sexual assault and the responsibility universities have to investigate allegations (Ali, 2011). It aimed to make reporting easier for an assault victim in a number of ways. For example, it reduced standards of evidence required in on-campus investigations, hopefully decreasing the chance of reporting an assault and having nothing happen. 
 
@@ -130,7 +130,18 @@ Lindo, Marcotte, Palmer, and Swensen, (2018) considers the effects of a Title IX
 
 The most important data source that this paper will use is Campus Safety and Security (CSS) data collected and distributed by the Department of Education . Under the Clery act, any university that uses federal student financial aid - which is almost every university in the US - must disclose details about the reports of crime that it receives every year. This data catalogues these reports by school, year and type of crime from 2005 to 2016. There are 7,663 unique universities that span the entire time span, including 1,096 with more than 5000 students and 563 with more than 10,000. In 2016, 8,991 sexual crimes were reported in total. Figure 1 and Figure 2 show the general trend of reports by year.  
 
-\section{Figures}
+% The appendix command is issued once, prior to all appendices, if any.
+\clearpage
+%References here (manual or bibTeX). If you are using bibTeX, add your bib file 
+%name in place of BibFile in the bibliography command.
+% Remove or comment out the next two lines if you are not using bibtex.
+
+\bibliographystyle{aea}
+\bibliography{bib}
+
+\clearpage
+\appendix
+
 
 \begin{figure}
 
@@ -146,7 +157,6 @@ Figure notes with optional leadin (Source, in this case).
 \end{figure}
 
 
-\section{Tables}
 
 \begin{table}
 \caption{Reports to Police/Schools in Same County by Year}
@@ -227,16 +237,10 @@ Table notes environment with optional leadin (Source, in this case).
 \end{table}
 
 
-References here (manual or bibTeX). If you are using bibTeX, add your bib file 
-name in place of BibFile in the bibliography command.
-% Remove or comment out the next two lines if you are not using bibtex.
-\bibliographystyle{aea}
-\bibliography{BibFile}
 
-% The appendix command is issued once, prior to all appendices, if any.
-\appendix
 
-\section{Mathematical Appendix}
+
+
 
 \end{document}
 
