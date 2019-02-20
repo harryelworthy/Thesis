@@ -70,10 +70,8 @@ use "processed/schools_cases_lags_new"
 xtset id year
 
 eststo: qui xtreg percap lead* casedate* lag* i.year, fe
-eststo: qui xtreg percap after_2011 i.year, fe
-eststo: qui xtreg percap lead* casedate* lag* after_2011 i.year, fe
 
-esttab using "figures/same_school_cases_reports_numbered.tex", se ar2 drop (*year*) replace
+esttab using "figures/same_school_cases_reports_numbered.tex", se ar2 drop (*year* lead* lag*) replace
 
 coefplot(est1), vertical keep(casedate*) yline(0) title("Impact of each Investigation on Reports at Schools")
 graph export "figures/cases_school_reports_numbered.eps", as(eps) replace
