@@ -154,8 +154,19 @@ $$
 
 Where $T_{t}$ is the Google Trend for "sexual assault" on day t in state i, $\alpha_{t}$, $\gamma_{t}$ and $\rho_{i}$ are year, week-of-year and state fixed effects, and $TitleIX_{t+b}$ is a set of leads, lags and dates of Title IX investigations being opened in state i. 
 
-The results are shown in Figure 2. As can be seen, statewide trends increase above normal for a few weeks before a case is opened and for at least 7 weeks after, by about 3 points (Trends are a relative score out of 100), statistically significant at the 5 percent level. Thus, these cases seem to be salient, if not at the national level, then certainly at the state level.
+The results are shown in Figure 3. As can be seen, statewide trends increase above normal for a few weeks before a case is opened and for at least 7 weeks after, by about 3 points (Trends are a relative score out of 100), statistically significant at the 5\% level. Thus, these cases seem to be salient, if not at the national level, then certainly at the state level.
 
+We then look at the effect that a case being opened at a school has on that school's reports of sexual assault. We estimate the equation:
+
+$$
+r_{i,t} = \alpha_{t} + \gamma_{i} \sum_{b=-5}^{5} \delta_{b} TitleIX_{i,t+b} + \varepsilon_{i,t}
+$$
+
+Where $T_{t}$ is per student reports of sexual assault in school t in year i, $\alpha_{t}$ and $\gamma_{i}$ are year and school fixed effects, and $TitleIX_{t+b}$ is a set of leads, lags and dates of Title IX investigations being opened in school i. 
+
+The results are shown in Figure 4 and Table 2. As can be seen, there is a significant uptick in reports at schools where investigations are opened, starting in the year before and extending for many years (albeit with increasing standard errors). The increases in the final lead, the case year and the first lag are significant at the 0.1\% level, and the next two lags at the 5\% level. The coefficient is 0.00089 on the year of the case; to put this in perspective, average reports per student in 2016 were 0.00047. Thus these investigations caused a near 200\% increase in reporting at schools that they were opened at. We also see that when introducing a dummy for years after the 2011 change, including Title IX dummies reduces the after\_2011 coefficient by 8.8\% - or in other words, increases due to Title IX investigations explain away 8.8\% of the increase in reports after 2011.
+
+I consider the differing effects that each investigation opened have on a school by re-estimating the above equation except with separate dummies for the first investigation at each school, the second, and so on, as well as leads and lags for each. The coefficients on the years of the cases are shown in Figure 5 and Table 3. 
 
 
 % The appendix command is issued once, prior to all appendices, if any.
@@ -208,7 +219,29 @@ Figure notes with optional leadin (Source, in this case).
 \end{figurenotes}
 \end{figure}
 
+\begin{figure}
+\includegraphics[width=4.9in]{figures/cases_schools_reports_lags.eps}
 
+\caption{Caption for figure below.}
+\begin{figurenotes}
+Figure notes without optional leadin.
+\end{figurenotes}
+\begin{figurenotes}[Source]
+Figure notes with optional leadin (Source, in this case).
+\end{figurenotes}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=4.9in]{figures/cases_school_reports_numbered.eps}
+
+\caption{Caption for figure below.}
+\begin{figurenotes}
+Figure notes without optional leadin.
+\end{figurenotes}
+\begin{figurenotes}[Source]
+Figure notes with optional leadin (Source, in this case).
+\end{figurenotes}
+\end{figure}
 
 \begin{table}
 \caption{Reports to Police/Schools in Same County by Year}
@@ -223,6 +256,7 @@ Table notes environment with optional leadin (Source, in this case).
 \end{tablenotes}
 \end{table}
 
+
 \begin{table}
 \caption{Reports in Schools with Title IX Cases}
 
@@ -235,6 +269,20 @@ Table notes environment without optional leadin.
 Table notes environment with optional leadin (Source, in this case).
 \end{tablenotes}
 \end{table}
+
+\begin{table}
+\caption{Reports in Schools with Title IX Cases}
+
+\input{figures/same_school_cases_reports_numbered.tex}
+
+\begin{tablenotes}
+Table notes environment without optional leadin.
+\end{tablenotes}
+\begin{tablenotes}[Source]
+Table notes environment with optional leadin (Source, in this case).
+\end{tablenotes}
+\end{table}
+
 
 \begin{table}
 \caption{Reports to Schools in same County as Schools with Title IX Cases}
