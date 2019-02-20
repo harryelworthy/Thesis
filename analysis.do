@@ -56,8 +56,8 @@ eststo: qui xtreg percap lead2 lead1 casedate lag1 lag2 lag3 lag4 lag5 after_201
 
 esttab using "figures/same_school_cases_reports.tex", se ar2 drop (*year*) replace
 
-coefplot(est1), vertical drop(*year* _cons) yline(0) title("Impact of an Investigation on Reports at Schools")
-graph export "figures/cases_school_reports.eps", as(eps) replace
+coefplot(est1), vertical drop(*year* _cons) yline(0) title("Impact with lags of an Investigation on Reports at Schools")
+graph export "figures/cases_schools_reports_lags.eps", as(eps) replace
 
 estimates clear
 
@@ -73,6 +73,8 @@ eststo: qui xtreg percap lead* casedate* lag* after_2011 i.year, fe
 
 esttab using "figures/same_school_cases_reports_numbered.tex", se ar2 drop (*year*) replace
 
+coefplot(est1), vertical keep(casedate*) yline(0) title("Impact of each Investigation on Reports at Schools")
+graph export "figures/cases_school_reports_numbered.eps", as(eps) replace
 
 * SAME COUNTY SCHOOLS CASES REPORTS
 
@@ -241,14 +243,14 @@ gen woy = week(date)
 gen year = year(date)
 gen dow = dow(date)
 
-eststo: qui reg saweb lead7 lead6 lead5 lead4 lead3 lead2 lead1 casedate lag* i.year i.woy date
-eststo: qui reg sanews casedate lag* lead* i.year i.woy i.dow date
-eststo: qui reg rapeweb casedate lag* lead* i.year i.woy i.dow date
-eststo: qui reg rapenews casedate lag* lead* i.year i.woy i.dow date
+eststo: qui reg saweb lead7 lead6 lead5 lead4 lead3 lead2 lead1 casedate lag* i.year i.woy i.dow
+* eststo: qui reg sanews casedate lag* lead* i.year i.woy i.dow 
+* eststo: qui reg rapeweb casedate lag* lead* i.year i.woy i.dow 
+* eststo: qui reg rapenews casedate lag* lead* i.year i.woy i.dow 
 
 coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("National GTrends before/after Investigation, Daily")
-
-esttab, se ar2 drop (*year* *woy* *dow* date) replace
+graph export "figures/national_trend_cases.eps", as(eps) replace
+* esttab, se ar2 drop (*year* *woy* *dow* date) replace
 
 
 ** STATE TRENDS NEW WITH CASES
@@ -284,6 +286,7 @@ xtset si date
 eststo: qui xtreg saweb lead7 lead6 lead5 lead4 lead3 lead2 lead1 casedate lag* lead* i.year i.woy 
 restore
 
+/*
 preserve
 drop if sanews == .
 xtset si date
@@ -302,9 +305,11 @@ xtset si date
 eststo: qui xtreg rapenews casedate lag* lead* i.year i.woy 
 restore
 
-/*
+*/
 
 eststo: qui xtreg saweb casedate lead* lag* i.year i.woy 
+
+/*
 eststo: qui xtreg sanews casedate lead* lag* i.year i.woy 
 eststo: qui xtreg rapeweb casedate lead* lag* i.year i.woy 
 eststo: qui xtreg rapenews casedate lead* lag* i.year i.woy
@@ -312,9 +317,9 @@ eststo: qui xtreg rapenews casedate lead* lag* i.year i.woy
 */
 
 coefplot(est1), vertical drop(*year* *woy* _cons) yline(0) title("State GTrends before/after Investigation, Weeks")
+graph export "figures/state_trend_cases.eps", as(eps) replace
 
-
-esttab, se ar2 drop (*year* *woy*) replace
+* esttab, se ar2 drop (*year* *woy*) replace
 
 
 
