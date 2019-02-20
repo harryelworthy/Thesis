@@ -71,7 +71,7 @@ xtset id year
 
 eststo: qui xtreg percap lead* casedate* lag* i.year, fe
 
-esttab using "figures/same_school_cases_reports_numbered.tex", se ar2 drop (*year* lead* lag*) replace
+esttab using "figures/same_school_cases_reports_numbered.tex", se ar2 drop (*year* lead* lag* casedate6) replace
 
 coefplot(est1), vertical keep(casedate*) yline(0) title("Impact of each Investigation on Reports at Schools")
 graph export "figures/cases_school_reports_numbered.eps", as(eps) replace
@@ -102,8 +102,8 @@ encode county, gen (cs)
 xtset cs year
 
 eststo: qui xtreg school_pc lead2 lead1 yof lag1 lag2 i.year, fe
-eststo: qui xtreg school_pc lead2 lead1 yof lag1 lag2 after_2011 i.year, fe
-eststo: qui xtreg school_pc after_2011 i.year, fe
+* eststo: qui xtreg school_pc lead2 lead1 yof lag1 lag2 after_2011 i.year, fe
+* eststo: qui xtreg school_pc after_2011 i.year, fe
 
 esttab using "figures/same_county_schools_cases_reports.tex", se ar2 drop (*year*) replace
 
