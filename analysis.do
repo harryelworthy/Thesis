@@ -133,8 +133,8 @@ encode county, gen (cs)
 xtset cs year
 
 eststo: qui xtreg county_pc lead2 lead1 yof lag1 lag2 i.year, fe
-eststo: qui xtreg county_pc lead2 lead1 yof lag1 lag2 after_2011 i.year, fe
-eststo: qui xtreg county_pc after_2011 i.year, fe
+* eststo: qui xtreg county_pc lead2 lead1 yof lag1 lag2 after_2011 i.year, fe
+* eststo: qui xtreg county_pc after_2011 i.year, fe
 
 esttab using "figures/same_county_police_cases_reports.tex", se ar2 drop (*year*) replace 
 
