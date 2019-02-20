@@ -110,6 +110,8 @@ These measures were taken in 2011 in response to a number of private documentari
 
 The issue of non-reporting has been especially salient over the past weeks, as Supreme Court nominee Brett Kavanaugh has been accused of crimes that were not reported at the time. President Trump tweeted in response to the claims: "I have no doubt that, if the attack on Dr. Ford was as bad as she says, charges would have been immediately filed with local Law Enforcement Authorities by either her or her loving parents" \citeyear{trump_i_2018}. There are clearly many reasons why an individual may not report: social pressures, abusive relationships, and fear of not being believed, for example. More importantly, however, this tweet illustrates a source of motivation for this paper: had Dr. Ford reported when the crime had been committed, her testimony now would be more impervious to detractors. There are many reasons that increased reporting would be a desirable outcome - this is just one of them. 
 
+
+
 \section{Literature Review}
 
 Since Becker outlined his economic model of crime, illicit activities have continued to have a place in the economic literature. Sexual assault has received a share of this attention, although perhaps less so than other crimes. One reason for this deficit is the difficulty of gathering accurate data on sexual assault. Crime is underreported in general, sexual assault especially \cite{kilpatrick_drug-facilitated_2007} \cite{fisher_sexual_2000}. Recently, however, several economics papers have focused on sexual assault and harassment. 
@@ -125,6 +127,34 @@ Since Becker outlined his economic model of crime, illicit activities have conti
 \section{Data Summary and Initial Regressions}
 
 The most important data source that this paper will use is Campus Safety and Security (CSS) data collected and distributed by the Department of Education . Under the Clery act, any university that uses federal student financial aid - which is almost every university in the US - must disclose details about the reports of crime that it receives every year. This data catalogues these reports by school, year and type of crime from 2005 to 2016. There are 7,663 unique universities that span the entire time span, including 1,096 with more than 5000 students and 563 with more than 10,000. In 2016, 8,991 sexual crimes were reported in total. Figure 1 and Figure 2 show the general trend of reports by year.  
+
+\section{Methodology and Results}
+
+First, I want to see whether reports to police increase in a county when reports are high to a school in that county. To consider this, I estimate the equation:
+
+$$ 
+p_{i,t} = \alpha_{i} + \beta s_{i,t} + \gamma{t} + \varepsilon_{i,t}
+$$
+
+Where $p_{it}$ are reports per capita of a station in question's area and year in question; $s_{it}$ are reports per student for the school and year in question; and $\alpha_{i}$ and $\gamma{t}$ are school and year fixed-effects. The results are shown in Table 1. The coefficient is 0.131, statistically significant at the 10\% level. Thus, with constant populations, 8 extra reporters to schools in a county should result in 1 extra report to police. \todo{Is this right? Kind of get confused with per capita stuff} This seems reasonable, and gives some evidence to the idea that school and police reports are substitutes. 
+
+Next, I want to check the salience of Title IX Investigations using Google Trends. \citeA{lindo_any_2018} does this using terms like "Penn State Sexual Assault," but I want to check salience in a general sense. Do these investigations cause enough fuss to dent trends for a search as general as "sexual assault?" To investigate, I run two regressions. The first is a daily time series of reports to police and Google Trends:
+
+$$
+T_{t} = \alpha_{t} + \gamma_{t} + \rho_{t} + \sum_{b=-7}^{7} \delta_{b} TitleIX_{t+b} + \varepsilon_{t}
+$$
+
+Where $T_{t}$ is the Google Trend for "sexual assault" on day t, $\alpha_{t}$, $\gamma_{t}$ and $\rho_{t}$ are year, week-of-year and day-of-week fixed effects, and $TitleIX_{t+b}$ is a set of leads, lags and dates of Title IX investigations being opened. 
+
+The results are shown in Figure 2. There is a possible uptick on the date of a case opening, but it falls well outside the window of statistical significance. Thus, we do not find evidence of significant national salience of these cases with a general search term. To investigate local salience, we run the following week-by-state panel regression:
+
+$$
+T_{i,t} = \alpha_{t} + \gamma_{t} + \rho_{i} + \sum_{b=-7}^{7} \delta_{b} TitleIX_{i,t+b} + \varepsilon_{t}
+$$
+
+Where $T_{t}$ is the Google Trend for "sexual assault" on day t in state i, $\alpha_{t}$, $\gamma_{t}$ and $\rho_{i}$ are year, week-of-year and state fixed effects, and $TitleIX_{t+b}$ is a set of leads, lags and dates of Title IX investigations being opened in state i. 
+
+The results are shown in Figure 2. As can be seen, statewide trends increase above normal for a few weeks before a case is opened and for at least 7 weeks after, by about 3 points (Trends are a relative score out of 100), statistically significant at the 5 percent level. Thus, these cases seem to be salient, if not at the national level, then certainly at the state level.
 
 
 
@@ -155,7 +185,19 @@ Figure notes with optional leadin (Source, in this case).
 \end{figure}
 
 \begin{figure}
-\includegraphics[width=4.9in]{figures/cases_schools_reports_lags.eps}
+\includegraphics[width=4.9in]{figures/national_trend_cases.eps}
+
+\caption{Caption for figure below.}
+\begin{figurenotes}
+Figure notes without optional leadin.
+\end{figurenotes}
+\begin{figurenotes}[Source]
+Figure notes with optional leadin (Source, in this case).
+\end{figurenotes}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=4.9in]{figures/state_trend_cases.eps}
 
 \caption{Caption for figure below.}
 \begin{figurenotes}
