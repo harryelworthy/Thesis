@@ -31,7 +31,9 @@ use "clean/school_police_county_cross"
 encode county, gen(ci)
 xtset ci year
 
+
 eststo: qui xtreg police_pc school_pc i.year, fe
+test school_pc
 /*
 qui testparm*
 estadd scalar p_value = r(p)
@@ -50,9 +52,9 @@ use "processed/schools_cases_lags"
 
 xtset id year
 
-eststo: qui xtreg percap lead2 lead1 casedate lag1 lag2 lag3 lag4 lag5 i.year, fe
+eststo: qui xtreg percap lead5 lead4 lead3 lead2 lead1 casedate lag1 lag2 lag3 lag4 lag5 i.year, fe
 eststo: qui xtreg percap after_2011 i.year, fe
-eststo: qui xtreg percap lead2 lead1 casedate lag1 lag2 lag3 lag4 lag5 after_2011 i.year, fe
+eststo: qui xtreg percap lead5 lead4 lead3 lead2 lead1 casedate lag1 lag2 lag3 lag4 lag5 after_2011 i.year, fe
 
 esttab using "figures/same_school_cases_reports.tex", se ar2 drop (*year*) replace
 

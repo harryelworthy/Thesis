@@ -65,7 +65,7 @@ def weekstate():
 def schools():
     schools = daily = pd.read_stata("processed/school_full_cases.dta")
 
-    numleads = 2
+    numleads = 5
     numlags = 5
 
     for i in range(numleads):
@@ -137,5 +137,5 @@ def schoolsnew():
 
 # daily()
 # weekbystate()
-# schools()
-schoolsnew()
+schools()
+#schoolsnew()
