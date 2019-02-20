@@ -172,7 +172,9 @@ I next consider whether schools in the same county as schools that have investig
 
 Very interestingly, all coefficients are negative, very small, and besides the coefficient on the first lag, all statistically insignificant. If these investigations are increasing reports at nearby schools because of their salience, why not here too? Why would they hugely increase reports there and decrease reports here?
 
+I do the same for police reports in the same counties as schools with Title IX investigations. These results are in Table 5. Again, there is no significant increase in reports, and again, this is surprising. \todo{This is very bad, yearly, old way to get case dates, can be much better - week by county? - may not null}
 
+A final step is to do time series analysis of Google Trends with police reports, either nationally daily or by week by state. I am in the process of reformatting the police data to accommodate this, and should have it done within the week. I've done it nationally by week and had null results, but I think more granular data is needed. This will answer a critical question: do reports trend with buzz about sexual assault? Might increases in buzz increase reporting?
 
 % The appendix command is issued once, prior to all appendices, if any.
 \clearpage
@@ -189,63 +191,35 @@ Very interestingly, all coefficients are negative, very small, and besides the c
 
 \begin{figure}
 
-\includegraphics[width=4.9in]{figures/school_reports.eps}
+\includegraphics[]{figures/school_reports.eps}
 
-\caption{Caption for figure below.}
-\begin{figurenotes}
-Figure notes without optional leadin.
-\end{figurenotes}
-\begin{figurenotes}[Source]
-Figure notes with optional leadin (Source, in this case).
-\end{figurenotes}
+\caption{Reports at Schools per Student, 2005 to 2016}
 \end{figure}
 
 \begin{figure}
-\includegraphics[width=4.9in]{figures/national_trend_cases.eps}
+\includegraphics[]{figures/national_trend_cases.eps}
 
-\caption{Caption for figure below.}
-\begin{figurenotes}
-Figure notes without optional leadin.
-\end{figurenotes}
-\begin{figurenotes}[Source]
-Figure notes with optional leadin (Source, in this case).
-\end{figurenotes}
+\caption{Daily National Google Trends Before/After T9 Investigation is Opened}
 \end{figure}
 
 \begin{figure}
-\includegraphics[width=4.9in]{figures/state_trend_cases.eps}
+\includegraphics[]{figures/state_trend_cases.eps}
 
-\caption{Caption for figure below.}
-\begin{figurenotes}
-Figure notes without optional leadin.
-\end{figurenotes}
-\begin{figurenotes}[Source]
-Figure notes with optional leadin (Source, in this case).
-\end{figurenotes}
+\caption{Weekly State Google Trends Before/After T9 Investigation is Opened}
+
 \end{figure}
 
 \begin{figure}
 \includegraphics[width=4.9in]{figures/cases_schools_reports_lags.eps}
 
-\caption{Caption for figure below.}
-\begin{figurenotes}
-Figure notes without optional leadin.
-\end{figurenotes}
-\begin{figurenotes}[Source]
-Figure notes with optional leadin (Source, in this case).
-\end{figurenotes}
+\caption{Impact of T9 Investigations on Reports at Schools}
 \end{figure}
 
 \begin{figure}
 \includegraphics[width=4.9in]{figures/cases_school_reports_numbered.eps}
 
-\caption{Caption for figure below.}
-\begin{figurenotes}
-Figure notes without optional leadin.
-\end{figurenotes}
-\begin{figurenotes}[Source]
-Figure notes with optional leadin (Source, in this case).
-\end{figurenotes}
+\caption{Impact of T9 Investigations on Reports at Schools, Numbered}
+
 \end{figure}
 
 \begin{table}
@@ -253,12 +227,6 @@ Figure notes with optional leadin (Source, in this case).
 
 \input{figures/county_school_police_reports.tex}
 
-\begin{tablenotes}
-Table notes environment without optional leadin.
-\end{tablenotes}
-\begin{tablenotes}[Source]
-Table notes environment with optional leadin (Source, in this case).
-\end{tablenotes}
 \end{table}
 
 
@@ -267,25 +235,13 @@ Table notes environment with optional leadin (Source, in this case).
 
 \input{figures/same_school_cases_reports.tex}
 
-\begin{tablenotes}
-Table notes environment without optional leadin.
-\end{tablenotes}
-\begin{tablenotes}[Source]
-Table notes environment with optional leadin (Source, in this case).
-\end{tablenotes}
 \end{table}
 
 \begin{table}
-\caption{Reports in Schools with Title IX Cases}
+\caption{Reports in Schools with Title IX Cases, Numbered}
 
 \input{figures/same_school_cases_reports_numbered.tex}
 
-\begin{tablenotes}
-Table notes environment without optional leadin.
-\end{tablenotes}
-\begin{tablenotes}[Source]
-Table notes environment with optional leadin (Source, in this case).
-\end{tablenotes}
 \end{table}
 
 
@@ -293,13 +249,6 @@ Table notes environment with optional leadin (Source, in this case).
 \caption{Reports to Schools in same County as Schools with Title IX Cases}
 
 \input{figures/same_county_schools_cases_reports.tex}
-
-\begin{tablenotes}
-Table notes environment without optional leadin.
-\end{tablenotes}
-\begin{tablenotes}[Source]
-Table notes environment with optional leadin (Source, in this case).
-\end{tablenotes}
 \end{table}
 
 \begin{table}
@@ -307,40 +256,13 @@ Table notes environment with optional leadin (Source, in this case).
 
 \input{figures/same_county_police_cases_reports.tex}
 
-\begin{tablenotes}
-Table notes environment without optional leadin.
-\end{tablenotes}
-\begin{tablenotes}[Source]
-Table notes environment with optional leadin (Source, in this case).
-\end{tablenotes}
+%\begin{tablenotes}
+%Table notes environment without optional leadin.
+%\end{tablenotes}
+%\begin{tablenotes}[Source]
+%Table notes environment with optional leadin (Source, in this case).
+%\end{tablenotes}
 \end{table}
-
-\begin{table}
-\caption{Reports to Police and Google Trends, Weekly}
-
-\input{figures/trends_reports_with_lags_extra_terms.tex}
-
-\begin{tablenotes}
-Table notes environment without optional leadin.
-\end{tablenotes}
-\begin{tablenotes}[Source]
-Table notes environment with optional leadin (Source, in this case).
-\end{tablenotes}
-\end{table}
-
-\begin{table}
-\caption{Reports to Police and Google Trends Weekly, Earlier Incidents}
-
-\input{figures/trends_reports_earlier_events.tex}
-
-\begin{tablenotes}
-Table notes environment without optional leadin.
-\end{tablenotes}
-\begin{tablenotes}[Source]
-Table notes environment with optional leadin (Source, in this case).
-\end{tablenotes}
-\end{table}
-
 
 
 
