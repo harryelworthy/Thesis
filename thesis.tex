@@ -130,7 +130,7 @@ The most important data source that this paper will use is Campus Safety and Sec
 
 \section{Methodology and Results}
 
-First, I want to see whether reports to police increase in a county when reports are high to a school in that county. To consider this, I estimate the equation:
+First, I want to see whether reports to police increase in a county when reports are high to a school in that county. To consider this, I estimate the equation: \todo{Why is this table messing up??}
 
 $$ 
 p_{i,t} = \alpha_{i} + \beta s_{i,t} + \gamma{t} + \varepsilon_{i,t}
@@ -146,7 +146,7 @@ $$
 
 Where $T_{t}$ is the Google Trend for "sexual assault" on day t, $\alpha_{t}$, $\gamma_{t}$ and $\rho_{t}$ are year, week-of-year and day-of-week fixed effects, and $TitleIX_{t+b}$ is a set of leads, lags and dates of Title IX investigations being opened. 
 
-The results are shown in Figure 2. There is a possible uptick on the date of a case opening, but it falls well outside the window of statistical significance. Thus, we do not find evidence of significant national salience of these cases with a general search term. To investigate local salience, we run the following week-by-state panel regression:
+The results are shown in Figure 2. There is a possible uptick on the date of a case opening, but it falls well outside the window of statistical significance. Thus, we do not find evidence of significant national salience of these cases with a general search term. To investigate local salience, we run the following week-by-state panel regression: \todo{In general I need to cluster standard errors/weight by state size/school size and run all the regressions robust}
 
 $$
 T_{i,t} = \alpha_{t} + \gamma_{t} + \rho_{i} + \sum_{b=-7}^{7} \delta_{b} TitleIX_{i,t+b} + \varepsilon_{t}
@@ -166,7 +166,12 @@ Where $T_{t}$ is per student reports of sexual assault in school t in year i, $\
 
 The results are shown in Figure 4 and Table 2. As can be seen, there is a significant uptick in reports at schools where investigations are opened, starting in the year before and extending for many years (albeit with increasing standard errors). The increases in the final lead, the case year and the first lag are significant at the 0.1\% level, and the next two lags at the 5\% level. The coefficient is 0.00089 on the year of the case; to put this in perspective, average reports per student in 2016 were 0.00047. Thus these investigations caused a near 200\% increase in reporting at schools that they were opened at. We also see that when introducing a dummy for years after the 2011 change, including Title IX dummies reduces the after\_2011 coefficient by 8.8\% - or in other words, increases due to Title IX investigations explain away 8.8\% of the increase in reports after 2011.
 
-I consider the differing effects that each investigation opened have on a school by re-estimating the above equation except with separate dummies for the first investigation at each school, the second, and so on, as well as leads and lags for each. The coefficients on the years of the cases are shown in Figure 5 and Table 3. 
+I consider the differing effects that each investigation opened have on a school by re-estimating the above equation except with separate dummies for the first investigation at each school, the second, and so on, as well as leads and lags for each. The coefficients on the years of the cases are shown in Figure 5 and Table 3. As might be expected, when grouping like this, the coefficient on the first case is higher than it was for all cases - whatever mechanism is driving these higher reports, it likely works less strongly when the second investigation is opened than the first. Interestingly, investigations after the first show no sign of increasing reports, as their coefficients are all small and statistically insignificant. 
+
+I next consider whether schools in the same county as schools that have investigations opened respond similarly to the investigated schools themselves. I run the above regression but for schools without investigations, with dummies for investigations opened in their counties. The results are shown in Table 4. \todo{This is using old way to get investigation dates, and is done poorly (not sure it excludes the right schools)}
+
+Very interestingly, all coefficients are negative, very small, and besides the coefficient on the first lag, all statistically insignificant. If these investigations are increasing reports at nearby schools because of their salience, why not here too? Why would they hugely increase reports there and decrease reports here?
+
 
 
 % The appendix command is issued once, prior to all appendices, if any.
