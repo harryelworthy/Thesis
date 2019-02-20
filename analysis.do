@@ -16,7 +16,7 @@ collapse (sum) total comb, by(year)
 gen reports_per_1000 = (comb * 1000)/total
 tsset year
 tsline reports_per_1000, title("Reports of Sexual Assault per 1000 Students Enrolled") ///
-	subtitle("Schools with >10,000 enrolled students")
+	subtitle("Schools with >10,000 enrolled students") xline(2011)
 	
 graph export "figures/school_reports.eps", as(eps) replace
 
@@ -307,7 +307,7 @@ restore
 
 */
 
-eststo: qui xtreg saweb casedate lead* lag* i.year i.woy 
+*eststo: qui xtreg saweb casedate lead* lag* i.year i.woy 
 
 /*
 eststo: qui xtreg sanews casedate lead* lag* i.year i.woy 
