@@ -1,4 +1,4 @@
-/*
+
 
 
 
@@ -9,7 +9,7 @@
 clear all
 
 
-/*
+
 forv i = 2013(1)2016{
 di "year: `i'"
 
@@ -20,10 +20,10 @@ di "year: `i'"
   rename bh006 date_nibrs
   rename bh007 city
   rename bh008 stabb
-  rename bh009 pop_group 
+  rename bh009 pop_group
   rename bh012 agency_indic
   *keep only city police
-  *keep if agency_indic==1 
+  *keep if agency_indic==1
 
 
   rename bh019 pop1
@@ -31,9 +31,9 @@ di "year: `i'"
   rename bh027 pop3
   rename bh031 pop4
   destring pop1, replace
-  
 
-  
+
+
   *year specific
 
    rename bh035 pop5
@@ -125,7 +125,7 @@ di "year: `i'"
   *Serious injury
   *Minor injury
   gen byte injuryMinor= (vinjury1==2|vinjury2==2|vinjury3==2|vinjury4==2|vinjury5==2)
-    
+
   gen byte injurySerious= !injuryMinor & !injuryNone & vinjury1!=-6
 
   rename v50061 oseqno
@@ -134,7 +134,7 @@ di "year: `i'"
   rename v50081 osex
     gen ofemale=osex==0
     quietly replace ofemale=. if osex==-6
-rename v50091 orace  
+rename v50091 orace
 
 
   keep ori rep* cfips* monthsreported pop* city stabb agency_indic pop_group date* ino idate ihour datereport offensecode offusing* location weapon* vage vfemale injuryN injuryM injuryS vrelate* vseqno offense* oseq* vrace oseqno oage ofemale orace
@@ -148,7 +148,7 @@ save "raw/`i'_out", replace
 }
 
 
-*/
+
 
 di "year: 2013"
 use "raw/2013_out", clear
@@ -160,7 +160,7 @@ forvalues i = 2014(1)2016 {
 
 *save step1, replace
 
-  
+
   ***Dates
 g year = int(idate/10000)
 g temp = idate-year*10000
@@ -185,8 +185,8 @@ forv i = 1(1)6{
   replace offense`i' = "36B" if temp`i' == 362
   drop temp`i'
   }
-  
- 
+
+
 rename vrace tempr
 gen vrace = "W" if tempr == 1
 replace vrace = "B" if tempr == 2
@@ -245,7 +245,7 @@ append using "raw/out_allyears"
 
 
 
-   *Data is now at the offender-by-victim level. We now know what offenses an offender committed against a victim, their relationship to the victim, the location of each offense and whether substances were involved for each offense.   
+   *Data is now at the offender-by-victim level. We now know what offenses an offender committed against a victim, their relationship to the victim, the location of each offense and whether substances were involved for each offense.
 drop if monthsreported == 0
 
 compress
@@ -261,13 +261,13 @@ keep date_nibrs ino pop* offense* vage oage vrace orace vfemale offusing* months
 *keep if ori is actively reporting to NIBRS
 g year_nibrs = substr(date_nibrs, 1,4)
 destring year_nibrs, replace
-keep if  year >= year_nibrs	
+keep if  year >= year_nibrs
 
 
 
 
 
-*order stabb ori ino  year month 
+*order stabb ori ino  year month
 *sort stabb ori ino year month day
 
 ***Calculate outcome measures and collapse to daily crime counts***
@@ -279,55 +279,55 @@ forv i = 1(1)6{
 
 	g rape_v17_24_o_resid =(rape ==1 & vage >= 17 & vage <= 24 &  oage ==.)
 	g rape_vic_res =(rape ==1 & vage ==.)
-	
+
 foreach i in 13 17 21 25{
 loc j = `i' + 3
 
 g rape_v17_24_o`i'_`j' =(rape ==1 & vage >= 17 & vage <= 24 &  oage >= `i' & oage <=`j')
 g rape_vic_`i'_`j' = 0
-  
+
 	forv m = 1(1)6{
-		replace rape_vic_`i'_`j' = 1 if (offense`m'  == "11A" | offense`m'== "11B" | offense`m'== "11C") & vage >= `i' & vage <=`j' 
-		
+		replace rape_vic_`i'_`j' = 1 if (offense`m'  == "11A" | offense`m'== "11B" | offense`m'== "11C") & vage >= `i' & vage <=`j'
+
 		}
 }
 
 g rape_vic_18_24 = 0
 forv m = 1(1)6{
-	replace rape_vic_18_24 = 1 if (offense`m'  == "11A" | offense`m'== "11B" | offense`m'== "11C") & vage >= 18 & vage <=24 
+	replace rape_vic_18_24 = 1 if (offense`m'  == "11A" | offense`m'== "11B" | offense`m'== "11C") & vage >= 18 & vage <=24
 	}
-	
+
 forv i = 1(1)3{
 	g byte alc`i' = (offusing`i' == 1 | offusing`i' == 1 | offusing`i' == 1)
-	
+
 	}
-	
+
 	g rapealc = 0
-		
+
 forv i = 1(1)3{
 	replace rapealc = 1 if alc`i' == 1 & (offense`i' == "11A" | offense`i'== "11B" | offense`i'== "11C")
 	}
-	
+
 	*Rapes by Race
-	
+
 	g rape_vblk_17_24 =  (rape == 1 & vrace == "B" & vage >= 17 & vage <= 24)
 	g rape_vwht_17_24 =  (rape == 1 & vrace == "W" & vage >= 17 & vage <= 24)
 	g rape_voth_17_24 =  (rape == 1 & vrace != "W" & vrace != "B" & vage >= 17 & vage <= 24)
-	
-	
+
+
 	g rape_oblk_17_24 =  (rape == 1 & orace == "B" & vage >= 17 & vage <= 24)
 	g rape_owht_17_24 =  (rape == 1 & orace == "W" & vage >= 17 & vage <= 24)
 	g rape_ooth_17_24 =  (rape == 1 & orace != "W" & orace != "B" & vage >= 17 & vage <= 24)
-	
-	*No Males 
+
+	*No Males
 	g rape_femv_17_24 =(rape == 1 & vfemale == 1 & vage >= 17 & vage <= 24)
-/*		
+/*
 	*Rapes by relationship
-	cap drop known 
+	cap drop known
 	g known = (vrelate == "AQ" | vrelate == "FR" |  vrelate == "NE" | vrelate == "BE" | vrelate == "BG" | vrelate == "CF" | vrelate == "HR" | vrelate == "EE" | vrelate == "ER" | vrelate == "OK" | vrelate == "XS")
 	g family = (vrelate == "SE" | vrelate == "CS" |  vrelate == "PA" | vrelate == "SB" | vrelate == "CH" | vrelate == "GP" | vrelate == "GC" | vrelate == "IL" | vrelate == "SP" | vrelate == "SC" | vrelate == "SS" | vrelate == "OF" | vrelate == "VO")
 
-		
+
 	g byte rape_spouse_17_24 = ((spouse == 1 | exspouse ==1 |commonspouse == 1) & rape == 1 & vage >= 17 & vage <= 24)
 	g byte rape_bfriend_17_24 = (bgfriend == 1 & rape == 1 & vage >= 17 & vage <= 24)
 	g byte rape_unkn_17_24 = (vrelate == "RU" & rape== 1 & vage >= 17 & vage <= 24)
@@ -340,22 +340,22 @@ forv i = 1(1)3{
 	g byte rape_hr_17_24 = (vrelate == "HR" & rape== 1 & vage >= 17 & vage <= 24)
 */
 if 1 ==1{
-	
+
 foreach i in 17{
 loc j = `i' + 7
 	gen rapealc_vic_`i'_`j' = 0
-		
-	forv m = 1(1)3{	
+
+	forv m = 1(1)3{
 		replace rapealc_vic_`i'_`j' = 1 if alc`m' == 1 & (offense`m' == "11A" | offense`m'== "11B" | offense`m'== "11C") & vage >= `i' & vage <=`j'
-		
-					
+
+
 		}
 	}
 }
-	
-		
-	
-	
+
+
+
+
 rename pop1 population1
 
 drop pop2 pop3 pop4 pop5
@@ -364,19 +364,19 @@ sort state_nibrs ori year month day
 
 duplicates drop
 
-	
+
 *append groupB crimes:
 *	append using "dataconstruction/datafiles\GroupB_1991_2012.dta"
 *compress
 keep  rape* population*  months* agency* city state_nibrs rep* stabb cfips* ori idt rdt ino
-* drop otherfam 
+* drop otherfam
 
 
 *save step3, replace
 
 collapse (sum) rape* (firstnm) population*  months* agency* city ori state_nibrs rep* stabb cfips* idt rdt, by(ino) fast
 
-* DO I DO THIS???? 
+* DO I DO THIS????
 
 compress
 
@@ -386,16 +386,16 @@ replace rdt = idt if rdt == .
 
 
 /*
-	
+
 ***merge in missing county IDs***
 	replace stabb = "NE" if stabb == "NB"
 	rename cfips1 countyfips
 	destring countyfips, replace
-	mmerge stabb using dataconstruction\datafiles\UCR_FIPS_stateXwalk.dta 
+	mmerge stabb using dataconstruction\datafiles\UCR_FIPS_stateXwalk.dta
 	drop if _merge == 2
-	
+
 	preserve
-		use dataconstruction\datafiles\04634-0001-Data.dta, clear 
+		use dataconstruction\datafiles\04634-0001-Data.dta, clear
 	rename LONG LONGI
 	rename *, lower
 	rename fstate statefips
@@ -405,21 +405,21 @@ replace rdt = idt if rdt == .
 	tempfile Xwalk
 	save "`Xwalk'", replace
 	restore
- 
+
 	*merge in county crosswalk
 	mmerge ori using "`Xwalk'"
 	drop if _merge == 2
 	destring countyfips, replace force
 	replace countyfips = countyfipsalt if countyfips == .
-	
+
 */
 
 g year = year(rdt)
 
 
 collapse (sum) rape* (firstnm) population*  months* agency* city state_nibrs rep* stabb cfips*, by(ori year) fast
-	
-	
+
+
 save "clean/police_yearly", replace
 
 
@@ -430,23 +430,23 @@ preserve
 replace rdt = idt if rdt == .
 
 *keep  rape* population*  months* agency* city state_nibrs dow rep* month day stabb cfips* year ori mdy sundayofweek
-* drop otherfam 
+* drop otherfam
 
-gen sundayofweek = cond(dow(rdt) == 0, rdt, rdt - dow(rdt)) 
+gen sundayofweek = cond(dow(rdt) == 0, rdt, rdt - dow(rdt))
 
 collapse (sum) rape* (firstnm) population*  months* agency* city state_nibrs rep* stabb cfips*, by(sundayofweek) fast
 
 /*
-	
+
 ***merge in missing county IDs***
 	replace stabb = "NE" if stabb == "NB"
 	rename cfips1 countyfips
 	destring countyfips, replace
-	mmerge stabb using dataconstruction\datafiles\UCR_FIPS_stateXwalk.dta 
+	mmerge stabb using dataconstruction\datafiles\UCR_FIPS_stateXwalk.dta
 	drop if _merge == 2
-	
+
 	preserve
-		use dataconstruction\datafiles\04634-0001-Data.dta, clear 
+		use dataconstruction\datafiles\04634-0001-Data.dta, clear
 	rename LONG LONGI
 	rename *, lower
 	rename fstate statefips
@@ -456,16 +456,16 @@ collapse (sum) rape* (firstnm) population*  months* agency* city state_nibrs rep
 	tempfile Xwalk
 	save "`Xwalk'", replace
 	restore
- 
+
 	*merge in county crosswalk
 	mmerge ori using "`Xwalk'"
 	drop if _merge == 2
 	destring countyfips, replace force
 	replace countyfips = countyfipsalt if countyfips == .
-	
-*/	
-	
-	
+
+*/
+
+
 save "clean/police_weekly", replace
 
 restore
@@ -489,18 +489,106 @@ save yearlyplus, replace
 
 restore
 
-gen sundayofweek = cond(dow(rdt) == 0, rdt, rdt - dow(rdt)) 
+preserve
+
+gen sundayofweek = cond(dow(rdt) == 0, rdt, rdt - dow(rdt))
 
 collapse (sum) rape* waitover* (mean) timewaited (firstnm) population*  months* agency* city state_nibrs rep* stabb cfips*, by(sundayofweek) fast
 
 save "clean/police_weekly_reportdates", replace
 
-clear
+
+restore
+
+preserve
+
+replace rdt = idt if rdt == .
+
+*keep  rape* population*  months* agency* city state_nibrs dow rep* month day stabb cfips* year ori mdy sundayofweek
+* drop otherfam
+
+gen sundayofweek = cond(dow(rdt) == 0, rdt, rdt - dow(rdt))
+
+collapse (sum) rape* (firstnm) population*  months* agency* city state_nibrs rep* cfips*, by(sundayofweek stabb) fast
+
+/*
+
+***merge in missing county IDs***
+	replace stabb = "NE" if stabb == "NB"
+	rename cfips1 countyfips
+	destring countyfips, replace
+	mmerge stabb using dataconstruction\datafiles\UCR_FIPS_stateXwalk.dta
+	drop if _merge == 2
+
+	preserve
+		use dataconstruction\datafiles\04634-0001-Data.dta, clear
+	rename LONG LONGI
+	rename *, lower
+	rename fstate statefips
+	rename fcounty countyfipsalt
+	rename ori9 ori
+	drop if ori == ""
+	tempfile Xwalk
+	save "`Xwalk'", replace
+	restore
+
+	*merge in county crosswalk
+	mmerge ori using "`Xwalk'"
+	drop if _merge == 2
+	destring countyfips, replace force
+	replace countyfips = countyfipsalt if countyfips == .
 
 */
 
 
+save "clean/police_week_by_state", replace
 
+restore
+
+preserve
+
+replace rdt = idt if rdt == .
+
+*keep  rape* population*  months* agency* city state_nibrs dow rep* month day stabb cfips* year ori mdy sundayofweek
+* drop otherfam
+
+gen sundayofweek = cond(dow(rdt) == 0, rdt, rdt - dow(rdt))
+
+collapse (sum) rape* (firstnm) population*  months* agency* city state_nibrs rep* cfips*, by(rdt) fast
+
+/*
+
+***merge in missing county IDs***
+	replace stabb = "NE" if stabb == "NB"
+	rename cfips1 countyfips
+	destring countyfips, replace
+	mmerge stabb using dataconstruction\datafiles\UCR_FIPS_stateXwalk.dta
+	drop if _merge == 2
+
+	preserve
+		use dataconstruction\datafiles\04634-0001-Data.dta, clear
+	rename LONG LONGI
+	rename *, lower
+	rename fstate statefips
+	rename fcounty countyfipsalt
+	rename ori9 ori
+	drop if ori == ""
+	tempfile Xwalk
+	save "`Xwalk'", replace
+	restore
+
+	*merge in county crosswalk
+	mmerge ori using "`Xwalk'"
+	drop if _merge == 2
+	destring countyfips, replace force
+	replace countyfips = countyfipsalt if countyfips == .
+
+*/
+
+
+save "clean/police_daily", replace
+
+restore
 
 
 
@@ -633,19 +721,19 @@ rename NONFOR nonforcib
 
 * Sum schools with same year, same name, i.e. different branches of same school
 * These create issues as the student count is for entire system, this summing reports makes sense
-bysort school year: replace rape = sum(rape) 
-bysort school year: replace fondl = sum(fondl) 
+bysort school year: replace rape = sum(rape)
+bysort school year: replace fondl = sum(fondl)
 bysort school year: replace inces = sum(inces)
-bysort school year: replace statr = sum(statr)  
-bysort school year: replace forcib = sum(forcib) 
+bysort school year: replace statr = sum(statr)
+bysort school year: replace forcib = sum(forcib)
 bysort school year: replace nonforcib = sum(nonforcib)
-by school year: keep if _n == _N 
+by school year: keep if _n == _N
 
 * Create combined var for all reports, incl different classifications before/after 2014
 gen comb = rape + fondl + inces + statr
 replace comb = forcib + nonforcib if year < 14
 
-* Create dummy for after 2011 
+* Create dummy for after 2011
 gen after_2011 = 0
 replace after_2011 = 1 if year > 11
 
@@ -673,7 +761,7 @@ save "clean/school_full", replace
 do "raw/add_school_params/hd2016.do"
 * use "/Users/harry/Google Drive/GDocuments/F18/Thesis/DATA/Data Cleaning and Analysis/dct_hd2017.dta", clear
 
-keep unitid zip obereg opeid opeflag sector iclevel control hbcu tribal medical locale act cyactive cbsa csa countycd cngdstcd 
+keep unitid zip obereg opeid opeflag sector iclevel control hbcu tribal medical locale act cyactive cbsa csa countycd cngdstcd
 
 save "raw/tempf", replace
 
@@ -753,7 +841,7 @@ insheet using "/Users/harry/Google Drive/GDocuments/F18/Thesis/DATA/Data Cleanin
 
 rename fips_code countycd
 
-reshape long total_ dem_ gop_ oth_, i(countycd) j(year)  
+reshape long total_ dem_ gop_ oth_, i(countycd) j(year)
 
 gen per_dem = dem_/total_
 gen per_gop = gop_/total_
@@ -792,7 +880,7 @@ drop part? tmp opened
 
 rename college_unitid id6s
 
-gen weekof = cond(dow(date_op) == 0, date_op, date_op - dow(date_op)) 
+gen weekof = cond(dow(date_op) == 0, date_op, date_op - dow(date_op))
 form weekof %td
 
 save "clean/all_cases", replace
@@ -803,7 +891,7 @@ form first_date_school %td
 
 drop if (first_date_school != date_op)
 
-duplicates drop 
+duplicates drop
 
 save "clean/first_cases", replace
 
@@ -816,7 +904,7 @@ save "clean/first_cases", replace
 **** TRENDS
 
 clear
-import delimited "raw/SA.csv", varnames(3) 
+import delimited "raw/SA.csv", varnames(3)
 
 split week ,g(part) p("/")
 g tmp = part1 + part2 + part3
@@ -834,7 +922,7 @@ rename normalized SA_norm
 save "clean/SA", replace
 
 clear
-import delimited "raw/r.csv", varnames(3) 
+import delimited "raw/r.csv", varnames(3)
 
 split week ,g(part) p("/")
 g tmp = part1 + part2 + part3
@@ -852,7 +940,7 @@ rename normalized r_norm
 save "clean/r", replace
 
 clear
-import delimited "raw/bn.csv", varnames(3) 
+import delimited "raw/bn.csv", varnames(3)
 
 split week ,g(part) p("/")
 g tmp = part1 + part2 + part3
@@ -870,7 +958,7 @@ rename normalized bn_norm
 save "clean/bn", replace
 
 clear
-import delimited "raw/b.csv", varnames(3) 
+import delimited "raw/b.csv", varnames(3)
 
 split week ,g(part) p("/")
 g tmp = part1 + part2 + part3
@@ -903,7 +991,7 @@ save "clean/combtrends", replace
 *** NEW TRENDS
 
 clear
-import delimited "raw/daily_trends.csv", varnames(1) 
+import delimited "raw/daily_trends.csv", varnames(1)
 drop v1
 
 split date ,g(part) p("-")
@@ -918,7 +1006,7 @@ drop part? tmp
 save "clean/daily_trends", replace
 
 clear
-import delimited "raw/trends.csv", varnames(1) 
+import delimited "raw/trends.csv", varnames(1)
 drop v1
 
 split date ,g(part) p("-")
