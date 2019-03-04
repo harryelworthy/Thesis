@@ -302,8 +302,9 @@ drop if _merge != 3
 
 keep state date value rape*
 form date %td
+rename value trend
 
-save "processed/trends_police_week_by_state"
+save "processed/trends_police_week_by_state", replace
 
 
 
@@ -320,8 +321,9 @@ drop if _merge != 3
 
 keep state date value reports_pre
 form date %td
+rename value trend
 
-save "processed/trends_police_week_by_state_plus"
+save "processed/trends_police_week_by_state_plus", replace
 
 
 
@@ -329,35 +331,37 @@ save "processed/trends_police_week_by_state_plus"
 
 clear
 use "clean/police_daily"
-keep sundayofweek rape*
-rename sundayofweek date
+keep rdt rape*
+rename rdt date
 gen term = "sexual assault"
 gen property = "web"
 
-merge 1:1 term state date property using "clean/trends"
+merge 1:1 term date property using "clean/daily_trends"
 drop if _merge != 3
 
 keep date value rape*
 form date %td
+rename value trend
 
-save "processed/trends_police_daily"
+save "processed/trends_police_daily", replace
 
 
 
 clear
 use "clean/police_daily"
-keep sundayofweek rape* reports_pre
-rename sundayofweek date
+keep rdt rape* reports_pre
+rename rdt date
 gen term = "sexual assault"
 gen property = "web"
 
-merge 1:1 term state date property using "clean/trends"
+merge 1:1 term date property using "clean/daily_trends"
 drop if _merge != 3
 
 keep date value reports_pre
 form date %td
+rename value trend
 
-save "processed/trends_police_daily"
+save "processed/trends_police_daily_plus", replace
 
 
 
