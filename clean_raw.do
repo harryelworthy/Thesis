@@ -8,6 +8,14 @@
 * AND from: https://www.openicpsr.org/openicpsr/project/100462/version/V3/view?path=/openicpsr/100462/fcr:versions/V3/Data-Construction/Data-Files/orischool.xls&type=file
 clear all
 
+use "raw/out_allyears"
+
+gen tmp = "0"
+replace tmp = "1" if (datereport == "R")
+drop datereport
+rename tmp datereport
+
+save "raw/out_allyears", replace
 
 
 forv i = 2013(1)2016{
@@ -250,10 +258,11 @@ drop if monthsreported == 0
 
 compress
 
+gen idt = .
+gen rdt = .
 
-
-gen idt = mdy if datereport == ""
-gen rdt = mdy if datereport == "R"
+replace idt = mdy if datereport == "0"
+replace rdt = mdy if datereport == "1"
 
 
 keep date_nibrs ino pop* offense* vage oage vrace orace vfemale offusing* months* agency* city state_nibrs dow rep* month day stabb cfips* year ori mdy idt rdt
@@ -376,114 +385,79 @@ keep  rape* population*  months* agency* city state_nibrs rep* stabb cfips* ori 
 
 collapse (sum) rape* (firstnm) population*  months* agency* city ori state_nibrs rep* stabb cfips* idt rdt, by(ino) fast
 
+drop if rape == 0
 * DO I DO THIS????
 
 compress
 
+
+
+
 preserve
 
 replace rdt = idt if rdt == .
-
-
-/*
-
-***merge in missing county IDs***
-	replace stabb = "NE" if stabb == "NB"
-	rename cfips1 countyfips
-	destring countyfips, replace
-	mmerge stabb using dataconstruction\datafiles\UCR_FIPS_stateXwalk.dta
-	drop if _merge == 2
-
-	preserve
-		use dataconstruction\datafiles\04634-0001-Data.dta, clear
-	rename LONG LONGI
-	rename *, lower
-	rename fstate statefips
-	rename fcounty countyfipsalt
-	rename ori9 ori
-	drop if ori == ""
-	tempfile Xwalk
-	save "`Xwalk'", replace
-	restore
-
-	*merge in county crosswalk
-	mmerge ori using "`Xwalk'"
-	drop if _merge == 2
-	destring countyfips, replace force
-	replace countyfips = countyfipsalt if countyfips == .
-
-*/
 
 g year = year(rdt)
 
-
 collapse (sum) rape* (firstnm) population*  months* agency* city state_nibrs rep* stabb cfips*, by(ori year) fast
-
 
 save "clean/police_yearly", replace
 
-
 restore
+
+
+
+
 
 preserve
 
 replace rdt = idt if rdt == .
 
-*keep  rape* population*  months* agency* city state_nibrs dow rep* month day stabb cfips* year ori mdy sundayofweek
-* drop otherfam
-
 gen sundayofweek = cond(dow(rdt) == 0, rdt, rdt - dow(rdt))
 
+collapse (sum) rape* (firstnm) population*  months* agency* city state_nibrs rep* cfips*, by(sundayofweek stabb) fast
+
+save "clean/police_week_by_state", replace
+
 collapse (sum) rape* (firstnm) population*  months* agency* city state_nibrs rep* stabb cfips*, by(sundayofweek) fast
-
-/*
-
-***merge in missing county IDs***
-	replace stabb = "NE" if stabb == "NB"
-	rename cfips1 countyfips
-	destring countyfips, replace
-	mmerge stabb using dataconstruction\datafiles\UCR_FIPS_stateXwalk.dta
-	drop if _merge == 2
-
-	preserve
-		use dataconstruction\datafiles\04634-0001-Data.dta, clear
-	rename LONG LONGI
-	rename *, lower
-	rename fstate statefips
-	rename fcounty countyfipsalt
-	rename ori9 ori
-	drop if ori == ""
-	tempfile Xwalk
-	save "`Xwalk'", replace
-	restore
-
-	*merge in county crosswalk
-	mmerge ori using "`Xwalk'"
-	drop if _merge == 2
-	destring countyfips, replace force
-	replace countyfips = countyfipsalt if countyfips == .
-
-*/
-
 
 save "clean/police_weekly", replace
 
 restore
 
+
+
+
+preserve
+
+replace rdt = idt if rdt == .
+
+gen sundayofweek = cond(dow(rdt) == 0, rdt, rdt - dow(rdt))
+
+collapse (sum) rape* (firstnm) population*  months* agency* city state_nibrs rep* cfips*, by(rdt) fast
+
+save "clean/police_daily", replace
+
+restore
+
+
+
+
+
 drop if rdt == .
 drop if idt == .
 
 gen timewaited = rdt - idt
-gen waitover7 = timewaited > 7
-gen waitover30 = timewaited > 30
-gen waitover365 = timewaited > 365
+gen reports_pre = 0
+
+
 
 preserve
 
 g year = year(rdt)
 
 
-collapse (sum) rape* waitover* (mean) timewaited (firstnm) population*  months* agency* city state_nibrs rep* stabb cfips*, by(ori year) fast
+collapse (sum) rape* (mean) timewaited (firstnm) population*  months* agency* city state_nibrs rep* stabb cfips*, by(ori year) fast
 
 save yearlyplus, replace
 
@@ -491,102 +465,44 @@ restore
 
 preserve
 
+gen sundayofidt = cond(dow(idt) == 0, idt, idt - dow(idt))
+
 gen sundayofweek = cond(dow(rdt) == 0, rdt, rdt - dow(rdt))
+replace reports_pre = rape if ((rdt - sundayofidt) < 0)
 
-collapse (sum) rape* waitover* (mean) timewaited (firstnm) population*  months* agency* city state_nibrs rep* stabb cfips*, by(sundayofweek) fast
+collapse (sum) rape* reports* (mean) timewaited (firstnm) population*  months* agency* city state_nibrs rep* stabb cfips*, by(sundayofweek) fast
 
-save "clean/police_weekly_reportdates", replace
+save "clean/police_weekly_plus", replace
 
 
 restore
 
 preserve
 
-replace rdt = idt if rdt == .
-
 *keep  rape* population*  months* agency* city state_nibrs dow rep* month day stabb cfips* year ori mdy sundayofweek
 * drop otherfam
+gen sundayofidt = cond(dow(idt) == 0, idt, idt - dow(idt))
 
 gen sundayofweek = cond(dow(rdt) == 0, rdt, rdt - dow(rdt))
+replace reports_pre = rape if ((rdt - sundayofidt) < 0)
 
-collapse (sum) rape* (firstnm) population*  months* agency* city state_nibrs rep* cfips*, by(sundayofweek stabb) fast
-
-/*
-
-***merge in missing county IDs***
-	replace stabb = "NE" if stabb == "NB"
-	rename cfips1 countyfips
-	destring countyfips, replace
-	mmerge stabb using dataconstruction\datafiles\UCR_FIPS_stateXwalk.dta
-	drop if _merge == 2
-
-	preserve
-		use dataconstruction\datafiles\04634-0001-Data.dta, clear
-	rename LONG LONGI
-	rename *, lower
-	rename fstate statefips
-	rename fcounty countyfipsalt
-	rename ori9 ori
-	drop if ori == ""
-	tempfile Xwalk
-	save "`Xwalk'", replace
-	restore
-
-	*merge in county crosswalk
-	mmerge ori using "`Xwalk'"
-	drop if _merge == 2
-	destring countyfips, replace force
-	replace countyfips = countyfipsalt if countyfips == .
-
-*/
+collapse (sum) rape* reports* (firstnm) population*  months* agency* city state_nibrs rep* cfips*, by(sundayofweek stabb) fast
 
 
-save "clean/police_week_by_state", replace
+save "clean/police_week_by_state_plus", replace
 
 restore
 
 preserve
 
-replace rdt = idt if rdt == .
-
 *keep  rape* population*  months* agency* city state_nibrs dow rep* month day stabb cfips* year ori mdy sundayofweek
 * drop otherfam
 
-gen sundayofweek = cond(dow(rdt) == 0, rdt, rdt - dow(rdt))
+replace reports_pre = rape if ((rdt - idt) >= 1)
 
-collapse (sum) rape* (firstnm) population*  months* agency* city state_nibrs rep* cfips*, by(rdt) fast
+collapse (sum) rape* reports* (firstnm) population*  months* agency* city state_nibrs rep* cfips*, by(rdt) fast
 
-/*
-
-***merge in missing county IDs***
-	replace stabb = "NE" if stabb == "NB"
-	rename cfips1 countyfips
-	destring countyfips, replace
-	mmerge stabb using dataconstruction\datafiles\UCR_FIPS_stateXwalk.dta
-	drop if _merge == 2
-
-	preserve
-		use dataconstruction\datafiles\04634-0001-Data.dta, clear
-	rename LONG LONGI
-	rename *, lower
-	rename fstate statefips
-	rename fcounty countyfipsalt
-	rename ori9 ori
-	drop if ori == ""
-	tempfile Xwalk
-	save "`Xwalk'", replace
-	restore
-
-	*merge in county crosswalk
-	mmerge ori using "`Xwalk'"
-	drop if _merge == 2
-	destring countyfips, replace force
-	replace countyfips = countyfipsalt if countyfips == .
-
-*/
-
-
-save "clean/police_daily", replace
+save "clean/police_daily_plus", replace
 
 restore
 
@@ -599,7 +515,7 @@ Download all excel files and put them in same folder as this file, then set work
 
 * 2008
 clear
-import excel "raw/Crime2008EXCEL/oncampuscrime050607.xls", sheet("Oncampuscrime050607") firstrow
+import excel "raw/Crime2008EXCEL/Oncampuscrime050607.xls", sheet("Oncampuscrime050607") firstrow
 
 * Need to add a 0 to middle of id's, was done in 2010, annoying!
 tostring UNITID_P, gen(strid)
@@ -621,7 +537,7 @@ save "raw/2008", replace
 
 * 2009
 clear
-import excel "raw/Crime2009EXCEL/oncampuscrime060708.xls", sheet("Oncampuscrime060708") firstrow
+import excel "raw/Crime2009EXCEL/Oncampuscrime060708.xls", sheet("Oncampuscrime060708") firstrow
 
 * As above
 tostring UNITID_P, gen(strid)
@@ -641,19 +557,19 @@ save "raw/2009", replace
 
 * 2010
 clear
-import excel "raw/Crime2010EXCEL/oncampuscrime070809.xls", sheet("Oncampuscrime070809") firstrow
+import excel "raw/Crime2010EXCEL/Oncampuscrime070809.xls", sheet("Oncampuscrime070809") firstrow
 save "raw/2010", replace
 
 
 * 2011
 clear
-import excel "raw/Crime2011EXCEL/oncampuscrime080910.xls", sheet("Oncampuscrime080910") firstrow
+import excel "raw/Crime2011EXCEL/Oncampuscrime080910.xls", sheet("Oncampuscrime080910") firstrow
 save "raw/2011", replace
 
 
 * 2012
 clear
-import excel "raw/Crime2012EXCEL/oncampuscrime091011.xls", sheet("Sheet1") firstrow
+import excel "raw/Crime2012EXCEL/Oncampuscrime091011.xls", sheet("Sheet1") firstrow
 save "raw/2012", replace
 
 
@@ -1002,6 +918,8 @@ g date = date(tmp, "YMD")
 form date %td
 // clean up
 drop part? tmp
+
+duplicates drop
 
 save "clean/daily_trends", replace
 

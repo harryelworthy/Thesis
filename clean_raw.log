@@ -1,0 +1,1073 @@
+
+  ___  ____  ____  ____  ____ (R)
+ /__    /   ____/   /   ____/
+___/   /   /___/   /   /___/   14.1   Copyright 1985-2015 StataCorp LP
+  Statistics/Data Analysis            StataCorp
+                                      4905 Lakeway Drive
+     Special Edition                  College Station, Texas 77845 USA
+                                      800-STATA-PC        http://www.stata.com
+                                      979-696-4600        stata@stata.com
+                                      979-696-4601 (fax)
+
+20-user Stata network perpetual license:
+       Serial number:  401406215644
+         Licensed to:  Duke University Economics
+                       Durham
+
+Notes:
+      1.  Stata is running in batch mode.
+      2.  Unicode is supported; see help unicode_advice.
+      3.  Maximum number of variables is set to 5000; see help set_maxvar.
+
+. do clean_raw 
+
+. 
+. 
+. 
+. 
+. *This file reads in and organizes nibrs data for all years
+. * Data from: https://www.icpsr.umich.edu/icpsrweb/NACJD/search/studies?q=NIBR
+> S&
+. * Extract Files
+. * AND from: https://www.openicpsr.org/openicpsr/project/100462/version/V3/vie
+> w?path=/openicpsr/100462/fcr:versions/V3/Data-Construction/Data-Files/orischo
+> ol.xls&type=file
+. clear all
+
+. 
+. use "raw/out_allyears"
+
+. 
+. gen tmp = "0"
+
+. replace tmp = "1" if (datereport == "R")
+(0 real changes made)
+
+. drop datereport
+
+. rename tmp datereport
+
+. 
+. save "raw/out_allyears", replace
+file raw/out_allyears.dta saved
+
+. 
+. 
+. forv i = 2013(1)2016{
+  2. di "year: `i'"
+  3. 
+. 
+.   use "raw/`i'_raw"
+  4.   ren *, lower
+  5.   rename bh005 date_added
+  6.   rename bh006 date_nibrs
+  7.   rename bh007 city
+  8.   rename bh008 stabb
+  9.   rename bh009 pop_group
+ 10.   rename bh012 agency_indic
+ 11.   *keep only city police
+.   *keep if agency_indic==1
+. 
+. 
+.   rename bh019 pop1
+ 12.   rename bh023 pop2
+ 13.   rename bh027 pop3
+ 14.   rename bh031 pop4
+ 15.   destring pop1, replace
+ 16. 
+. 
+. 
+.   *year specific
+. 
+.    rename bh035 pop5
+ 17.    rename bh039 rep_indicator
+ 18.    rename bh040 monthsreported
+ 19.    rename bh042 rep_jan
+ 20.    rename bh043 rep_feb
+ 21.    rename bh044 rep_march
+ 22.    rename bh045 rep_apr
+ 23.    rename bh046 rep_may
+ 24.    rename bh047 rep_june
+ 25.    rename bh048 rep_july
+ 26.    rename bh049 rep_aug
+ 27.    rename bh050 rep_sep
+ 28.    rename bh051 rep_oct
+ 29.    rename bh052 rep_nov
+ 30.    rename bh053 rep_dec
+ 31.    rename bh054 cfips1
+ 32.    rename bh055 cfips2
+ 33.    rename bh056 cfips3
+ 34.    rename bh057 cfips4
+ 35.    rename bh058 cfips5
+ 36. 
+.   rename incnum ino
+ 37.   rename incdate idate
+ 38.   destring idate, replace
+ 39.   rename v1006 datereport
+ 40.   rename v1007 ihour
+ 41. 
+. 
+. 
+.   rename v20061 offensecode
+ 42.   rename v20081 offusing1
+ 43.   rename v20091 offusing2
+ 44.   rename v20101 offusing3
+ 45.   rename v20111 location
+ 46.   rename v20171 weapon1
+ 47.   rename v20181 weapon2
+ 48.   rename v20191 weapon3v
+ 49.   rename v40061 vseqno
+ 50.   rename v40071 offense1
+ 51.   rename v40081 offense2
+ 52.   rename v40091 offense3
+ 53.   rename v40101 offense4
+ 54.   rename v40111 offense5
+ 55.   rename v40121 offense6
+ 56.   rename v40131 offense7
+ 57.   rename v40141 offense8
+ 58.   rename v40151 offense9
+ 59.   rename v40161 offense10
+ 60. 
+. 
+. 
+.   rename v40181 vage
+ 61.     replace vage=. if vage<0
+ 62. 
+. 
+.   rename v40191 vsex
+ 63.     gen vfemale=vsex==0
+ 64.     quietly replace vfemale=. if vsex==-6
+ 65.   rename v40261 vinjury1
+ 66.   rename v40271 vinjury2
+ 67.   rename v40281 vinjury3
+ 68.   rename v40291 vinjury4
+ 69.   rename v40301 vinjury5
+ 70.   rename v40311 oseqno1
+ 71.   rename v40321 vrelate1
+ 72.   rename v40331 oseqno2
+ 73.   rename v40341 vrelate2
+ 74.   rename v40351 oseqno3
+ 75.   rename v40361 vrelate3
+ 76.   rename v40371 oseqno4
+ 77.   rename v40381 vrelate4
+ 78.   rename v40391 oseqno5
+ 79.   rename v40401 vrelate5
+ 80.   rename v40411 oseqno6
+ 81.   rename v40421 vrelate6
+ 82.   rename v40431 oseqno7
+ 83.   rename v40441 vrelate7
+ 84.   rename v40451 oseqno8
+ 85.   rename v40461 vrelate8
+ 86.   rename v40471 oseqno9
+ 87.   rename v40481 vrelate9
+ 88.   rename v40491 oseqno10
+ 89.   rename v40501 vrelate10
+ 90.   rename v40201 vrace
+ 91.   *No injury
+.   gen byte injuryNone=vinjury1==1
+ 92.   *Serious injury
+.   *Minor injury
+.   gen byte injuryMinor= (vinjury1==2|vinjury2==2|vinjury3==2|vinjury4==2|vinj
+> ury5==2)
+ 93. 
+.   gen byte injurySerious= !injuryMinor & !injuryNone & vinjury1!=-6
+ 94. 
+.   rename v50061 oseqno
+ 95.   rename v50071 oage
+ 96.     replace oage=. if oage==0
+ 97.   rename v50081 osex
+ 98.     gen ofemale=osex==0
+ 99.     quietly replace ofemale=. if osex==-6
+100. rename v50091 orace
+101. 
+. 
+.   keep ori rep* cfips* monthsreported pop* city stabb agency_indic pop_group 
+> date* ino idate ihour datereport offensecode offusing* location weapon* vage 
+> vfemale injuryN injuryM injuryS vrelate* vseqno offense* oseq* vrace oseqno o
+> age ofemale orace
+102. 
+. drop offense7 offense8 offense9 offense10
+103. 
+.   sort ori ino
+104. 
+. 
+. save "raw/`i'_out", replace
+105. }
+year: 2013
+(National Incident-Based Reporting System, 2013: Extract Files, Incident-Level 
+> Fi)
+pop1 already numeric; no replace
+idate already numeric; no replace
+(1,528,091 real changes made, 1,528,091 to missing)
+(0 real changes made)
+file raw/2013_out.dta saved
+year: 2014
+(National Incident-Based Reporting System, 2014: Extract Files, Incident-Level 
+> Fi)
+pop1 already numeric; no replace
+idate already numeric; no replace
+(1,546,173 real changes made, 1,546,173 to missing)
+(0 real changes made)
+file raw/2014_out.dta saved
+year: 2015
+(National Incident-Based Reporting System, 2015: Extract Files, Incident-Level 
+> Fi)
+pop1 already numeric; no replace
+idate already numeric; no replace
+(1,556,819 real changes made, 1,556,819 to missing)
+(0 real changes made)
+file raw/2015_out.dta saved
+year: 2016
+(National Incident-Based Reporting System, 2015: Extract Files, Incident-Level 
+> Fi)
+pop1 already numeric; no replace
+idate already numeric; no replace
+(1,556,819 real changes made, 1,556,819 to missing)
+(0 real changes made)
+file raw/2016_out.dta saved
+
+. 
+. 
+. 
+. 
+. di "year: 2013"
+year: 2013
+
+. use "raw/2013_out", clear
+(National Incident-Based Reporting System, 2013: Extract Files, Incident-Level 
+> Fi)
+
+. forvalues i = 2014(1)2016 {
+  2.   di "year: `i'"
+  3.   append using "raw/`i'_out"
+  4. }
+year: 2014
+(label INCDATE already defined)
+(label BH006 already defined)
+(label BH009 already defined)
+(label BH012 already defined)
+(label BH039 already defined)
+(label BH042 already defined)
+(label BH043 already defined)
+(label BH044 already defined)
+(label BH045 already defined)
+(label BH046 already defined)
+(label BH047 already defined)
+(label BH048 already defined)
+(label BH049 already defined)
+(label BH050 already defined)
+(label BH051 already defined)
+(label BH052 already defined)
+(label BH053 already defined)
+(label BH054 already defined)
+(label BH055 already defined)
+(label BH056 already defined)
+(label BH057 already defined)
+(label BH058 already defined)
+(label V1006 already defined)
+(label V1007 already defined)
+(label V20061 already defined)
+(label V20081 already defined)
+(label V20091 already defined)
+(label V20101 already defined)
+(label V20111 already defined)
+(label V20171 already defined)
+(label V20181 already defined)
+(label V20191 already defined)
+(label V40061 already defined)
+(label V40071 already defined)
+(label V40081 already defined)
+(label V40091 already defined)
+(label V40101 already defined)
+(label V40111 already defined)
+(label V40121 already defined)
+(label V40201 already defined)
+(label V40311 already defined)
+(label V40321 already defined)
+(label V40331 already defined)
+(label V40341 already defined)
+(label V40351 already defined)
+(label V40361 already defined)
+(label V40371 already defined)
+(label V40381 already defined)
+(label V40391 already defined)
+(label V40401 already defined)
+(label V40411 already defined)
+(label V40421 already defined)
+(label V40431 already defined)
+(label V40441 already defined)
+(label V40451 already defined)
+(label V40461 already defined)
+(label V40471 already defined)
+(label V40481 already defined)
+(label V40491 already defined)
+(label V40501 already defined)
+(label V50061 already defined)
+(label V50071 already defined)
+(label V50091 already defined)
+year: 2015
+(label INCDATE already defined)
+(label BH006 already defined)
+(label BH009 already defined)
+(label BH012 already defined)
+(label BH039 already defined)
+(label BH042 already defined)
+(label BH043 already defined)
+(label BH044 already defined)
+(label BH045 already defined)
+(label BH046 already defined)
+(label BH047 already defined)
+(label BH048 already defined)
+(label BH049 already defined)
+(label BH050 already defined)
+(label BH051 already defined)
+(label BH052 already defined)
+(label BH053 already defined)
+(label BH054 already defined)
+(label BH055 already defined)
+(label BH056 already defined)
+(label BH057 already defined)
+(label BH058 already defined)
+(label V1006 already defined)
+(label V1007 already defined)
+(label V20061 already defined)
+(label V20081 already defined)
+(label V20091 already defined)
+(label V20101 already defined)
+(label V20111 already defined)
+(label V20171 already defined)
+(label V20181 already defined)
+(label V20191 already defined)
+(label V40061 already defined)
+(label V40071 already defined)
+(label V40081 already defined)
+(label V40091 already defined)
+(label V40101 already defined)
+(label V40111 already defined)
+(label V40121 already defined)
+(label V40201 already defined)
+(label V40311 already defined)
+(label V40321 already defined)
+(label V40331 already defined)
+(label V40341 already defined)
+(label V40351 already defined)
+(label V40361 already defined)
+(label V40371 already defined)
+(label V40381 already defined)
+(label V40391 already defined)
+(label V40401 already defined)
+(label V40411 already defined)
+(label V40421 already defined)
+(label V40431 already defined)
+(label V40441 already defined)
+(label V40451 already defined)
+(label V40461 already defined)
+(label V40471 already defined)
+(label V40481 already defined)
+(label V40491 already defined)
+(label V40501 already defined)
+(label V50061 already defined)
+(label V50071 already defined)
+(label V50091 already defined)
+year: 2016
+(label INCDATE already defined)
+(label BH006 already defined)
+(label BH009 already defined)
+(label BH012 already defined)
+(label BH039 already defined)
+(label BH042 already defined)
+(label BH043 already defined)
+(label BH044 already defined)
+(label BH045 already defined)
+(label BH046 already defined)
+(label BH047 already defined)
+(label BH048 already defined)
+(label BH049 already defined)
+(label BH050 already defined)
+(label BH051 already defined)
+(label BH052 already defined)
+(label BH053 already defined)
+(label BH054 already defined)
+(label BH055 already defined)
+(label BH056 already defined)
+(label BH057 already defined)
+(label BH058 already defined)
+(label V1006 already defined)
+(label V1007 already defined)
+(label V20061 already defined)
+(label V20081 already defined)
+(label V20091 already defined)
+(label V20101 already defined)
+(label V20111 already defined)
+(label V20171 already defined)
+(label V20181 already defined)
+(label V20191 already defined)
+(label V40061 already defined)
+(label V40071 already defined)
+(label V40081 already defined)
+(label V40091 already defined)
+(label V40101 already defined)
+(label V40111 already defined)
+(label V40121 already defined)
+(label V40201 already defined)
+(label V40311 already defined)
+(label V40321 already defined)
+(label V40331 already defined)
+(label V40341 already defined)
+(label V40351 already defined)
+(label V40361 already defined)
+(label V40371 already defined)
+(label V40381 already defined)
+(label V40391 already defined)
+(label V40401 already defined)
+(label V40411 already defined)
+(label V40421 already defined)
+(label V40431 already defined)
+(label V40441 already defined)
+(label V40451 already defined)
+(label V40461 already defined)
+(label V40471 already defined)
+(label V40481 already defined)
+(label V40491 already defined)
+(label V40501 already defined)
+(label V50061 already defined)
+(label V50071 already defined)
+(label V50091 already defined)
+
+. 
+. 
+. *save step1, replace
+. 
+. 
+.   ***Dates
+. g year = int(idate/10000)
+
+. g temp = idate-year*10000
+
+. g month = int(temp/100)
+
+. g day = temp - month*100
+
+. drop temp
+
+. g mdy = mdy(month,day,year)
+
+. g dow = dow(mdy)
+
+. g doy = doy(mdy)
+
+. 
+. 
+. 
+. *keep crimes against person
+. 
+. 
+. forv i = 1(1)6{
+  2.   rename offense`i' temp`i'
+  3.   gen offense`i' = "11A" if temp`i' == 111
+  4.   replace offense`i' = "11B" if temp`i' == 112
+  5.   replace offense`i' = "11C" if temp`i' == 113
+  6.   replace offense`i' = "36A" if temp`i' == 361
+  7.   replace offense`i' = "36B" if temp`i' == 362
+  8.   drop temp`i'
+  9.   }
+(19,777,322 missing values generated)
+(27,589 real changes made)
+(11,684 real changes made)
+(3,097 real changes made)
+(18,805 real changes made)
+(19,888,410 missing values generated)
+(2,245 real changes made)
+(564 real changes made)
+(61 real changes made)
+(289 real changes made)
+(19,891,061 missing values generated)
+(156 real changes made)
+(81 real changes made)
+(3 real changes made)
+(11 real changes made)
+(19,891,145 missing values generated)
+(6 real changes made)
+(8 real changes made)
+(0 real changes made)
+(0 real changes made)
+(19,891,147 missing values generated)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(19,891,150 missing values generated)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+
+. 
+. 
+. rename vrace tempr
+
+. gen vrace = "W" if tempr == 1
+(9,867,332 missing values generated)
+
+. replace vrace = "B" if tempr == 2
+(2,957,103 real changes made)
+
+. replace vrace = "O" if tempr > 2
+(259,031 real changes made)
+
+. drop tempr
+
+. 
+. rename orace tempr
+
+. gen orace = "W" if tempr == 1
+(12,576,085 missing values generated)
+
+. replace orace = "B" if tempr == 2
+(3,530,189 real changes made)
+
+. replace orace = "O" if tempr > 2
+(212,008 real changes made)
+
+. drop tempr
+
+. 
+. rename date_added tempr
+
+. tostring tempr, gen(date_added)
+date_added generated as str8
+
+. drop tempr
+
+. 
+. rename date_nibrs tempr
+
+. tostring tempr, gen(date_nibrs)
+date_nibrs generated as str8
+
+. drop tempr
+
+. 
+. rename pop2 tempr
+
+. tostring tempr, gen(pop2)
+pop2 generated as str6
+
+. drop tempr
+
+. 
+. rename pop3 tempr
+
+. tostring tempr, gen(pop3)
+pop3 generated as str5
+
+. drop tempr
+
+. 
+. rename pop4 tempr
+
+. tostring tempr, gen(pop4)
+pop4 generated as str1
+
+. drop tempr
+
+. 
+. rename pop5 tempr
+
+. tostring tempr, gen(pop5)
+pop5 generated as str1
+
+. drop tempr
+
+. 
+. rename datereport tempr
+
+. tostring tempr, gen(datereport)
+datereport generated as str1
+
+. drop tempr
+
+. 
+. *save step2, replace
+. 
+. drop pop_group rep_*
+
+. 
+. rename oseqno1 onum
+
+. 
+. rename cfips1 tempr
+
+. tostring tempr, gen(cfips1)
+cfips1 generated as str3
+
+. drop tempr
+
+. 
+. drop cfips2 cfips3 cfips4 cfips5
+
+. 
+. 
+. 
+. append using "raw/out_allyears"
+(note: variable offense6 was str1, now str3 to accommodate using data's
+       values)
+
+. 
+. 
+. 
+.    *Data is now at the offender-by-victim level. We now know what offenses an
+>  offender committed against a victim, their relationship to the victim, the l
+> ocation of each offense and whether substances were involved for each offense
+> .
+. drop if monthsreported == 0
+(0 observations deleted)
+
+. 
+. compress
+  variable agency_indic was int now byte
+  variable monthsreported was int now byte
+  variable ihour was int now byte
+  variable offusing1 was int now byte
+  variable offusing2 was int now byte
+  variable offusing3 was int now byte
+  variable location was int now byte
+  variable onum was int now byte
+  variable vrelate1 was int now byte
+  variable oseqno2 was int now byte
+  variable vrelate2 was int now byte
+  variable oseqno3 was int now byte
+  variable vrelate3 was int now byte
+  variable oseqno4 was int now byte
+  variable vrelate4 was int now byte
+  variable oseqno5 was int now byte
+  variable vrelate5 was int now byte
+  variable oseqno6 was int now byte
+  variable vrelate6 was int now byte
+  variable oseqno7 was int now byte
+  variable vrelate7 was int now byte
+  variable oseqno8 was int now byte
+  variable vrelate8 was int now byte
+  variable oseqno9 was int now byte
+  variable vrelate9 was int now byte
+  variable oseqno10 was int now byte
+  variable vrelate10 was int now byte
+  variable oseqno was int now byte
+  variable oage was int now byte
+  variable vfemale was float now byte
+  variable ofemale was float now byte
+  variable year was float now int
+  variable month was float now byte
+  variable day was float now byte
+  variable mdy was float now int
+  variable dow was float now byte
+  variable doy was float now int
+  variable weapon18 was str3 now str2
+  (2,165,355,297 bytes saved)
+
+. 
+. gen idt = .
+(42,457,947 missing values generated)
+
+. gen rdt = .
+(42,457,947 missing values generated)
+
+. 
+. replace idt = mdy if datereport == "0"
+(40,101,348 real changes made)
+
+. replace rdt = mdy if datereport == "1"
+(2,356,599 real changes made)
+
+. 
+. 
+. keep date_nibrs ino pop* offense* vage oage vrace orace vfemale offusing* mon
+> ths* agency* city state_nibrs dow rep* month day stabb cfips* year ori mdy id
+> t rdt
+
+. 
+. *keep if ori is actively reporting to NIBRS
+. g year_nibrs = substr(date_nibrs, 1,4)
+
+. destring year_nibrs, replace
+year_nibrs has all characters numeric; replaced as int
+(82 missing values generated)
+
+. keep if  year >= year_nibrs
+(132 observations deleted)
+
+. 
+. 
+. 
+. 
+. 
+. *order stabb ori ino  year month
+. *sort stabb ori ino year month day
+. 
+. ***Calculate outcome measures and collapse to daily crime counts***
+. g rape = 0
+
+. 
+. forv i = 1(1)6{
+  2.         replace  rape = 1 if offense`i'  == "11A" |  offense`i'== "11B" | 
+> offense`i'== "11C"
+  3.         }
+(700,076 real changes made)
+(17,511 real changes made)
+(528 real changes made)
+(45 real changes made)
+(1 real change made)
+(0 real changes made)
+
+. 
+.         g rape_v17_24_o_resid =(rape ==1 & vage >= 17 & vage <= 24 &  oage ==
+> .)
+
+.         g rape_vic_res =(rape ==1 & vage ==.)
+
+. 
+. foreach i in 13 17 21 25{
+  2. loc j = `i' + 3
+  3. 
+. g rape_v17_24_o`i'_`j' =(rape ==1 & vage >= 17 & vage <= 24 &  oage >= `i' & 
+> oage <=`j')
+  4. g rape_vic_`i'_`j' = 0
+  5. 
+.         forv m = 1(1)6{
+  6.                 replace rape_vic_`i'_`j' = 1 if (offense`m'  == "11A" | of
+> fense`m'== "11B" | offense`m'== "11C") & vage >= `i' & vage <=`j'
+  7. 
+.                 }
+  8. }
+(188,430 real changes made)
+(2,461 real changes made)
+(30 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(106,023 real changes made)
+(2,872 real changes made)
+(69 real changes made)
+(11 real changes made)
+(0 real changes made)
+(0 real changes made)
+(63,395 real changes made)
+(2,649 real changes made)
+(109 real changes made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(42,440 real changes made)
+(2,117 real changes made)
+(76 real changes made)
+(8 real changes made)
+(0 real changes made)
+(0 real changes made)
+
+. 
+. g rape_vic_18_24 = 0
+
+. forv m = 1(1)6{
+  2.         replace rape_vic_18_24 = 1 if (offense`m'  == "11A" | offense`m'==
+>  "11B" | offense`m'== "11C") & vage >= 18 & vage <=24
+  3.         }
+(137,523 real changes made)
+(4,800 real changes made)
+(167 real changes made)
+(12 real changes made)
+(0 real changes made)
+(0 real changes made)
+
+. 
+. forv i = 1(1)3{
+  2.         g byte alc`i' = (offusing`i' == 1 | offusing`i' == 1 | offusing`i'
+>  == 1)
+  3. 
+.         }
+
+. 
+.         g rapealc = 0
+
+. 
+. forv i = 1(1)3{
+  2.         replace rapealc = 1 if alc`i' == 1 & (offense`i' == "11A" | offens
+> e`i'== "11B" | offense`i'== "11C")
+  3.         }
+(15,861 real changes made)
+(21 real changes made)
+(0 real changes made)
+
+. 
+.         *Rapes by Race
+. 
+.         g rape_vblk_17_24 =  (rape == 1 & vrace == "B" & vage >= 17 & vage <=
+>  24)
+
+.         g rape_vwht_17_24 =  (rape == 1 & vrace == "W" & vage >= 17 & vage <=
+>  24)
+
+.         g rape_voth_17_24 =  (rape == 1 & vrace != "W" & vrace != "B" & vage 
+> >= 17 & vage <= 24)
+
+. 
+. 
+.         g rape_oblk_17_24 =  (rape == 1 & orace == "B" & vage >= 17 & vage <=
+>  24)
+
+.         g rape_owht_17_24 =  (rape == 1 & orace == "W" & vage >= 17 & vage <=
+>  24)
+
+.         g rape_ooth_17_24 =  (rape == 1 & orace != "W" & orace != "B" & vage 
+> >= 17 & vage <= 24)
+
+. 
+.         *No Males
+.         g rape_femv_17_24 =(rape == 1 & vfemale == 1 & vage >= 17 & vage <= 2
+> 4)
+
+. /*
+>         *Rapes by relationship
+>         cap drop known
+>         g known = (vrelate == "AQ" | vrelate == "FR" |  vrelate == "NE" | vre
+> late == "BE" | vrelate == "BG" | vrelate == "CF" | vrelate == "HR" | vrelate 
+> == "EE" | vrelate == "ER" | vrelate == "OK" | vrelate == "XS")
+>         g family = (vrelate == "SE" | vrelate == "CS" |  vrelate == "PA" | vr
+> elate == "SB" | vrelate == "CH" | vrelate == "GP" | vrelate == "GC" | vrelate
+>  == "IL" | vrelate == "SP" | vrelate == "SC" | vrelate == "SS" | vrelate == "
+> OF" | vrelate == "VO")
+> 
+> 
+>         g byte rape_spouse_17_24 = ((spouse == 1 | exspouse ==1 |commonspouse
+>  == 1) & rape == 1 & vage >= 17 & vage <= 24)
+>         g byte rape_bfriend_17_24 = (bgfriend == 1 & rape == 1 & vage >= 17 &
+>  vage <= 24)
+>         g byte rape_unkn_17_24 = (vrelate == "RU" & rape== 1 & vage >= 17 & v
+> age <= 24)
+>         g byte rape_str_17_24 = ( vrelate == "ST" & rape== 1 & vage >= 17 & v
+> age <= 24)
+>         g byte rape_kn_17_24 = (known == 1 & rape== 1 & vage >= 17 & vage <= 
+> 24)
+>         g byte rape_fam_17_24 = (family == 1 & rape== 1 & vage >= 17 & vage <
+> = 24)
+>         g byte rape_aq_17_24 = (vrelate == "AQ" & rape== 1 & vage >= 17 & vag
+> e <= 24)
+>         g byte rape_friend_17_24 = (vrelate == "FR" & rape== 1 & vage >= 17 &
+>  vage <= 24)
+>         g byte rape_ne_17_24 = (vrelate == "NE" & rape== 1 & vage >= 17 & vag
+> e <= 24)
+>         g byte rape_hr_17_24 = (vrelate == "HR" & rape== 1 & vage >= 17 & vag
+> e <= 24)
+> */
+. if 1 ==1{
+. 
+. foreach i in 17{
+  2. loc j = `i' + 7
+  3.         gen rapealc_vic_`i'_`j' = 0
+  4. 
+.         forv m = 1(1)3{
+  5.                 replace rapealc_vic_`i'_`j' = 1 if alc`m' == 1 & (offense`
+> m' == "11A" | offense`m'== "11B" | offense`m'== "11C") & vage >= `i' & vage <
+> =`j'
+  6. 
+. 
+.                 }
+  7.         }
+(6,386 real changes made)
+(4 real changes made)
+(0 real changes made)
+. }
+
+. 
+. 
+. 
+. 
+. rename pop1 population1
+
+. 
+. drop pop2 pop3 pop4 pop5
+
+. 
+. sort state_nibrs ori year month day
+
+. 
+. duplicates drop
+
+Duplicates in terms of all variables
+
+(6,478,802 observations deleted)
+
+. 
+. 
+. *append groupB crimes:
+. *       append using "dataconstruction/datafiles\GroupB_1991_2012.dta"
+. *compress
+. keep  rape* population*  months* agency* city state_nibrs rep* stabb cfips* o
+> ri idt rdt ino
+
+. * drop otherfam
+. 
+. 
+. *save step3, replace
+. 
+. collapse (sum) rape* (firstnm) population*  months* agency* city ori state_ni
+> brs rep* stabb cfips* idt rdt, by(ino) fast
+
+. 
+. drop if rape == 0
+(20,423,335 observations deleted)
+
+. * DO I DO THIS????
+. 
+. compress
+  variable idt was float now int
+  variable rdt was float now int
+  variable rape was double now byte
+  variable rape_v17_24_o_resid was double now byte
+  variable rape_vic_res was double now byte
+  variable rape_v17_24_o13_16 was double now byte
+  variable rape_vic_13_16 was double now byte
+  variable rape_v17_24_o17_20 was double now byte
+  variable rape_vic_17_20 was double now byte
+  variable rape_v17_24_o21_24 was double now byte
+  variable rape_vic_21_24 was double now byte
+  variable rape_v17_24_o25_28 was double now byte
+  variable rape_vic_25_28 was double now byte
+  variable rape_vic_18_24 was double now byte
+  variable rapealc was double now byte
+  variable rape_vblk_17_24 was double now byte
+  variable rape_vwht_17_24 was double now byte
+  variable rape_voth_17_24 was double now byte
+  variable rape_oblk_17_24 was double now byte
+  variable rape_owht_17_24 was double now byte
+  variable rape_ooth_17_24 was double now byte
+  variable rape_femv_17_24 was double now byte
+  variable rapealc_vic_17_24 was double now byte
+  (83,191,940 bytes saved)
+
+. 
+. 
+. 
+. 
+. preserve
+
+. 
+. replace rdt = idt if rdt == .
+(511,597 real changes made)
+
+. 
+. g year = year(rdt)
+
+. 
+. collapse (sum) rape* (firstnm) population*  months* agency* city state_nibrs 
+> rep* stabb cfips*, by(ori year) fast
+
+. 
+. save "clean/police_yearly", replace
+file clean/police_yearly.dta saved
+
+. 
+. restore
+
+. 
+. 
+. 
+. 
+. 
+. preserve
+
+. 
+. replace rdt = idt if rdt == .
+(511,597 real changes made)
+
+. 
+. gen sundayofweek = cond(dow(rdt) == 0, rdt, rdt - dow(rdt))
+
+. 
+. collapse (sum) rape* (firstnm) population*  months* agency* city state_nibrs 
+> rep* cfips*, by(sundayofweek stabb) fast
+
+. 
+. save "clean/police_week_by_state", replace
+file clean/police_week_by_state.dta saved
+
+. 
+. collapse (sum) rape* (firstnm) population*  months* agency* city state_nibrs 
+> rep* stabb cfips*, by(sundayofweek) fast
+
+. 
+. save "clean/police_weekly", replace
+file clean/police_weekly.dta saved
+
+. 
+. restore
+
+. 
+. 
+. 
+. 
+. preserve
+
+. 
+. replace rdt = idt if rdt == .
+(511,597 real changes made)
+
+. 
+. gen sundayofweek = cond(dow(rdt) == 0, rdt, rdt - dow(rdt))
+
+. 
+. collapse (sum) rape* (firstnm) population*  months* agency* city state_nibrs 
+> rep* cfips*, by(rdt) fast
+
+. 
+. save "clean/police_daily", replace
+file clean/police_daily.dta saved
+
+. 
+. restore
+
+. 
+. 
+. 
+. 
+. 
+. drop if rdt == .
+(511,597 observations deleted)
+
+. drop if idt == .
+(10,057 observations deleted)
+
+. 
+. gen timewaited = rdt - idt
+
+. gen reports_pre = 0
+
+. 
+. 
+. 
+. preserve
+
+. 
+. g year = year(rdt)
+
+. 
+. 
+. collapse (sum) rape* (mean) timewaited (firstnm) population*  months* agency*
+>  city state_nibrs rep* stabb cfips*, by(ori year) fast
+
+. 
+. save yearlyplus, replace
+file yearlyplus.dta saved
+
+. 
+. restore
+
+. 
+. preserve
+
+. 
+. sundayofidt = cond(dow(idt) == 0, idt, idt - dow(idt))
+command sundayofidt is unrecognized
+r(199);
+
+end of do-file
+r(199);
