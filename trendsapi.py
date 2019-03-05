@@ -9,7 +9,7 @@ DISCOVERY_URL_SUFFIX = '/discovery/v1/apis/trends/' + API_VERSION + '/rest'
 DISCOVERY_URL = SERVER + DISCOVERY_URL_SUFFIX
 
 service = build('trends', 'v1beta',
-                  developerKey='AIzaSyC3T1xglEOalPLA5fEJZGCyUDixuw3FWHI',
+                  developerKey='',
                   discoveryServiceUrl=DISCOVERY_URL)
 
 s1 = '2008-01'
