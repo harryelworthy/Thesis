@@ -290,7 +290,7 @@ forv i = 1(1)6{
 
 
 forv i = 10(10)60{
-	loc j = i + 9
+	loc j = `i' + 9
 	g rape_victim_`i'_to_`j' =(rape ==1 & vage >= `i' & vage <= `j')
 }
 
@@ -471,6 +471,30 @@ save "clean/police_daily", replace
 
 restore
 
+****** IDT
+
+preserve
+
+drop if idt == .
+* drop if idt == rdt
+
+collapse (sum) rape*  (firstnm) population1  months* agency* city state_nibrs rep* cfips*, by(idt) fast
+
+save "clean/police_daily_idt", replace
+
+restore
+
+preserve
+
+drop if idt == .
+drop if idt == rdt
+
+collapse (sum) rape*  (firstnm) population1  months* agency* city state_nibrs rep* cfips*, by(idt) fast
+
+save "clean/police_daily_idt_plus", replace
+
+restore
+
 
 
 
@@ -488,7 +512,7 @@ preserve
 g year = year(rdt)
 
 
-collapse (sum) rape*  (mean)  population1 timewaited (firstnm)  months* agency* city state_nibrs rep* stabb cfips*, by(ori year) fast
+collapse (sum) rape* (mean) population1 timewaited (firstnm)  months* agency* city state_nibrs rep* stabb cfips*, by(ori year) fast
 
 save yearlyplus, replace
 
@@ -524,16 +548,16 @@ preserve
 * drop otherfam
 drop if ((rdt - idt) >= 1)
 
-collapse (sum) rape*  (firstnm) population1  months* agency* city state_nibrs rep* cfips*, by(rdt stabb cfips1) fast
+collapse (sum) rape* (firstnm) population1  months* agency* city state_nibrs rep* cfips*, by(rdt stabb cfips1) fast
 
 save "clean/police_daily_by_county_plus", replace
 
-collapse (sum) rape*  (firstnm) population1  months* agency* city state_nibrs rep* cfips*, by(rdt stabb) fast
+collapse (sum) rape* (firstnm) population1  months* agency* city state_nibrs rep* cfips*, by(rdt stabb) fast
 
 save "clean/police_daily_by_state_plus", replace
 
 
-collapse (sum) rape*  (firstnm) population1  months* agency* city state_nibrs rep* cfips*, by(rdt) fast
+collapse (sum) rape* (firstnm) population1  months* agency* city state_nibrs rep* cfips*, by(rdt) fast
 
 save "clean/police_daily_plus", replace
 

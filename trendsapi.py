@@ -9,7 +9,7 @@ DISCOVERY_URL_SUFFIX = '/discovery/v1/apis/trends/' + API_VERSION + '/rest'
 DISCOVERY_URL = SERVER + DISCOVERY_URL_SUFFIX
 
 service = build('trends', 'v1beta',
-                  developerKey='',
+                  developerKey='AIzaSyC3T1xglEOalPLA5fEJZGCyUDixuw3FWHI',
                   discoveryServiceUrl=DISCOVERY_URL)
 
 s1 = '2008-01'
@@ -202,10 +202,15 @@ def daily_search(term, state='', property=''):
 
     return df1
 
-df = daily_search('rape')
-df = df.append(daily_search('rape', property='news'))
-df = df.append(daily_search('sexual assault'))
-df = df.append(daily_search('sexual assault', property='news'))
+
+df = daily_search('sexual assault')
+
+for s in statecodes:
+    df = df.append(daily_search('sexual assault',s))
+    print(s)
+#df = df.append(daily_search('rape', property='news'))
+#df = df.append(daily_search('sexual assault'))
+#df = df.append(daily_search('sexual assault', property='news'))
 
 #for s in statecodes:
 #    for p in properties:
@@ -216,4 +221,4 @@ df = df.append(daily_search('sexual assault', property='news'))
 
 #print(daily_search('rape'))
 
-df.to_csv('raw/daily_trends.csv')
+df.to_csv('raw/daily_trends_full.csv')
