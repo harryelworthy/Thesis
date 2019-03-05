@@ -388,7 +388,7 @@ xtset date si
 g woy = week(date)
 g year = year(date)
 
-eststo: qui xtreg rape lead7 lead6 lead5 lead4 lead3 lead2 lead1 trend lag* i.year i.woy
+eststo: qui xtreg rape lead7 lead6 lead5 lead4 lead3 lead2 lead1 trend lag* i.year i.woy, fe
 
 
 coefplot(est1), vertical drop(*year* *woy* _cons) yline(0) title("Reports to Police vs. Trends, Week by State")
@@ -448,7 +448,7 @@ forv i = 50(25)150{
 		by state: g lag`j' = dateofhigh[_n-`j']
 		by state: g lead`j' = dateofhigh[_n+`j']
 	}
-	eststo: qui reg rape lead7 lead6 lead5 lead4 lead3 lead2 lead1 dateofhigh lag* i.year i.woy
+	eststo: qui xtreg rape lead7 lead6 lead5 lead4 lead3 lead2 lead1 dateofhigh lag* i.year i.woy, fe
 	drop dateofhigh lag* lead*
 }
 
