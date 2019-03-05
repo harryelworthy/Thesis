@@ -31,7 +31,7 @@ collapse (sum) rape population1, by(year)
 gen reports_per_1000 = (rape * 1000)/population1
 
 tsset year
-tsline rape, title("Reports to Police of Sexual Assault") ///
+tsline reports_per_1000, title("Reports to Police of Sexual Assault") ///
 	subtitle("per 1000 People in covered districts") xline(2011)
 	
 graph export "figures/police_yearly_reports.eps", as(eps) replace
