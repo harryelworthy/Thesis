@@ -431,17 +431,17 @@ replace rdt = idt if rdt == .
 gen sundayofweek = cond(dow(rdt) == 0, rdt, rdt - dow(rdt))
 
 
-collapse (sum) rape* (firstnm) population1 months* agency* city state_nibrs rep* cfips*, by(sundayofweek stabb cfips1) fast
+collapse (sum) rape* (firstnm) population1 months* agency* city state_nibrs rep*, by(sundayofweek stabb cfips1) fast
 
 save "clean/police_week_by_county", replace
 
 
-collapse (sum) rape* (firstnm) population1 months* agency* city state_nibrs rep* cfips*, by(sundayofweek stabb) fast
+collapse (sum) rape* (firstnm) population1 months* agency* city state_nibrs rep*, by(sundayofweek stabb) fast
 
 save "clean/police_week_by_state", replace
 
 
-collapse (sum) rape* (firstnm) population1  months* agency* city state_nibrs rep* stabb cfips*, by(sundayofweek) fast
+collapse (sum) rape* (firstnm) population1  months* agency* city state_nibrs rep* stabb, by(sundayofweek) fast
 
 save "clean/police_weekly", replace
 
@@ -456,11 +456,11 @@ replace rdt = idt if rdt == .
 
 gen sundayofweek = cond(dow(rdt) == 0, rdt, rdt - dow(rdt))
 
-collapse (sum) rape*  (firstnm) population1  months* agency* city state_nibrs rep* cfips*, by(rdt stabb cfips1) fast
+collapse (sum) rape*  (firstnm) population1  months* agency* city state_nibrs rep*, by(rdt stabb cfips1) fast
 
 save "clean/police_daily_by_county", replace
 
-collapse (sum) rape*  (firstnm) population1  months* agency* city state_nibrs rep* cfips*, by(rdt stabb) fast
+collapse (sum) rape*  (firstnm) population1  months* agency* city state_nibrs rep*, by(rdt stabb) fast
 
 save "clean/police_daily_by_state", replace
 
@@ -478,7 +478,7 @@ preserve
 drop if idt == .
 * drop if idt == rdt
 
-collapse (sum) rape*  (firstnm) population1  months* agency* city state_nibrs rep* cfips*, by(idt) fast
+collapse (sum) rape*  (firstnm) population1  months* agency* city state_nibrs rep*, by(idt) fast
 
 save "clean/police_daily_idt", replace
 
@@ -489,7 +489,7 @@ preserve
 drop if idt == .
 drop if idt == rdt
 
-collapse (sum) rape*  (firstnm) population1  months* agency* city state_nibrs rep* cfips*, by(idt) fast
+collapse (sum) rape*  (firstnm) population1  months* agency* city state_nibrs rep*, by(idt) fast
 
 save "clean/police_daily_idt_plus", replace
 
@@ -512,7 +512,7 @@ preserve
 g year = year(rdt)
 
 
-collapse (sum) rape* (mean) population1 timewaited (firstnm)  months* agency* city state_nibrs rep* stabb cfips*, by(ori year) fast
+collapse (sum) rape* (mean) population1 timewaited (firstnm)  months* agency* city state_nibrs rep* stabb, by(ori year) fast
 
 save yearlyplus, replace
 
@@ -525,17 +525,17 @@ gen sundayofidt = cond(dow(idt) == 0, idt, idt - dow(idt))
 gen sundayofweek = cond(dow(rdt) == 0, rdt, rdt - dow(rdt))
 drop if ((rdt - sundayofidt) < 0)
 
-collapse (sum) rape* (firstnm) population1 months* agency* city state_nibrs rep* cfips*, by(sundayofweek stabb cfips1) fast
+collapse (sum) rape* (firstnm) population1 months* agency* city state_nibrs rep*, by(sundayofweek stabb cfips1) fast
 
 save "clean/police_week_by_county_plus", replace
 
 
-collapse (sum) rape* (firstnm) population1 months* agency* city state_nibrs rep* cfips*, by(sundayofweek stabb) fast
+collapse (sum) rape* (firstnm) population1 months* agency* city state_nibrs rep*, by(sundayofweek stabb) fast
 
 save "clean/police_week_by_state_plus", replace
 
 
-collapse (sum) rape* (firstnm) population1  months* agency* city state_nibrs rep* stabb cfips*, by(sundayofweek) fast
+collapse (sum) rape* (firstnm) population1  months* agency* city state_nibrs rep* stabb, by(sundayofweek) fast
 
 save "clean/police_weekly_plus", replace
 
@@ -548,16 +548,16 @@ preserve
 * drop otherfam
 drop if ((rdt - idt) >= 1)
 
-collapse (sum) rape* (firstnm) population1  months* agency* city state_nibrs rep* cfips*, by(rdt stabb cfips1) fast
+collapse (sum) rape* (firstnm) population1  months* agency* city state_nibrs rep*, by(rdt stabb cfips1) fast
 
 save "clean/police_daily_by_county_plus", replace
 
-collapse (sum) rape* (firstnm) population1  months* agency* city state_nibrs rep* cfips*, by(rdt stabb) fast
+collapse (sum) rape* (firstnm) population1  months* agency* city state_nibrs rep*, by(rdt stabb) fast
 
 save "clean/police_daily_by_state_plus", replace
 
 
-collapse (sum) rape* (firstnm) population1  months* agency* city state_nibrs rep* cfips*, by(rdt) fast
+collapse (sum) rape* (firstnm) population1  months* agency* city state_nibrs rep*, by(rdt) fast
 
 save "clean/police_daily_plus", replace
 

@@ -364,6 +364,41 @@ rename value trend
 save "processed/trends_police_daily_plus", replace
 
 
+clear
+use "clean/police_daily_idt"
+keep idt rape* reports_pre
+rename idt date
+gen term = "sexual assault"
+gen property = "web"
+
+merge 1:1 term date property using "clean/daily_trends"
+drop if _merge != 3
+
+keep date value reports_pre
+form date %td
+rename value trend
+
+save "processed/trends_police_daily_idt", replace
+
+
+clear
+use "clean/police_daily_idt_plis"
+keep idt rape* reports_pre
+rename idt date
+gen term = "sexual assault"
+gen property = "web"
+
+merge 1:1 term date property using "clean/daily_trends"
+drop if _merge != 3
+
+keep date value reports_pre
+form date %td
+rename value trend
+
+save "processed/trends_police_daily_idt_plus", replace
+
+
+
 
 
 

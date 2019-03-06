@@ -366,6 +366,54 @@ eststo: qui reg rape lead7 lead6 lead5 lead4 lead3 lead2 lead1 trend lag* i.year
 coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("Reports to Police vs. Trends, Daily")
 graph export "figures/police_trend_daily.eps", as(eps) replace
 
+clear
+use "processed/trends_police_daily_plus"
+
+tsset date
+g dow = dow(date)
+g woy = week(date)
+g year = year(date)
+
+forv i = 1(1)7{
+	g lag`i' = trend[_n-`i']
+	g lead`i' = trend[_n+`i']
+}
+
+eststo: qui reg rape lead7 lead6 lead5 lead4 lead3 lead2 lead1 trend lag* i.year i.woy i.dow
+
+
+clear
+use "processed/trends_police_daily_idt"
+
+tsset date
+g dow = dow(date)
+g woy = week(date)
+g year = year(date)
+
+forv i = 1(1)7{
+	g lag`i' = trend[_n-`i']
+	g lead`i' = trend[_n+`i']
+}
+
+eststo: qui reg rape lead7 lead6 lead5 lead4 lead3 lead2 lead1 trend lag* i.year i.woy i.dow
+
+
+clear
+use "processed/trends_police_daily_idt_plus"
+
+tsset date
+g dow = dow(date)
+g woy = week(date)
+g year = year(date)
+
+forv i = 1(1)7{
+	g lag`i' = trend[_n-`i']
+	g lead`i' = trend[_n+`i']
+}
+
+eststo: qui reg rape lead7 lead6 lead5 lead4 lead3 lead2 lead1 trend lag* i.year i.woy i.dow
+
+
 esttab using "figures/police_trend_daily.tex", se ar2 drop(*year* *woy* *dow*) replace
 
 
@@ -393,6 +441,25 @@ eststo: qui xtreg rape lead7 lead6 lead5 lead4 lead3 lead2 lead1 trend lag* i.ye
 
 coefplot(est1), vertical drop(*year* *woy* _cons) yline(0) title("Reports to Police vs. Trends, Week by State")
 graph export "figures/police_trend_week_by_state.eps", as(eps) replace
+
+
+clear
+use "processed/trends_police_week_by_state_plus"
+
+sort state date 
+
+forv i = 1(1)7{
+	by state: g lag`i' = trend[_n-`i']
+	by state: g lead`i' = trend[_n+`i']
+}
+
+encode state, gen(si)
+xtset date si
+g woy = week(date)
+g year = year(date)
+
+eststo: qui xtreg rape lead7 lead6 lead5 lead4 lead3 lead2 lead1 trend lag* i.year i.woy, fe
+
 
 esttab using "figures/police_trend_week_by_state.tex", se ar2 drop(*year* *woy*) replace
 
@@ -426,6 +493,31 @@ forv i = 50(25)150{
 esttab using "figures/police_trend_daily_ES.tex", se ar2 drop(*year* *woy* *dow*) replace
 
 
+estimates clear
+
+clear
+use "processed/trends_police_daily_idt"
+
+tsset date
+g dow = dow(date)
+g woy = week(date)
+g year = year(date)
+
+forv i = 50(25)150{
+	g dateofhigh = 0
+	replace dateofhigh = 1 if (trend >= `i')
+	forv j = 1(1)7{
+		g lag`j' = dateofhigh[_n-`j']
+		g lead`j' = dateofhigh[_n+`j']
+	}
+	eststo: qui reg rape lead7 lead6 lead5 lead4 lead3 lead2 lead1 dateofhigh lag* i.year i.woy i.dow
+	drop dateofhigh lag* lead*
+}
+
+
+esttab using "figures/police_trend_daily_idt_ES.tex", se ar2 drop(*year* *woy* *dow*) replace
+
+
 
 
 estimates clear
@@ -456,6 +548,36 @@ forv i = 50(25)150{
 esttab using "figures/police_trend_wbs_ES.tex", se ar2 drop(*year* *woy*) replace
 
 
+
+*****************************
+****** AGES *****************
+*****************************
+
+
+
+estimates clear
+
+clear
+use "processed/trends_police_daily"
+
+tsset date
+g dow = dow(date)
+g woy = week(date)
+g year = year(date)
+
+forv i = 1(1)7{
+	g lag`i' = trend[_n-`i']
+	g lead`i' = trend[_n+`i']
+}
+
+forv j = 10(10)60{
+	loc k = `j' + 9
+	eststo: qui reg rape_victim_`j'_to_`k' lead7 lead6 lead5 lead4 lead3 lead2 lead1 trend lag* i.year i.woy i.dow
+}
+
+
+coefplot(est*), vertical drop(*year* *woy* *dow lead* lag* _cons) yline(0) title("Reports to Police vs. Trends, by Age Group")
+graph export "figures/police_trend_daily_agegroup.eps", as(eps) replace
 
 
 
