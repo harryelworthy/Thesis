@@ -465,7 +465,7 @@ collapse (sum) rape*  (firstnm) population1  months* agency* city state_nibrs re
 save "clean/police_daily_by_state", replace
 
 
-collapse (sum) rape*  (firstnm) population1  months* agency* city state_nibrs rep* cfips*, by(rdt) fast
+collapse (sum) rape*  (firstnm) population1  months* agency* city state_nibrs rep*, by(rdt) fast
 
 save "clean/police_daily", replace
 

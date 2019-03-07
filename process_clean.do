@@ -310,7 +310,7 @@ save "processed/trends_police_week_by_state", replace
 
 clear
 use "clean/police_week_by_state_plus"
-keep stabb sundayofweek rape* reports_pre
+keep stabb sundayofweek rape*
 rename stabb state
 rename sundayofweek date
 gen term = "sexual assault"
@@ -319,7 +319,7 @@ gen property = "web"
 merge 1:1 term state date property using "clean/trends"
 drop if _merge != 3
 
-keep state date value reports_pre
+keep state date value rape*
 form date %td
 rename value trend
 
@@ -348,8 +348,8 @@ save "processed/trends_police_daily", replace
 
 
 clear
-use "clean/police_daily"
-keep rdt rape* reports_pre
+use "clean/police_daily_plus"
+keep rdt rape*
 rename rdt date
 gen term = "sexual assault"
 gen property = "web"
@@ -357,7 +357,7 @@ gen property = "web"
 merge 1:1 term date property using "clean/daily_trends"
 drop if _merge != 3
 
-keep date value reports_pre
+keep date value rape*
 form date %td
 rename value trend
 
@@ -366,7 +366,7 @@ save "processed/trends_police_daily_plus", replace
 
 clear
 use "clean/police_daily_idt"
-keep idt rape* reports_pre
+keep idt rape*
 rename idt date
 gen term = "sexual assault"
 gen property = "web"
@@ -374,7 +374,7 @@ gen property = "web"
 merge 1:1 term date property using "clean/daily_trends"
 drop if _merge != 3
 
-keep date value reports_pre
+keep date value rape*
 form date %td
 rename value trend
 
@@ -383,7 +383,7 @@ save "processed/trends_police_daily_idt", replace
 
 clear
 use "clean/police_daily_idt_plis"
-keep idt rape* reports_pre
+keep idt rape* 
 rename idt date
 gen term = "sexual assault"
 gen property = "web"
@@ -391,11 +391,33 @@ gen property = "web"
 merge 1:1 term date property using "clean/daily_trends"
 drop if _merge != 3
 
-keep date value reports_pre
+keep date value rape*
 form date %td
 rename value trend
 
 save "processed/trends_police_daily_idt_plus", replace
+
+
+
+
+clear
+use "clean/police_daily_by_state"
+keep stabb rdt rape*
+rename stabb state
+rename rdt date
+gen term = "sexual assault"
+gen property = "web"
+
+merge 1:1 term state date property using "clean/daily_trends_full"
+gen nationaltrend = value if state == "US"
+bysort date (nationaltrend): replace nationaltrend = nationaltrend[1]
+drop if _merge != 3
+
+keep state date value rape* nationaltrend
+form date %td
+rename value trend
+
+save "processed/trends_police_daily_by_state", replace
 
 
 
