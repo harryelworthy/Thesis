@@ -464,6 +464,34 @@ eststo: qui xtreg rape lead7 lead6 lead5 lead4 lead3 lead2 lead1 trend lag* i.ye
 esttab using "figures/police_trend_week_by_state.tex", se ar2 drop(*year* *woy*) replace
 
 
+estimates clear
+clear
+use "processed/trends_police_daily_by_state"
+
+sort state date 
+
+forv i = 1(1)7{
+	by state: g lag`i' = trend[_n-`i']
+	by state: g lead`i' = trend[_n+`i']
+	by state: g nlag`i' = nationaltrend[_n-`i']
+	by state: g nlead`i' = nationaltrend[_n+`i']
+}
+
+encode state, gen(si)
+xtset date si
+g woy = week(date)
+g year = year(date)
+g dow = dow(date)
+
+eststo: qui xtreg rape lead7 lead6 lead5 lead4 lead3 lead2 lead1 trend lag* nlead7 nlead6 nlead5 nlead4 nlead3 nlead2 nlead1 nationaltrend nlag* i.year i.woy i.dow, fe
+
+
+esttab using "figures/police_trend_daily_by_state.tex", se ar2 keep(lead2 lead1 trend lag1 lag2 nlead2 nlead1 nationaltrend nlag1 nlag2) replace
+
+
+
+
+
 **************************************************
 *** EVENT STUDY HIGH TREND
 **************************************************
@@ -572,12 +600,25 @@ forv i = 1(1)7{
 
 forv j = 10(10)60{
 	loc k = `j' + 9
-	eststo: qui reg rape_victim_`j'_to_`k' lead7 lead6 lead5 lead4 lead3 lead2 lead1 trend lag* i.year i.woy i.dow
+	rename lead1 lead1_`j'_to_`k'
+	eststo: qui reg rape_victim_`j'_to_`k' lead7 lead6 lead5 lead4 lead3 lead2 lead1_`j'_to_`k' trend lag* i.year i.woy i.dow
 }
 
 
-coefplot(est*), vertical drop(*year* *woy* *dow lead* lag* _cons) yline(0) title("Reports to Police vs. Trends, by Age Group")
+coefplot(est*), vertical k(*year* *woy* *dow lead7 lead6 lead5 lead4 lead3 lead2 trend lag* _cons) yline(0) title("Reports to Police vs. Trends, by Age Group")
 graph export "figures/police_trend_daily_agegroup.eps", as(eps) replace
 
+
+
+**** WEINSTEIN
+clear
+use "/Users/harry/Google Drive/GDocuments/F18/Thesis/DATA/Final/clean/daily_trends.dta"
+keep if (term == "sexual assault" & property == "web")
+drop if date < date[3536]
+drop if date > date[62]
+
+tsset date
+
+tsline value
 
 
