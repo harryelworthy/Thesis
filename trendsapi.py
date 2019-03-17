@@ -221,4 +221,13 @@ for s in statecodes:
 
 #print(daily_search('rape'))
 
+def get_events(term, trend_df, threshold):
+    # Above 90% of that year? or what?? That six months?
+    # Adjust daily_search to include original trend column
+    # Start from start. Date, term, orig trend, end trend columns. Search each date
+    # above threshold. Check if each term in table, if not, add with that date
+    # Try a few thresholds/methodologies until seems right
+    return
+
+
 df.to_csv('raw/daily_trends_full.csv')
