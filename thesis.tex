@@ -104,6 +104,7 @@ The background section of \cite{lindo_college_2018} has a good background on sex
     \item Papers from other disciplines on the reporting decision - more research needs to be done here. Psychology/sociology. Would be good for talking about cost of reporting later.
     \item Short history of high profile sexual assault cases. Run through most important ones from my list of events since 2008, plus some discussion of pre-2008.
     \item Some on #metoo? Although not directly relevant to my investigation as such
+    \item Much more on why reporting is so important - in itself and in what we hope to see in its outcomes, i.e. less assaults
 \end{itemize}
 
 I'd also like to include something like Figure~\ref{figure:police_yearly} below. Note that this is not a great graph right now, as it shows a time when the number of police stations reporting these numbers was increasing. I need to make it per-capita, which will just take a re-jigging of my code that runs on the server. 
@@ -178,14 +179,51 @@ This section needs to be taken out of bullet form once I've settled on my final 
 
 \section{Methodology}
 
-Things I'd like to include in the first half of this section:
+In the first half of this section I'll discuss sexual assault, both the crime and the reporting of it, from an economic standpoint. This is outlined below. Second half, I outline the regression equations I'll be using.
 
 \begin{itemize}
-    \item Discussion of why someone might not report, fueled by \citeA{allen_reporting_2007} and \citeA{du_mont_role_2003} as well as any other papers I find about this
-    \item Pull that discussion into a more formal discussion of the costs that one faces in reporting 
+    \item Discussion of why someone might not report, fueled by \citeA{allen_reporting_2007} (where we see that a social safety net helps ease the reporting decision among other things) and \citeA{du_mont_role_2003} as well as any other papers I find about this
+    \item Pull that discussion into a more formal discussion of the costs and uncertainty that one faces in reporting, and how coverage of sexual assault might affect that in one way or another: by lowering or raising expected cost of social stigma, by inspiring and perhaps increasing expected benefit, the idea that reporting can help reduce sexual assault. More here, need to come up with as exhaustive a list as I can, as this is important.
+    \item Then spend some time discussing a similar thing but for potential perpetators - expected cost of assault. Obviously even more than the other one this is a behaviour that is tough to rationalize, but it's not wild to think (and one would seriously hope) that at the margin these people can be influenced one way or another
+    \item Talk about the two in tandem, and again why hopefully reporting affects the second, and thus is important. If possible, this link would be great to try to estimate, but very difficult given the nature of the data. 
 \end{itemize}
 
+In this paper, I'll run a number of time-series, panel-data and event-study type regressions. The general form of these regression equations is outlined below. My time-series regressions are at the daily level, and are of the form: 
+
+$$ 
+y_{t} = \beta_{0} + \sum_{b=-7}^{7} \delta_{b} x_{t+b} + \gamma_{t} + \varepsilon_{t}
+$$
+
+Where $y_{t}$ is the outcome variable in question; $x_{t+b}$ is the independent variable in question along with a set of leads and lags, and $\gamma{t}$ is a vector including day-of-week, week-of-year and year fixed-effects. These fixed effects should take care of most seasonality in the data. \todo{I need to decide on a good reason for how many leads and lags I will be including, then put this reasoning here. Advisor also said that in final form, i.e. for tables rather than graphing, I should drop leads from this.}
+
+My panel data regressions are of the form:
+
+$$ 
+y_{i,t} = \beta_{0} + \sum_{b=-7}^{7} \delta_{b} x_{i,t+b} + \alpha_{i} + \gamma_{t} + \varepsilon_{i,t}
+$$
+
+Where $y_{i,t}$ is the outcome variable in question; $x_{i,t+b}$ is the independent variable in question along with a set of leads and lags, $\alpha_{i}$ is a fixed effect at the level of the panel, usually by state or by school, and $\gamma{t}$ is a vector including year fixed-effects, as well as day-of-week and week-of-year fixed effects if the data is at the daily level.
+
+My event study regressions are of the form:
+
+$$ 
+y_{t} = \beta_{0} + \sum_{b=-7}^{7} \delta_{b} x_{t+b} + \gamma_{t} + \varepsilon_{t}
+$$
+
+Where $y_{t}$ is the outcome variable in question; $x_{t+b}$ is a dummy for the event in question along with a set of leads and lags, and $\gamma{t}$ is a vector including day-of-week, week-of-year and year fixed-effects.
+
 \section{Results}
+
+In general, I may drop uninteresting things from this section as I decide exactly on the narrative on my paper. I'll also include more tables in the final paper (and probably less graphs) but graphs are just nicer to glance through.
+
+I begin by running a time-series regression of reports of sexual assault to the FBI by report-date on national Google Trends for 'sexual assault'. The results of this are shown in Figure~\ref{figure:police_trends_daily}
+
+\begin{figure}
+\includegraphics[]{figures/police_trend_daily.eps}
+\caption{Time-Series Regression of FBI Reports of Sexual Assault on Google Trends for 'sexual assault'}
+\end{figure}
+
+
 
 First, I want to see whether reports to police increase in a county when reports are high to a school in that county. To consider this, I estimate the equation: \todo{Unsure why this table messing up below??}
 
