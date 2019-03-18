@@ -86,54 +86,40 @@ Files available at \url{github.com/harryelworthy/Thesis}
 %\end{itemize}
 
 \clearpage
-Approximately 20\% of women in the United States are sexually assaulted at some point in their lives, with more than a third of these assaults occurring before the victim turns 18 \cite{black_national_2011}. Approximately 20\% to 25\% of women nationally are sexually assaulted at some point during their college careers \cite{fisher_sexual_2000}. At Duke, this figure is estimated at closer to 40\%, as well as 10\% of men \cite{fox_university_2017} \todo{I can sort these statistics better to tell a better story. I also should note male victims earlier.}. Despite this, very few assaults are reported to police or to other authorities such as universities, for a number of reasons. A number of different measures have been taken by many schools to address campus sexual assault, including significant federal reform via Title IX reform in 2011, which affected almost every school in the US. These changes aimed to make reporting easier for an assault victim, thus increasing reports and hopefully, in equilibrium, decreasing assault.
+Approximately 20\% of women in the United States are sexually assaulted at some point in their lives, with more than a third of these assaults occurring before the victim turns 18 \cite{black_national_2011}. Approximately 20\% to 25\% of women nationally are sexually assaulted at some point during their college careers \cite{fisher_sexual_2000}. At Duke, this figure is estimated at closer to 40\%, as well as 10\% of men \cite{fox_university_2017} \todo{I can sort these statistics better to tell a better story. I also should note male victims earlier.}. Despite this, few assaults are reported to police or to other authorities such as universities, for a number of reasons, including self-blame or guilt, fear of the perpetrator or fear of not being believed \cite{du_mont_role_2003}. A number of different measures have been taken by many schools to address campus sexual assault, including significant federal reform via Title IX reform in 2011, which affected almost every school in the US. These changes aimed to make reporting easier for an assault victim, thus increasing reports and hopefully, in equilibrium, decreasing assault.
 
-The issue of non-reporting has been especially salient over the past weeks, as Supreme Court nominee Brett Kavanaugh has been accused of crimes that were not reported at the time. President Trump tweeted in response to the claims: "I have no doubt that, if the attack on Dr. Ford was as bad as she says, charges would have been immediately filed with local Law Enforcement Authorities by either her or her loving parents" \citeyear{trump_i_2018}. There are clearly many reasons why an individual may not report: social pressures, abusive relationships, and fear of not being believed, for example. More importantly, however, this tweet illustrates a source of motivation for this paper: had Dr. Ford reported when the crime had been committed, her testimony now would be more impervious to detractors. There are many reasons that increased reporting would be a desirable outcome - this is just one of them. 
+The issue of non-reporting has been especially salient over the past years, as first Harvey Weinstein, then Supreme Court nominee - now Justice - Brett Kavanaugh made national headlines being accused of sexual assaults that were not reported to police at the time they were committed \todo{Not completely sure this the case for Weinstein}. President Trump tweeted in response to the Kavanaugh claims: "I have no doubt that, if the attack on Dr. Ford was as bad as she says, charges would have been immediately filed with local Law Enforcement Authorities by either her or her loving parents" \citeyear{trump_i_2018}. As above, there are many reasons why an individual may not report: social pressures, abusive relationships, and fear of not being believed, for example. More importantly, however, this tweet illustrates a source of motivation for this paper: had Dr. Ford reported when the crime had been committed, her testimony now would be more impervious to detractors. There are many reasons that increased reporting would be a desirable outcome - this is just one of them. \todo{Need more on why reporting is desirable}
 
-There was a sizable increase in reporting at schools in the years following the 2011 changes, as can be seen in Figure 1 below. This paper hopes to dive into this increase and consider the different ways in which 2011 may have increased reports both to police and to schools. More generally, this paper seeks to investigate the link between discourse around sexual assault and reporting of sexual assault. \todo{This is obviously way too terse an introduction. I want to wait to flesh this out until I have all results in front of me and have decided the angle I want to take.}
+The #metoo movement that the Weinstein allegations started focused on women coming forward with their sexual assault stories because they saw others come forward with theirs - thus the 'me too.' This idea highlights an important question: are victims of sexual assault encouraged to report to police or other authorities by coverage of other victims reporting? Several other questions follow: if they are encouraged, what is the magnitude in the increase in reports? How long does the increase in reporting last for? How does local reporting affect reporting vs. national reporting? And - most importantly - does this coverage affect the behavior of potential perpetrators?
+
+In this paper, I explore these questions using incident-level FBI data of crime reports from 1991 to 2016, along with data from Google Trends. I also conduct a number of event studies using Title IX investigations of universities and a novel dataset of high-profile sexual assault allegations. 
 
 \section{Background}
 
-The background section of \cite{lindo_any_2018} provides a more complete background to the 'Dear Colleague' letter and its effects - here I will summarize their points. 
-
-Title IX of the Education Amendments of 1972 was intended to 'assure equal access to education,' originally focused on female college sport. It has been reinterpreted in the form of 'Dear Colleague' letters, which are sent by the OCR, and allow slight changes in the law without congressional approval by framing the changes as 'clarifications'. The 2011 letter that this paper will focus on stated that Title IX required, among other things, that:
+The background section of \cite{lindo_college_2018} has a good background on sexual assault reporting, as do a number of my cited papers. I need to make my own ASAP! I've deleted all previously written stuff as my paper has pivoted away from it enough to make it pretty irrelevant. Here's what I'd like to talk about in my background section when I write it:
 
 \begin{itemize}
-
-\item If a school knew or "reasonably should know" of sexual harassment or assault, it was to conduct a "prompt, thorough, and impartial" investigation \cite{ali_dear_2011}.
-
-\item These investigations would use a "preponderance of evidence standard," which requires less proof than the standards of normal courts \cite{lindo_any_2018}
-
-\item If the investigation found that sexual harassment or assault had occurred, the school was to "take immediate action to eliminate the hostile environment, prevent its reoccurrence, and address its effects"  \cite{ali_dear_2011}. 
-
+    \item One or two sentences about the multitude of work on prostitution/porn/sexual harrassment etc. by economists in the past two decades (many of the pieces in my Lit Review are like this)
+    \item Background on history of economic papers on sexual assault reporting decision (\citeA{allen_reporting_2007} needs to be much more at the fore). 
+    \item Papers from other disciplines on the reporting decision - more research needs to be done here. Psychology/sociology. Would be good for talking about cost of reporting later.
+    \item Short history of high profile sexual assault cases. Run through most important ones from my list of events since 2008, plus some discussion of pre-2008.
+    \item Some on #metoo? Although not directly relevant to my investigation as such
 \end{itemize}
 
-Any victim that felt these steps had not been taken could file a complaint with the OCR which would trigger an investigation by the OCR into the way that school handled sexual harassment and assault. These cases are high profile, generating a large amount of press about the universities in question \cite{lindo_any_2018}. 
+I'd also like to include something like Figure~\ref{figure:police_yearly} below. Note that this is not a great graph right now, as it shows a time when the number of police stations reporting these numbers was increasing. I need to make it per-capita, which will just take a re-jigging of my code that runs on the server. 
 
-In addition to these changes in 2011, the OCR made a number of further changes to policy in the following years, including putting more effort into getting mandatory reporters to report. Any employee of a university that receives federal funding is required to report to the school's Title IX coordinator any crime that is reported to them by a student, which will then be recorded in CSS statistics. In the years after 2011, the OCR increased efforts to enforce this rule . This enforcement could drive an increase in reports in the data without an actual increase in reports to staff.
+\begin{figure}
 
-These measures were taken in 2011 in response to a number of private documentaries and investigations that emphasized the nationwide injustices that victims face, the lack of repercussions for perpetrators and difficulty victims face while reporting. One key metric, then, to evaluate how well the policy has worked is report rates before and after the Letter was released. When reporting, a victim faces the choice of reporting to the police or to the university. A police report will usually lead to an investigation that is hugely costly to both the victim and the accused - something that most victims wish to avoid. Before 2011, a university report would lead to a number of different outcomes at different universities, but usually there would be an investigation that was still costly especially to the victim. The intention of the changes in 2011 were to make this university investigation less difficult for the victim.
+\includegraphics[]{figures/police_yearly_reports.eps}
 
-I asked Duke's Title IX office about what mechanisms could be driving this increase in reports. From the Associate Dean of Students:
+\caption{Reports to Police per Person, 1991 to 2015} \label{figure:police_yearly}
+\end{figure}
 
-\begin{quote}
-An uptick in reporting is probably due to a lot of factors. While I can’t speak to the standard that other institutions use, or the changes in their policies or reported number of assaults, I can say that increase in numbers at Duke are probably connected to: increases of mandatory reporting by university officials, increased awareness of the university’s disciplinary process and this as an available option for students who report they have been assaulted; increased awareness of this issue nationally through enforcement efforts of the Obama administration (most famously for the Dear Colleague letter in 2011); and actual changes in the ease of reporting."
-\end{quote}
 
-From the Title IX coordinator:
-
-\begin{quote}
-Before I came to Duke, I worked at the Office for Civil Rights at the U.S. Department of Education, including when the 2011 guidance was issued. The general consensus at the agency was that the increase in reporting of sexual misconduct allegations – both through universities and to OCR – was due to the issuance of the guidance, the visibility of several OCR complaints (including one at UNC Chapel Hill) (often assisted by groups such as Know Your IX), and to journalistic reporting by the Center for Public Integrity (which spurred OCR to issue the guidance). I don’t know if there is research to support this.
-\end{quote}
-
-There are a number of different mechanisms proposed here, and hopefully this paper will investigate each of them.
-
-The idea that the preponderance-of-evidence change could have effected a significant chunk of the after-2011 change in reporting seems tenuous. \citeA{karjane_campus_2002} finds that in 2002, more than 80\% of schools were already using the preponderance of evidence standard, and likely more switched since then. Given that the increases after 2011 were spread widely and not concentrated in a small number of schools, it is doubtful that this change could have been very significant. I was unable to get data on schools' evidence standards in 2011 and so cannot follow this up further. \todo{This is terribly written and needs way more backing up.}
-
-I will look instead in this paper at the effect that "increased awareness of the university's disciplinary process" and "increased awareness  of this issue nationally" might have had on reports, and try to tease out these 'salience effects' from other, less important effects - such as an increase in mandatory reporting (which shows no actualy increase in reporting by victims).
+This is obviously a big area of work for my paper. My literature review is also still (I know I know) not organized at all around my paper, and is instead just a list of summaries. This is also a big area of work. Because I've been shifting my research question around, some of these are now irrelevant while others have become much more important. This week my big task will be synthesizing the intro, my background and the lit review into one coherent package.
 
 \section{Literature Review}
-\todo{This is unchanged from last time. In my final paper I won't have a literature review section, but instead will pull what of this is useful into the background/empirics sections.}
+\todo{This is unchanged from last time.}
 Since Becker outlined his economic model of crime, illicit activities have continued to have a place in the economic literature. Sexual assault has received a share of this attention, although perhaps less so than other crimes. One reason for this deficit is the difficulty of gathering accurate data on sexual assault. Crime is underreported in general, sexual assault especially \cite{kilpatrick_drug-facilitated_2007} \cite{fisher_sexual_2000}. Recently, however, several economics papers have focused on sexual assault and harassment. 
 
 \citeA{allen_reporting_2007} investigates the factors that influence an individual's decision to report a rape to law enforcement using survey data from The National Sample of Rape Victims, completed in 1985 and released in 2000, and finds that victims will be more likely to report sexual assault given more 'social support and ancillary evidence associated with the crime.' This paper is important to this investigation as it shows that the decision to report is influenced by factors that may be affected by policy, and thus supports the notion that policy to ease the reporting process could be beneficial. It is also some of the only research done on what affects the individual's decision to report. Given that I will be diving deeper into reasons this decision may have been made more often after 2011, this seems especially important to my investigation.
@@ -144,30 +130,39 @@ Since Becker outlined his economic model of crime, illicit activities have conti
 
 \citeA{lindo_any_2018} considers the effects of a Title IX investigation on a universities outcomes such as enrolment, applications, degree completion and donations. Their estimates show significant upticks in both enrolment and applications following an investigation for both men and women\todo{Would be interesting to do this and see if the size of a school's increase in Reports has any effect on the size of the increase in enrollment}, with no evidence of effects on degree completion or donations. As part of their analysis, they use Google Trends data as a proxy for public awareness of investigations, concluding that the investigations are indeed in the public spotlight, even while federal policy on sexual assault may not be. The paper has an in-depth background of the 2011 Title IX changes that is very useful for my paper, as well as being closely related in subject. 
 
-\section{Data Summary and Initial Regressions}
+\section{Data Summary}
 
-I have four main data sources for this project: \todo{Need to include sources for these, make this not a bullet point list, explain them a bit more in detail (I use on-campus reports etc.)}
+I have four main data sources for this project: \todo{Need to include sources for these, make this not a bullet point list, explain them a bit more in detail (I use on-campus reports etc.) but will wait to see how much I use school data in the end for this.}
 \begin{itemize}
+    \item National Incident-Based Reporting System (NIBRS) Data
+    \begin{itemize}
+        \item Individual reports of crime to police stations. 1991 to 2016.
+        \item About 40\% of population covered (some police stations don’t report) and this number has increased since 1991 as more stations have begun reporting.
+        \item Timestamped, both report and incident datetime, lots of auxiliary information i.e. about the victim in question
+        \item Because is by incident, can be collapsed to any specification: Nationally Daily, State-by-Week, etc. 
+    \end{itemize}
+    \item Google Trends data
+    \begin{itemize}
+        \item Daily and weekly trends for “sexual assault” 2008 to 2018 \footnote{Decided on "sexual assault" as "rape" tended to have a lot of unsavoury related searches, mostly pornography related, whereas searches for sexual assault tended to be related to cases of sexual assault. I test both for salience, and "rape" is not responsive to Title IX cases while "sexual assault" is. May try to add both back in.} \todo{Can probably change this to 2004 as not using News, need to rerun}
+        \item National and statewide trends.
+        \item Relative trends out of 100, scaled to 2008 numbers, so some numbers later on are higher.
+        \item Merge daily with police data for most of my investigation. Thus have reports of sexual assault grouped by either report or incident date together with Google Trends, daily, from 2008 to 2016. 
+    \end{itemize}
+    \item Related Events with Prominent News Coverage
+    \begin{itemize}
+        \item This is very recent, I need to go over it with my advisor etc, but I think it is useful. 
+        \item I've created a dataset of 35 big-headline sexual assault events from 2008 until 2016, along with the dates that they were first in the news.
+        \item To do this I used Google's Related Topics tool. This tool shows for a given time period what related searches were to a given search.
+        \item I looked at related search terms to 'sexual assault' each day that the trend for 'sexual assault' was above 70\% of its 6 month maximum. For events that had coverage for multiple days, I only included the first day. If there was more than a month between coverage I counted these as separate events. 
+        \item The 35 events I found are shown in Appendix 1. I also categorize them into allegations and 'big allegations,' which are events that held the google trend above 75 for more than 3 days in a row. 
+        \item I am sure that I've missed some events as my process could have been better, but each of these events is definitely a high profile sexual assault event. For an event study, it would definitely be better to get more events, but my results should be relatively good estimators as is (just with large standard errors from low n)
+    \end{itemize}
     \item Campus Safety and Security (CSS) Data
     \begin{itemize}
         \item Collected and distributed by the Department of Education, 2005 to 2016
         \item Reports of Sexual Assault by year by university, for all schools that receive financial aid (7663 schools that span the full time period)
         \item Not granular at all - because of an internal standards change in 2013 for how to count sexual assault reports, have to include all assaults, including non-forcible ones/statutory assault/etc.
         \item Can tie in a lot of auxiliary data by school ID from other sources, such as funding, SAT scores, enrollment by race/sex, etc.
-    \end{itemize}
-    \item National Incident-Based Reporting System (NIBRS) Data
-    \begin{itemize}
-        \item Individual reports of crime to police stations. 1995 to 2017.
-        \item About 40\% of population covered (some police stations don’t report)
-        \item Timestamped, both report and incident datetime, lots of extra information
-        \item Information about victims (age, race) can be merged in, have yet to get this working
-        \item Because is by incident, can be collapsed to any specification: Nationally Daily, State-by-Week, etc. 
-    \end{itemize}
-    \item Google Trends data
-    \begin{itemize}
-        \item Weekly trends for “sexual assault” 2008 to 2018 \footnote{Decided on "sexual assault" as "rape" tended to have a lot of unsavoury related searches, mostly pornography related, whereas searches for sexual assault tended to be related to cases of sexual assault. I test both for salience, and "rape" is not responsive to Title IX cases while "sexual assault" is.} \todo{Can probably change this to 2004 as not using News, need to rerun}
-        \item National trends daily or weekly, state trends weekly
-        \item Relative trends out of 100, scaled to 2008 numbers, so some numbers later on are higher.
     \end{itemize}
     \item Title IX Cases
     \begin{itemize}
@@ -178,9 +173,19 @@ I have four main data sources for this project: \todo{Need to include sources fo
         \item I am basing my panel data models off of theirs'
     \end{itemize}
 \end{itemize}
-\todo{Need to include some summary stats, etc. as well here. Maybe just one table. Once I decide the question that I really am answering, will be more clear what to include here.}
 
-\section{Methodology and Results}
+This section needs to be taken out of bullet form once I've settled on my final list of figures and tables. I'd also like to have a table of summary statistics here.
+
+\section{Methodology}
+
+Things I'd like to include in the first half of this section:
+
+\begin{itemize}
+    \item Discussion of why someone might not report, fueled by \citeA{allen_reporting_2007} and \citeA{du_mont_role_2003} as well as any other papers I find about this
+    \item Pull that discussion into a more formal discussion of the costs that one faces in reporting 
+\end{itemize}
+
+\section{Results}
 
 First, I want to see whether reports to police increase in a county when reports are high to a school in that county. To consider this, I estimate the equation: \todo{Unsure why this table messing up below??}
 
