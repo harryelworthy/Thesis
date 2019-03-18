@@ -457,3 +457,15 @@ replace big_allegation = 0 if big_allegation == .
 keep date rape* event_date allegation big_allegation
 save "processed/police_daily_events_idt", replace
 
+
+** PLUS
+
+clear
+use "clean/police_daily_plus"
+rename rdt date
+merge 1:1 date using "clean/high_profile_events"
+replace event_date = 0 if event_date == .
+replace allegation = 0 if allegation == .
+replace big_allegation = 0 if big_allegation == .
+keep date rape* event_date allegation big_allegation
+save "processed/police_daily_events_plus", replace

@@ -682,7 +682,8 @@ forv i = 1(1)7{
 }
 
 eststo: qui reg rape lead7 lead6 lead5 lead4 lead3 lead2 lead1 allegation lag* i.year i.woy i.dow
-coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("Reports to Police vs. Trends, Daily")
+coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("Reports to Police  before and after High-Profile Allegations")
+graph export "figures/events_police_allegations.eps", as(eps) replace
 
 *** ONLY BIG ALLEGATIONS
 
