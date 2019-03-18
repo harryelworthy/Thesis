@@ -116,6 +116,7 @@ I'd also like to include something like Figure~\ref{figure:police_yearly} below.
 \caption{Reports to Police per Person, 1991 to 2015} \label{figure:police_yearly}
 \end{figure}
 
+\todo{Unsure why all my figures have big black bar on the right? Need to fix!}
 
 This is obviously a big area of work for my paper. My literature review is also still (I know I know) not organized at all around my paper, and is instead just a list of summaries. This is also a big area of work. Because I've been shifting my research question around, some of these are now irrelevant while others have become much more important. This week my big task will be synthesizing the intro, my background and the lit review into one coherent package.
 
@@ -220,10 +221,28 @@ I begin by running a time-series regression of reports of sexual assault to the 
 
 \begin{figure}
 \includegraphics[]{figures/police_trend_daily.eps}
-\caption{Time-Series Regression of FBI Reports of Sexual Assault on Google Trends for 'sexual assault'}
+\caption{Time-Series Regression of FBI Reports of Sexual Assault on Google Trends for 'sexual assault'} \label{figure:police_trends_daily}
 \end{figure}
 
+There is a clear, statistically significant effect on the first lead variable. \todo{I think I worked out that I had miscoded this, and that it was on the first lag variable. Need to go over and fix. Also fix x axis.} I discuss interpretations of the effect magnitude below. \todo{Don't actually show below yet. Probably use the Bill Cosby case as it's within sample, maybe also with a smaller case, as well as all 35 of my events. Show their graphs, eyeball approximate estimates, for the full 35 event sample calculate average effect.}
 
+This increase in reporting is driven by reporters under 20, as shown in Figure~/ref{figure:police_trends_daily_by_age}:
+
+\begin{figure}
+\includegraphics[]{figures/police_trend_daily_agegroup.eps}
+\caption{Estimates of effects of Google Trends on FBI reports of sexual assault by age group} \label{figure:police_trends_daily_by_age}
+\end{figure}
+
+\todo{Lots of x axes are bad, this is especially so. Groups are in 10 year chunks, first is 10 to 20.}
+
+Here I'd look at how state by state variation in trends impacts reporting across states, but that regression has been giving me grief and is not presentable. I think it's going to be a small or 0 effect.
+
+I now turn to an event study of 35 high-profile sexual-assault related stories from 2008 to 2016. To check that these events were indeed high-profile, I run an event-study regression of Google Trends on each of these event dates, results shown in Figure~/ref{figure:police_trends_daily_by_age}:
+
+\begin{figure}
+\includegraphics[]{figures/police_trend_daily_agegroup.eps}
+\caption{Estimates of effects of Google Trends on FBI reports of sexual assault by age group} \label{figure:police_trends_daily_by_age}
+\end{figure}
 
 First, I want to see whether reports to police increase in a county when reports are high to a school in that county. To consider this, I estimate the equation: \todo{Unsure why this table messing up below??}
 
