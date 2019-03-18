@@ -237,12 +237,48 @@ This increase in reporting is driven by reporters under 20, as shown in Figure~/
 
 Here I'd look at how state by state variation in trends impacts reporting across states, but that regression has been giving me grief and is not presentable. I think it's going to be a small or 0 effect.
 
-I now turn to an event study of 35 high-profile sexual-assault related stories from 2008 to 2016. To check that these events were indeed high-profile, I run an event-study regression of Google Trends on each of these event dates, results shown in Figure~/ref{figure:police_trends_daily_by_age}:
+I now turn to an event study of 35 high-profile sexual-assault related stories from 2008 to 2016. To check that these events were indeed high-profile, I run an event-study regression of Google Trends on each of these event dates, results shown in Figure~/ref{figure:events_trend}:
 
 \begin{figure}
-\includegraphics[]{figures/police_trend_daily_agegroup.eps}
-\caption{Estimates of effects of Google Trends on FBI reports of sexual assault by age group} \label{figure:police_trends_daily_by_age}
+\includegraphics[]{figures/events_trend.eps}
+\caption{Google Trends before and after High Profile Events} \label{figure:events_trend}
 \end{figure}
+
+As can be seen, these events have sizable effects on the google trend for sexual assault that last for about 3 days. Thus they look to be good examples of random positive shocks to the google trend. \todo{Should explain this more}
+
+I now look at the effects these events have on reports to the FBI. The results of a simple event-study regression are shown in Figure~/ref{figure:events_police}:
+
+\begin{figure}
+\includegraphics[]{figures/events_police.eps}
+\caption{Reports to the FBI before and after High Profile Events} \label{figure:events_police}
+\end{figure}
+
+There looks to be a possible effect, but it's not showing as significant on any individual day. To try to fix this, I bin the results in 3 day groups (from the 3 days that they impact google trends) in an effort to reduce standard errors. Results are shown in Figure~/ref{figure:events_police_binned}:
+
+\begin{figure}
+\includegraphics[]{figures/events_police_binned.eps}
+\caption{Reports to the FBI before and after High Profile Events, Binned} \label{figure:events_police_binned}
+\end{figure}
+
+There is still not a significant coefficient (p value is 0.15). I need to think about this and maybe bin more. Regardless, we have what looks to be a positive coefficient but SE's that are too large to confirm it. More events (higher n) would help with this.
+
+I also estimate the effects of just events related to sexual assault allegations in Figure~/ref{figure:events_police_allegations}, and the effects of 'big allegations' in Figure~/ref{figure:events_police_big}:
+
+\begin{figure}
+\includegraphics[]{figures/events_police_allegations.eps}
+\caption{Reports to the FBI before and after allegations of sexual assault} \label{figure:events_police_allegations}
+\end{figure}
+
+\begin{figure}
+\includegraphics[]{figures/events_police_big.eps}
+\caption{Reports to the FBI before and after 'Big Allegations'} \label{figure:events_police_big}
+\end{figure}
+
+
+
+
+
+
 
 First, I want to see whether reports to police increase in a county when reports are high to a school in that county. To consider this, I estimate the equation: \todo{Unsure why this table messing up below??}
 
