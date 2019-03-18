@@ -31,8 +31,8 @@ collapse (sum) rape population1, by(year)
 gen reports_per_1000 = (rape * 1000)/population1
 
 tsset year
-tsline reports_per_1000, title("Reports to Police of Sexual Assault") ///
-	subtitle("per 1000 People in covered districts") xline(2011)
+tsline rape, title("Reports to Police of Sexual Assault") ///
+	subtitle("In covered districs, per year")
 	
 graph export "figures/police_yearly_reports.eps", as(eps) replace
 	
@@ -88,9 +88,9 @@ xtset id year
 
 eststo: qui xtreg percap lead* casedate* lag* i.year, fe
 
-esttab using "figures/same_school_cases_reports_numbered.tex", se ar2 drop (*year* lead* lag* casedate6) replace
+esttab using "figures/same_school_cases_reports_numbered.tex", se ar2 drop (*year* lead* lag* casedate6 casedate5 casedate4) replace
 
-coefplot(est1), vertical keep(casedate*) yline(0) title("Impact of each Investigation on Reports at Schools")
+coefplot(est1), vertical keep(casedate0 casedate1 casedate2 casedate3) yline(0) title("Impact of each Investigation on Reports at Schools")
 graph export "figures/cases_school_reports_numbered.eps", as(eps) replace
 
 * SAME COUNTY SCHOOLS CASES REPORTS
@@ -360,7 +360,7 @@ forv i = 1(1)7{
 	g lead`i' = trend[_n+`i']
 }
 
-eststo: qui reg rape lead7 lead6 lead5 lead4 lead3 lead2 lead1 trend lag* i.year i.woy i.dow
+eststo: qui reg rape  lead7 lead6 lead5 lead4 lead3 lead2 lead1 trend lag* i.year i.woy i.dow
 
 
 coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("Reports to Police vs. Trends, Daily")
@@ -380,6 +380,7 @@ forv i = 1(1)7{
 }
 
 eststo: qui reg rape lead7 lead6 lead5 lead4 lead3 lead2 lead1 trend lag* i.year i.woy i.dow
+coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("Reports to Police vs. Trends, Daily")
 
 
 clear
@@ -641,7 +642,8 @@ forv i = 1(1)7{
 }
 
 eststo: qui reg value lead7 lead6 lead5 lead4 lead3 lead2 lead1 event_date lag* i.year i.woy i.dow
-coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("Reports to Police vs. Trends, Daily")
+coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("Google Trends before and after High-Profile Events")
+graph export "figures/events_trend.eps", as(eps) replace
 
 * W REPORTS
 
@@ -660,7 +662,8 @@ forv i = 1(1)7{
 }
 
 eststo: qui reg rape event_date lag* i.year i.woy i.dow, robust
-coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("Reports to Police vs. Trends, Daily")
+coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("Reports to Police  before and after High-Profile Events")
+graph export "figures/events_police.eps", as(eps) replace
 
 *** ONLY ALLEGATIONS
 
@@ -698,7 +701,53 @@ forv i = 1(1)7{
 }
 
 eststo: qui reg rape lead7 lead6 lead5 lead4 lead3 lead2 lead1 big_allegation lag* i.year i.woy i.dow
+coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("Reports to Police  before and after 'Big Allegations'")
+graph export "figures/events_police_big.eps", as(eps) replace
+
+
+
+** IDT EVENTS
+
+
+estimates clear
+clear
+use "processed/police_daily_events_idt"
+
+tsset date
+g dow = dow(date)
+g woy = week(date)
+g year = year(date)
+
+forv i = 1(1)7{
+	g lag`i' = event_date[_n-`i']
+	g lead`i' = event_date[_n+`i']
+}
+
+eststo: qui reg rape lead7 lead6 lead5 lead4 lead3 lead2 lead1 event_date lag* i.year i.woy i.dow, robust
 coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("Reports to Police vs. Trends, Daily")
+
+esttab, se ar2 drop(*year* *dow* *woy* )
+
+** PLUS EVENTS
+
+
+estimates clear
+clear
+use "processed/police_daily_events_plus"
+
+tsset date
+g dow = dow(date)
+g woy = week(date)
+g year = year(date)
+
+forv i = 1(1)7{
+	g lag`i' = event_date[_n-`i']
+	g lead`i' = event_date[_n+`i']
+}
+
+eststo: qui reg rape lead7 lead6 lead5 lead4 lead3 lead2 lead1 event_date lag* i.year i.woy i.dow, robust
+coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("Reports to Police vs. Trends, Daily")
+esttab, se ar2 drop(*year* *dow* *woy* )
 
 
 *** BIN NOT WORKING
@@ -758,9 +807,9 @@ gen event_bin = event_date + lag1 + lag2
 gen lag_bin1 = lag3 + lag4 + lag5
 gen lag_bin2 = lag6 + lag7 + lag8
 
-eststo: qui reg lead_bin2 lead_bin1 event_bin lag_bin* i.year i.woy i.dow
-
-coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("Reports to Police vs. Trends, Daily")
+eststo: qui reg rape lead_bin2 lead_bin1 event_bin lag_bin* i.year i.woy i.dow
+coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("Reports to Police  before and after High-Profile Events, Binned")
+graph export "figures/events_police_binned.eps", as(eps) replace
 
 esttab, se ar2 drop(*year* *dow* *woy* )
 
@@ -821,3 +870,7 @@ eststo: qui reg rape lead_bin2 lead_bin1 event_bin lag_bin* i.year i.woy i.dow
 coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("Reports to Police vs. Trends, Daily")
 
 esttab, se ar2 drop(*year* *dow* *woy* )
+
+
+
+
