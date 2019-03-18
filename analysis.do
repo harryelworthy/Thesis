@@ -661,7 +661,7 @@ forv i = 1(1)7{
 	g lead`i' = event_date[_n+`i']
 }
 
-eststo: qui reg rape event_date lag* i.year i.woy i.dow, robust
+eststo: qui reg rape lead7 lead6 lead5 lead4 lead3 lead2 lead1 event_date lag* i.year i.woy i.dow, robust
 coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("Reports to Police  before and after High-Profile Events")
 graph export "figures/events_police.eps", as(eps) replace
 
