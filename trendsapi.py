@@ -150,6 +150,9 @@ def daily_search(term, state='', property=''):
                               restrictions_geo=geo,
                               restrictions_property=property).execute().get('lines')[0].get('points')
 
+    out['orig_value'] = out['value']
+    next['orig_value'] = next['value']
+
     multiplier = 1
     if next[30].get('value') != 0:
         multiplier = out[-1].get('value')/next[30].get('value')
@@ -177,6 +180,9 @@ def daily_search(term, state='', property=''):
                                       restrictions_endDate=e,
                                       restrictions_geo=geo,
                                       restrictions_property=property).execute().get('lines')[0].get('points')
+
+            next['orig_value'] = next['value']
+
             multiplier = 1
             if next[30].get('value') != 0:
                 multiplier = out[-1].get('value')/next[30].get('value')
@@ -221,12 +227,14 @@ for s in statecodes:
 
 #print(daily_search('rape'))
 
-def get_events(term, trend_df, threshold):
+def get_events(trend_df, term='sexual assualt', threshold=0.9):
     # Above 90% of that year? or what?? That six months?
     # Adjust daily_search to include original trend column
     # Start from start. Date, term, orig trend, end trend columns. Search each date
     # above threshold. Check if each term in table, if not, add with that date
     # Try a few thresholds/methodologies until seems right
+
+
     return
 
 

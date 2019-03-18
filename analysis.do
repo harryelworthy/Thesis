@@ -622,3 +622,202 @@ tsset date
 tsline value
 
 
+
+
+**** EVENTS TRENDS
+
+estimates clear
+clear
+use "processed/trends_events"
+
+tsset date
+g dow = dow(date)
+g woy = week(date)
+g year = year(date)
+
+forv i = 1(1)7{
+	g lag`i' = event_date[_n-`i']
+	g lead`i' = event_date[_n+`i']
+}
+
+eststo: qui reg value lead7 lead6 lead5 lead4 lead3 lead2 lead1 event_date lag* i.year i.woy i.dow
+coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("Reports to Police vs. Trends, Daily")
+
+* W REPORTS
+
+estimates clear
+clear
+use "processed/police_daily_events"
+
+tsset date
+g dow = dow(date)
+g woy = week(date)
+g year = year(date)
+
+forv i = 1(1)7{
+	g lag`i' = event_date[_n-`i']
+	g lead`i' = event_date[_n+`i']
+}
+
+eststo: qui reg rape event_date lag* i.year i.woy i.dow, robust
+coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("Reports to Police vs. Trends, Daily")
+
+*** ONLY ALLEGATIONS
+
+estimates clear
+clear
+use "processed/police_daily_events"
+
+tsset date
+g dow = dow(date)
+g woy = week(date)
+g year = year(date)
+
+forv i = 1(1)7{
+	g lag`i' = allegation[_n-`i']
+	g lead`i' = allegation[_n+`i']
+}
+
+eststo: qui reg rape lead7 lead6 lead5 lead4 lead3 lead2 lead1 allegation lag* i.year i.woy i.dow
+coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("Reports to Police vs. Trends, Daily")
+
+*** ONLY BIG ALLEGATIONS
+
+estimates clear
+clear
+use "processed/police_daily_events"
+
+tsset date
+g dow = dow(date)
+g woy = week(date)
+g year = year(date)
+
+forv i = 1(1)7{
+	g lag`i' = big_allegation[_n-`i']
+	g lead`i' = big_allegation[_n+`i']
+}
+
+eststo: qui reg rape lead7 lead6 lead5 lead4 lead3 lead2 lead1 big_allegation lag* i.year i.woy i.dow
+coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("Reports to Police vs. Trends, Daily")
+
+
+*** BIN NOT WORKING
+
+/*
+
+estimates clear
+clear
+use "processed/police_daily_events"
+
+tsset date
+g dow = dow(date)
+g woy = week(date)
+g year = year(date)
+
+loc bin_size = 2
+loc num_lags = 7
+
+forv i = 1(1)`num_lags'{
+	loc mult = `bin_size'*`i'
+	g lag`i' = 0
+	g lead`i' = 0
+	forv j = 0(1)`bin_size'-1{
+		replace lag`i' = lag`i' + event_date[_n-`j'-`mult'-`bin_size']
+		replace lead`i' = lead`i' + event_date[_n+`j'+`mult']
+	}
+}
+
+forv j = 1(1)`bin_size'{
+	replace event_date = event_date + event_date[_n-`j']
+}
+
+eststo: qui reg rape event_date lag* i.year i.woy i.dow, robust
+coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("Reports to Police vs. Trends, Daily")
+*/
+
+
+*** BIN WORKING
+
+estimates clear
+clear
+use "processed/police_daily_events"
+
+tsset date
+g dow = dow(date)
+g woy = week(date)
+g year = year(date)
+
+forv i = 1(1)8{
+	g lag`i' = event_date[_n-`i']
+	g lead`i' = event_date[_n+`i']
+}
+
+gen lead_bin2 = lead6 + lead5 + lead4
+gen lead_bin1 = lead3 + lead2 + lead1 
+gen event_bin = event_date + lag1 + lag2
+gen lag_bin1 = lag3 + lag4 + lag5
+gen lag_bin2 = lag6 + lag7 + lag8
+
+eststo: qui reg lead_bin2 lead_bin1 event_bin lag_bin* i.year i.woy i.dow
+
+coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("Reports to Police vs. Trends, Daily")
+
+esttab, se ar2 drop(*year* *dow* *woy* )
+
+
+*** ALLEGATIONS
+
+estimates clear
+clear
+use "processed/police_daily_events"
+
+tsset date
+g dow = dow(date)
+g woy = week(date)
+g year = year(date)
+
+forv i = 1(1)8{
+	g lag`i' = allegation[_n-`i']
+	g lead`i' = allegation[_n+`i']
+}
+
+gen lead_bin2 = lead6 + lead5 + lead4
+gen lead_bin1 = lead3 + lead2 + lead1 
+gen event_bin = allegation + lag1 + lag2
+gen lag_bin1 = lag3 + lag4 + lag5
+gen lag_bin2 = lag6 + lag7 + lag8
+
+eststo: qui reg rape lead_bin2 lead_bin1 event_bin lag_bin* i.year i.woy i.dow
+
+coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("Reports to Police vs. Trends, Daily")
+
+esttab, se ar2 drop(*year* *dow* *woy* )
+
+
+*** BIG ALLEGATIONS
+
+estimates clear
+clear
+use "processed/police_daily_events"
+
+tsset date
+g dow = dow(date)
+g woy = week(date)
+g year = year(date)
+
+forv i = 1(1)8{
+	g lag`i' = big_allegation[_n-`i']
+	g lead`i' = big_allegation[_n+`i']
+}
+
+gen lead_bin2 = lead6 + lead5 + lead4
+gen lead_bin1 = lead3 + lead2 + lead1 
+gen event_bin = big_allegation + lag1 + lag2
+gen lag_bin1 = lag3 + lag4 + lag5
+gen lag_bin2 = lag6 + lag7 + lag8
+
+eststo: qui reg rape lead_bin2 lead_bin1 event_bin lag_bin* i.year i.woy i.dow
+
+coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("Reports to Police vs. Trends, Daily")
+
+esttab, se ar2 drop(*year* *dow* *woy* )

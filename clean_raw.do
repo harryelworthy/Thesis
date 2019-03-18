@@ -1015,3 +1015,22 @@ duplicates drop
 collapse (firstnm) value, by (date term property state)
 
 save "clean/daily_trends_full", replace
+
+
+
+*** NOTABLE EVENTS
+
+clear
+import delimited "raw/high_profile_events.csv", varnames(1)
+rename ïdate date
+
+split date ,g(part) p("-")
+g tmp = part1 + part2 + part3
+drop date
+// transfer to date
+g date = date(tmp, "YMD")
+form date %td
+// clean up
+drop part? tmp
+
+save "clean/high_profile_events", replace

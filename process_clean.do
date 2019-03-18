@@ -421,6 +421,39 @@ save "processed/trends_police_daily_by_state", replace
 
 
 
+*** NOTABLE EVENTS TRENDS
+
+clear
+use "clean/daily_trends"
+keep if term=="sexual assault" & state=="US" & property=="web"
+merge 1:1 date using "clean/high_profile_events"
+replace event_date = 0 if event_date == .
+replace allegation = 0 if allegation == .
+replace big_allegation = 0 if big_allegation == .
+keep value date event_date allegation big_allegation
+save "processed/trends_events", replace
+
+*** NOTABLE EVENTS REPORTS
+clear
+use "clean/police_daily"
+rename rdt date
+merge 1:1 date using "clean/high_profile_events"
+replace event_date = 0 if event_date == .
+replace allegation = 0 if allegation == .
+replace big_allegation = 0 if big_allegation == .
+keep date rape* event_date allegation big_allegation
+save "processed/police_daily_events", replace
 
 
+** IDT
+
+clear
+use "clean/police_daily_idt"
+rename idt date
+merge 1:1 date using "clean/high_profile_events"
+replace event_date = 0 if event_date == .
+replace allegation = 0 if allegation == .
+replace big_allegation = 0 if big_allegation == .
+keep date rape* event_date allegation big_allegation
+save "processed/police_daily_events_idt", replace
 
