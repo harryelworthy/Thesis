@@ -209,11 +209,27 @@ def daily_search(term, state='', property=''):
     return df1
 
 
-df = daily_search('sexual assault')
+def get_events(trend_df, term='sexual assualt', threshold=0.8):
+    # Above 90% of that year? or what?? That six months?
+    # Adjust daily_search to include original trend column
+    # Start from start. Date, term, orig trend, end trend columns. Search each date
+    # above threshold. Check if each term in table, if not, add with that date
+    # Try a few thresholds/methodologies until seems right
+    df = pd.DataFrame(columns=['date', 'term', 'orig_trend','trend'])
+    for index, row in trend_df.iterrows():
+        if row['orig_value'] > threshold:
 
-for s in statecodes:
-    df = df.append(daily_search('sexual assault',s))
-    print(s)
+
+    return
+
+
+#df = daily_search('sexual assault')
+
+#for s in statecodes:
+#    df = df.append(daily_search('sexual assault',s))
+#    print(s)
+
+
 #df = df.append(daily_search('rape', property='news'))
 #df = df.append(daily_search('sexual assault'))
 #df = df.append(daily_search('sexual assault', property='news'))
@@ -227,15 +243,5 @@ for s in statecodes:
 
 #print(daily_search('rape'))
 
-def get_events(trend_df, term='sexual assualt', threshold=0.9):
-    # Above 90% of that year? or what?? That six months?
-    # Adjust daily_search to include original trend column
-    # Start from start. Date, term, orig trend, end trend columns. Search each date
-    # above threshold. Check if each term in table, if not, add with that date
-    # Try a few thresholds/methodologies until seems right
 
-
-    return
-
-
-df.to_csv('raw/daily_trends_full.csv')
+#df.to_csv('raw/daily_trends_full.csv')

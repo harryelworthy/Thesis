@@ -218,11 +218,11 @@ idate already numeric; no replace
 (0 real changes made)
 file raw/2015_out.dta saved
 year: 2016
-(National Incident-Based Reporting System, 2015: Extract Files, Incident-Level 
+(National Incident-Based Reporting System, 2016: Extract Files, Incident-Level 
 > Fi)
 pop1 already numeric; no replace
 idate already numeric; no replace
-(1,556,819 real changes made, 1,556,819 to missing)
+(1,653,930 real changes made, 1,653,930 to missing)
 (0 real changes made)
 file raw/2016_out.dta saved
 
@@ -471,32 +471,32 @@ year: 2016
   7.   replace offense`i' = "36B" if temp`i' == 362
   8.   drop temp`i'
   9.   }
-(19,777,322 missing values generated)
-(27,589 real changes made)
-(11,684 real changes made)
-(3,097 real changes made)
-(18,805 real changes made)
-(19,888,410 missing values generated)
-(2,245 real changes made)
-(564 real changes made)
-(61 real changes made)
-(289 real changes made)
-(19,891,061 missing values generated)
-(156 real changes made)
-(81 real changes made)
+(20,081,184 missing values generated)
+(28,122 real changes made)
+(11,777 real changes made)
+(3,078 real changes made)
+(18,640 real changes made)
+(20,195,223 missing values generated)
+(2,348 real changes made)
+(571 real changes made)
+(57 real changes made)
+(284 real changes made)
+(20,197,979 missing values generated)
+(170 real changes made)
+(102 real changes made)
 (3 real changes made)
-(11 real changes made)
-(19,891,145 missing values generated)
-(6 real changes made)
-(8 real changes made)
+(10 real changes made)
+(20,198,074 missing values generated)
+(5 real changes made)
+(12 real changes made)
 (0 real changes made)
 (0 real changes made)
-(19,891,147 missing values generated)
+(20,198,076 missing values generated)
 (1 real change made)
 (0 real changes made)
 (0 real changes made)
 (0 real changes made)
-(19,891,150 missing values generated)
+(20,198,078 missing values generated)
 (0 real changes made)
 (0 real changes made)
 (0 real changes made)
@@ -507,13 +507,13 @@ year: 2016
 . rename vrace tempr
 
 . gen vrace = "W" if tempr == 1
-(9,867,332 missing values generated)
+(10,023,271 missing values generated)
 
 . replace vrace = "B" if tempr == 2
-(2,957,103 real changes made)
+(2,991,007 real changes made)
 
 . replace vrace = "O" if tempr > 2
-(259,031 real changes made)
+(268,742 real changes made)
 
 . drop tempr
 
@@ -521,13 +521,13 @@ year: 2016
 . rename orace tempr
 
 . gen orace = "W" if tempr == 1
-(12,576,085 missing values generated)
+(12,774,139 missing values generated)
 
 . replace orace = "B" if tempr == 2
-(3,530,189 real changes made)
+(3,575,297 real changes made)
 
 . replace orace = "O" if tempr > 2
-(212,008 real changes made)
+(218,244 real changes made)
 
 . drop tempr
 
@@ -663,21 +663,21 @@ cfips1 generated as str3
   variable dow was float now byte
   variable doy was float now int
   variable weapon18 was str3 now str2
-  (2,165,355,297 bytes saved)
+  (2,181,008,625 bytes saved)
 
 . 
 . gen idt = .
-(42,457,947 missing values generated)
+(42,764,875 missing values generated)
 
 . gen rdt = .
-(42,457,947 missing values generated)
+(42,764,875 missing values generated)
 
 . 
 . replace idt = mdy if datereport == "0"
-(40,101,348 real changes made)
+(40,385,525 real changes made)
 
 . replace rdt = mdy if datereport == "1"
-(2,356,599 real changes made)
+(2,379,350 real changes made)
 
 . 
 . 
@@ -712,10 +712,10 @@ year_nibrs has all characters numeric; replaced as int
   2.         replace  rape = 1 if offense`i'  == "11A" |  offense`i'== "11B" | 
 > offense`i'== "11C"
   3.         }
-(700,076 real changes made)
-(17,511 real changes made)
-(528 real changes made)
-(45 real changes made)
+(703,768 real changes made)
+(17,654 real changes made)
+(539 real changes made)
+(44 real changes made)
 (1 real change made)
 (0 real changes made)
 
@@ -757,27 +757,27 @@ year_nibrs has all characters numeric; replaced as int
   7. 
 .                 }
   8. }
-(188,430 real changes made)
-(2,461 real changes made)
-(30 real changes made)
+(189,140 real changes made)
+(2,470 real changes made)
+(32 real changes made)
 (0 real changes made)
 (0 real changes made)
 (0 real changes made)
-(106,023 real changes made)
-(2,872 real changes made)
-(69 real changes made)
+(106,885 real changes made)
+(2,895 real changes made)
+(71 real changes made)
 (11 real changes made)
 (0 real changes made)
 (0 real changes made)
-(63,395 real changes made)
-(2,649 real changes made)
-(109 real changes made)
+(63,679 real changes made)
+(2,682 real changes made)
+(108 real changes made)
 (1 real change made)
 (0 real changes made)
 (0 real changes made)
-(42,440 real changes made)
-(2,117 real changes made)
-(76 real changes made)
+(42,912 real changes made)
+(2,138 real changes made)
+(78 real changes made)
 (8 real changes made)
 (0 real changes made)
 (0 real changes made)
@@ -789,8 +789,8 @@ year_nibrs has all characters numeric; replaced as int
   2.         replace rape_vic_18_24 = 1 if (offense`m'  == "11A" | offense`m'==
 >  "11B" | offense`m'== "11C") & vage >= 18 & vage <=24
   3.         }
-(137,523 real changes made)
-(4,800 real changes made)
+(138,369 real changes made)
+(4,856 real changes made)
 (167 real changes made)
 (12 real changes made)
 (0 real changes made)
@@ -811,8 +811,8 @@ year_nibrs has all characters numeric; replaced as int
   2.         replace rapealc = 1 if alc`i' == 1 & (offense`i' == "11A" | offens
 > e`i'== "11B" | offense`i'== "11C")
   3.         }
-(15,861 real changes made)
-(21 real changes made)
+(16,184 real changes made)
+(29 real changes made)
 (0 real changes made)
 
 . 
@@ -890,8 +890,8 @@ year_nibrs has all characters numeric; replaced as int
 . 
 .                 }
   7.         }
-(6,386 real changes made)
-(4 real changes made)
+(6,624 real changes made)
+(7 real changes made)
 (0 real changes made)
 . }
 
@@ -912,7 +912,7 @@ year_nibrs has all characters numeric; replaced as int
 
 Duplicates in terms of all variables
 
-(6,478,802 observations deleted)
+(1,492,194 observations deleted)
 
 . 
 . 
@@ -932,7 +932,7 @@ Duplicates in terms of all variables
 
 . 
 . drop if rape == 0
-(20,423,335 observations deleted)
+(23,535,784 observations deleted)
 
 . * DO I DO THIS????
 . 
@@ -968,7 +968,7 @@ Duplicates in terms of all variables
   variable rape_ooth_17_24 was double now byte
   variable rape_femv_17_24 was double now byte
   variable rapealc_vic_17_24 was double now byte
-  (114,044,580 bytes saved)
+  (122,995,881 bytes saved)
 
 . 
 . 
@@ -978,7 +978,7 @@ Duplicates in terms of all variables
 
 . 
 . replace rdt = idt if rdt == .
-(511,597 real changes made)
+(540,012 real changes made)
 
 . 
 . g year = year(rdt)
@@ -1003,7 +1003,7 @@ file clean/police_yearly.dta saved
 
 . 
 . replace rdt = idt if rdt == .
-(511,597 real changes made)
+(540,012 real changes made)
 
 . 
 . gen sundayofweek = cond(dow(rdt) == 0, rdt, rdt - dow(rdt))
@@ -1046,7 +1046,7 @@ file clean/police_weekly.dta saved
 
 . 
 . replace rdt = idt if rdt == .
-(511,597 real changes made)
+(540,012 real changes made)
 
 . 
 . gen sundayofweek = cond(dow(rdt) == 0, rdt, rdt - dow(rdt))
@@ -1086,7 +1086,7 @@ file clean/police_daily.dta saved
 
 . 
 . drop if idt == .
-(10,057 observations deleted)
+(13,844 observations deleted)
 
 . * drop if idt == rdt
 . 
@@ -1095,7 +1095,6 @@ file clean/police_daily.dta saved
 
 . 
 . save "clean/police_daily_idt", replace
-(note: file clean/police_daily_idt.dta not found)
 file clean/police_daily_idt.dta saved
 
 . 
@@ -1106,10 +1105,10 @@ file clean/police_daily_idt.dta saved
 
 . 
 . drop if idt == .
-(10,057 observations deleted)
+(13,844 observations deleted)
 
 . drop if idt == rdt
-(258 observations deleted)
+(396 observations deleted)
 
 . 
 . collapse (sum) rape*  (firstnm) population1  months* agency* city state_nibrs
@@ -1117,7 +1116,6 @@ file clean/police_daily_idt.dta saved
 
 . 
 . save "clean/police_daily_idt_plus", replace
-(note: file clean/police_daily_idt_plus.dta not found)
 file clean/police_daily_idt_plus.dta saved
 
 . 
@@ -1129,10 +1127,10 @@ file clean/police_daily_idt_plus.dta saved
 . 
 . 
 . drop if rdt == .
-(511,597 observations deleted)
+(540,012 observations deleted)
 
 . drop if idt == .
-(10,057 observations deleted)
+(13,844 observations deleted)
 
 . 
 . gen timewaited = rdt - idt
@@ -1169,7 +1167,7 @@ file yearlyplus.dta saved
 . gen sundayofweek = cond(dow(rdt) == 0, rdt, rdt - dow(rdt))
 
 . drop if ((rdt - sundayofidt) < 0)
-(13,196 observations deleted)
+(18,100 observations deleted)
 
 . 
 . collapse (sum) rape* (firstnm) population1 months* agency* city state_nibrs r
@@ -1177,7 +1175,6 @@ file yearlyplus.dta saved
 
 . 
 . save "clean/police_week_by_county_plus", replace
-(note: file clean/police_week_by_county_plus.dta not found)
 file clean/police_week_by_county_plus.dta saved
 
 . 
@@ -1187,7 +1184,6 @@ file clean/police_week_by_county_plus.dta saved
 
 . 
 . save "clean/police_week_by_state_plus", replace
-(note: file clean/police_week_by_state_plus.dta not found)
 file clean/police_week_by_state_plus.dta saved
 
 . 
@@ -1197,7 +1193,6 @@ file clean/police_week_by_state_plus.dta saved
 
 . 
 . save "clean/police_weekly_plus", replace
-(note: file clean/police_weekly_plus.dta not found)
 file clean/police_weekly_plus.dta saved
 
 . 
@@ -1212,7 +1207,7 @@ file clean/police_weekly_plus.dta saved
 >  stabb cfips* year ori mdy sundayofweek
 . * drop otherfam
 . drop if ((rdt - idt) >= 1)
-(15,412 observations deleted)
+(21,200 observations deleted)
 
 . 
 . collapse (sum) rape* (firstnm) population1  months* agency* city state_nibrs 
@@ -1220,7 +1215,6 @@ file clean/police_weekly_plus.dta saved
 
 . 
 . save "clean/police_daily_by_county_plus", replace
-(note: file clean/police_daily_by_county_plus.dta not found)
 file clean/police_daily_by_county_plus.dta saved
 
 . 
@@ -1229,7 +1223,6 @@ file clean/police_daily_by_county_plus.dta saved
 
 . 
 . save "clean/police_daily_by_state_plus", replace
-(note: file clean/police_daily_by_state_plus.dta not found)
 file clean/police_daily_by_state_plus.dta saved
 
 . 
@@ -1239,7 +1232,6 @@ file clean/police_daily_by_state_plus.dta saved
 
 . 
 . save "clean/police_daily_plus", replace
-(note: file clean/police_daily_plus.dta not found)
 file clean/police_daily_plus.dta saved
 
 . 
@@ -1645,22 +1637,22 @@ xij variables:
 . * These create issues as the student count is for entire system, this summing
 >  reports makes sense
 . bysort school year: replace rape = sum(rape)
-(151,526 real changes made)
+(151,500 real changes made)
 
 . bysort school year: replace fondl = sum(fondl)
-(151,570 real changes made)
+(151,548 real changes made)
 
 . bysort school year: replace inces = sum(inces)
-(148,963 real changes made)
+(148,960 real changes made)
 
 . bysort school year: replace statr = sum(statr)
-(149,131 real changes made)
+(149,135 real changes made)
 
 . bysort school year: replace forcib = sum(forcib)
-(96,796 real changes made)
+(96,731 real changes made)
 
 . bysort school year: replace nonforcib = sum(nonforcib)
-(92,340 real changes made)
+(92,315 real changes made)
 
 . by school year: keep if _n == _N
 (81,012 observations deleted)
@@ -1683,7 +1675,7 @@ xij variables:
 . 
 . * Drop if no student count
 . drop if total == .
-(8,532 observations deleted)
+(8,521 observations deleted)
 
 . 
 . * Create reports per student var
@@ -1704,7 +1696,7 @@ stridr has all characters numeric; unitid generated as long
 . 
 . replace year = year + 2000
 variable year was byte now int
-(91,992 real changes made)
+(92,003 real changes made)
 
 . 
 . save "clean/school_full", replace
