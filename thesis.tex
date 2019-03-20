@@ -215,6 +215,8 @@ Where $y_{t}$ is the outcome variable in question; $x_{t+b}$ is a dummy for the 
 
 \section{Results}
 
+\todo{I think this could maybe be split into primary and secondary results, or 'evidence from schools' or something, but need to work out narrative better first}
+
 In general, I may drop uninteresting things from this section as I decide exactly on the narrative on my paper. I'll also include more tables in the final paper (and probably less graphs) but graphs are just nicer to glance through.
 
 I begin by running a time-series regression of reports of sexual assault to the FBI by report-date on national Google Trends for 'sexual assault'. The results of this are shown in Figure~\ref{figure:police_trends_daily}
@@ -274,73 +276,43 @@ I also estimate the effects of just events related to sexual assault allegations
 \caption{Reports to the FBI before and after 'Big Allegations'} \label{figure:events_police_big}
 \end{figure}
 
+We see also see no significant individual days after allegations. After 'big allegations,' we see a large, statistically significant increase in reports 2 days after the event. 30 reports occuring that would otherwise not have after each of these high profile cases is huge. 
 
-
-
-
-
-
-First, I want to see whether reports to police increase in a county when reports are high to a school in that county. To consider this, I estimate the equation: \todo{Unsure why this table messing up below??}
-
-$$ 
-p_{i,t} = \alpha_{i} + \beta s_{i,t} + \gamma{t} + \varepsilon_{i,t}
-$$ \todo{I shouldn't need to write out 4 essentially the same equations - will think about how to structure this better}\todo{This regression should probably have lags?}
-
-Where $p_{it}$ are reports per capita of a station in question's area and year in question; $s_{it}$ are reports per student for the school and year in question; and $\alpha_{i}$ and $\gamma{t}$ are school and year fixed-effects. The results are shown in Table 1. The coefficient is 0.131, statistically significant at the 10\% level. Thus, with constant populations, 8 extra reporters to schools in a county should result in 1 extra report to police. \todo{Is this right? Kind of get confused with per capita stuff} This seems reasonable, and gives some evidence to the idea that school and police reports are substitutes. 
-
-Next, I want to check the salience of Title IX Investigations using Google Trends. \citeA{lindo_any_2018} does this using terms like "Penn State Sexual Assault," but I want to check salience in a general sense. Do these investigations cause enough fuss to dent trends for a search as general as "sexual assault?" To investigate, I run two regressions. The first is a daily time series of reports to police and Google Trends:
-
-$$
-T_{t} = \alpha_{t} + \gamma_{t} + \rho_{t} + \sum_{b=-7}^{7} \delta_{b} TitleIX_{t+b} + \varepsilon_{t}
-$$
-
-Where $T_{t}$ is the Google Trend for "sexual assault" on day t, $\alpha_{t}$, $\gamma_{t}$ and $\rho_{t}$ are year, week-of-year and day-of-week fixed effects, and $TitleIX_{t+b}$ is a set of leads, lags and dates of Title IX investigations being opened. 
-
-The results are shown in Figure 2. There is a possible uptick on the date of a case opening, but it falls well outside the window of statistical significance. Thus, we do not find evidence of significant national salience of these cases with a general search term. To investigate local salience, we run the following week-by-state panel regression: \todo{In general I need to cluster standard errors/weight by state size/school size and run all the regressions robust}
-
-$$
-T_{i,t} = \alpha_{t} + \gamma_{t} + \rho_{i} + \sum_{b=-7}^{7} \delta_{b} TitleIX_{i,t+b} + \varepsilon_{t}
-$$
-
-Where $T_{t}$ is the Google Trend for "sexual assault" on day t in state i, $\alpha_{t}$, $\gamma_{t}$ and $\rho_{i}$ are year, week-of-year and state fixed effects, and $TitleIX_{t+b}$ is a set of leads, lags and dates of Title IX investigations being opened in state i. 
-
-The results are shown in Figure 3. As can be seen, statewide trends increase above normal for a few weeks before a case is opened and for at least 7 weeks after, by about 3 points (Trends are a relative score out of 100), statistically significant at the 5\% level. Thus, these cases seem to be salient, if not at the national level, then certainly at the state level.
-
-We then look at the effect that a case being opened at a school has on that school's reports of sexual assault. We estimate the equation:
-
-$$
-r_{i,t} = \alpha_{t} + \gamma_{i} \sum_{b=-5}^{5} \delta_{b} TitleIX_{i,t+b} + \varepsilon_{i,t}
-$$
-
-Where $T_{t}$ is per student reports of sexual assault in school t in year i, $\alpha_{t}$ and $\gamma_{i}$ are year and school fixed effects, and $TitleIX_{t+b}$ is a set of leads, lags and dates of Title IX investigations being opened in school i. 
-
-The results are shown in Figure 4 and Table 2. As can be seen, there is a significant uptick in reports at schools where investigations are opened, starting in the year before and extending for many years (albeit with increasing standard errors). The increases in the final lead, the case year and the first lag are significant at the 0.1\% level, and the next two lags at the 5\% level. The coefficient is 0.00089 on the year of the case; to put this in perspective, average reports per student in 2016 were 0.00047. Thus these investigations caused a near 200\% increase in reporting at schools that they were opened at. We also see that when introducing a dummy for years after the 2011 change, including Title IX dummies reduces the after\_2011 coefficient by 8.8\% - or in other words, increases due to Title IX investigations explain away 8.8\% of the increase in reports after 2011.
-
-I consider the differing effects that each investigation opened have on a school by re-estimating the above equation except with separate dummies for the first investigation at each school, the second, and so on, as well as leads and lags for each. The coefficients on the years of the cases are shown in Figure 5 and Table 3. As might be expected, when grouping like this, the coefficient on the first case is higher than it was for all cases - whatever mechanism is driving these higher reports, it likely works less strongly when the second investigation is opened than the first. Interestingly, investigations after the first show no sign of increasing reports, as their coefficients are all small and statistically insignificant. \todo{Need to talk about how this isn't that big of a deal as not many schools had more than 1 case, very few more than 2, so could just be large variance from low sample size?}
-
-I next consider whether schools in the same county as schools that have investigations opened respond similarly to the investigated schools themselves. I run the above regression but for schools without investigations, with dummies for investigations opened in their counties. The results are shown in Table 4. \todo{This is using old way to get investigation dates, and is done poorly (not sure it excludes the right schools)}
-
-Very interestingly, all coefficients are negative, very small, and besides the coefficient on the first lag, all statistically insignificant. If these investigations are increasing reports at nearby schools because of their salience, why not here too? Why would they hugely increase reports there and decrease reports here?
-
-I do the same for police reports in the same counties as schools with Title IX investigations. These results are in Table 5. Again, there is no significant increase in reports, and again, this is surprising. \todo{This is very bad, yearly, old way to get case dates, can be much better - week by county? - may not null. Should be redone yearly and put in one table with the above, then redone weekly.}
-
-\section{Discussion of Results}
-
-It has been difficult for me to keep a consistent narrative in my head of what my results are saying, as they keep changing! However, here is a summary and what I think it might mean:
-
+Here I think I want to bring up school reporting again. My narrative would go something like this:
 \begin{itemize}
-    \item Police and School reports in the same county are weekly positively related.
-    \item T9 Cases are salient on a weekly level in the states that they happen, but not even on the daily level nationally, using a general search term like "sexual assault." \todo{Need to explain why using a general term is important}
-    \item There is a huge (200\%) increase in reporting at schools that have investigations opened, in the year they are opened and in a number of years afterwards, and these increases explain away 9\% of the total increase in reports after 2011.
-    \item This increase looks to be concentrated in the first case opened at a school.
-    \item Schools and police stations in the same county as schools that have T9 investigations opened do not see increases in reporting, with schools even seeing a slight decrease.
+    \item Maybe we also see effects for much more local cases
+    \item Potential evidencefor this: school reporting after title IX cases
+    \item Show huge increase in reports at schools after title IX cases get opened there, explain that the cases are very salient as shown in \citeA{lindo_any_2018}
+    \item However, looking closer this doesn't seem to hold up especially well
+    \item Figure showing that effect is only on the first case, not subsequent ones
+    \item Figures showing no increase in nearby schools or police stations (still need to rerun this, especially daily police) - maybe there is a small increase
 \end{itemize}
 
-To me, these results seem to indicate that salience of these investigations was not a large driver of increased reports. If it were, how would police and schools nearby not be similarly affected - especially when these investigations are salient enough to appear on statewide trends? It looks more like, instead, something like increased mandatory reporting. An investigation starts, people who knew about reports but didn't report them to the Title IX coordinator all of a sudden bring them forward. If this is the case, it is significant, as it could indicate that a lot of the increase in reporting after 2011 is in fact just reports that should have been filed but weren't before - and thus the increase is less an increase in actual reporting of women than we thought. This makes sense also, as although we see a correlation between school and police reports in the same county, we don't see any of the same increase in police reporting since 2011 that we do in schools reporting. \todo{Should have identical graph to Figure 1 but for police reports} I need to get my last results discussed below before I begin drawing conclusions, but right now this is my best guess at what is happeing. 
+\section{Discussion}
+
+TBD
 
 \section{Next Steps}
 
-A final step is to do time series analysis of Google Trends with police reports, either nationally daily or by week by state. I am in the process of reformatting the police data to accommodate this, and should have it done within the week. I've done it nationally by week and had null results, but I think more granular data is needed. This will answer a critical question: do reports trend with buzz about sexual assault? Might increases in buzz increase reporting?
+\begin{itemize}
+    \item Run police daily event studies within county/state after T9 case is opened - plus probably national and show no effect
+    \item Show line graph of Bill Cosby, extrapolate how many reports it increased
+    \item Same for average event effect, calculate more exactly
+    \item Think about instrumenting for google trend with events? Need to mull over
+    \item Break down by race as well as age for google trend increase
+    \item Think more about how to think about perpetrator behaviour. Have events by incident date, think there should be some way to look at this (although probably too noisy to get good results). At least outline how it would be useful for future work. This is most interesting stuff
+    \item Obviously write a whole lot more of every section
+    \item Think about log forms
+    \item Re go over leads and lags - make sure not going crazy
+    \item Do IRF? From advisor. Think event study is kind of that, but also for impact g trend has on reports.
+    \item Fix up state panel data with date fixed effects
+    \item decide how want to break this up into tables of results and which tables are worth keeping
+    \item Schools should be weighted by school size or not done per-capita (?) - nah per capita good and good for states too, as not as many people available to make decision
+    \item Try to get 2017 data. Would be really good as full of events, etc. In state by state SQL files, need to work out how difficult it would be to merge in
+    \item Go back to 2004 with trend analysis
+    \item Think about also doing 'rape' term analysis
+    \item Look for more high-profile cases for event study. Go back before 2008, re-go-over already done dates
+\end{itemize}
 
 Another interesting possibility would be to pull in age/race data for victims in the police data, and look at how subgroups respond to information - one could imagine that younger victims might feel empowered to come forward by a prominent sexual assault case in the news, while older victims might feel the opposite.
 
@@ -358,117 +330,9 @@ There is a decent amount of qualitative work to be done. I am trying to talk wit
 \clearpage
 \appendix
 
+\chapter{High Profile Events}
 
-\begin{figure}
-
-\includegraphics[]{figures/school_reports.eps}
-
-\caption{Reports at Schools per Student, 2005 to 2016}
-\end{figure}
-
-\begin{figure}
-
-\includegraphics[]{figures/police_yearly_reports.eps}
-
-\caption{Reports to Police per Person, 1991 to 2015}
-\end{figure}
-
-\begin{figure}
-\includegraphics[]{figures/national_trend_cases.eps}
-
-\caption{Daily National Google Trends Before/After T9 Investigation is Opened}
-\end{figure}
-
-\begin{figure}
-\includegraphics[]{figures/state_trend_cases.eps}
-
-\caption{Weekly State Google Trends Before/After T9 Investigation is Opened}
-
-\end{figure}
-
-\begin{figure}
-\includegraphics[width=4.9in]{figures/cases_schools_reports_lags.eps}
-
-\caption{Impact of T9 Investigations on Reports at Schools}
-\end{figure}
-
-\begin{figure}
-\includegraphics[width=4.9in]{figures/cases_school_reports_numbered.eps}
-
-\caption{Impact of T9 Investigations on Reports at Schools, Numbered}
-
-\end{figure}
-
-\begin{table}
-\caption{Reports to Police/Schools in Same County by Year}
-
-\input{figures/county_school_police_reports.tex}
-
-\end{table}
-
-
-\begin{table}
-\caption{Reports in Schools with Title IX Cases}
-
-\input{figures/same_school_cases_reports.tex}
-
-\end{table}
-
-\begin{table}
-\caption{Reports in Schools with Title IX Cases, Numbered}
-
-\input{figures/same_school_cases_reports_numbered.tex}
-
-\end{table}
-
-
-\begin{table}
-\caption{Reports to Schools in same County as Schools with Title IX Cases}
-
-\input{figures/same_county_schools_cases_reports.tex}
-\end{table}
-
-\begin{table}
-\caption{Reports to Police in same County as Schools with Title IX Cases}
-
-\input{figures/same_county_police_cases_reports.tex}
-
-%\begin{tablenotes}
-%Table notes environment without optional leadin.
-%\end{tablenotes}
-%\begin{tablenotes}[Source]
-%Table notes environment with optional leadin (Source, in this case).
-%\end{tablenotes}
-\end{table}
-
-
-
-\begin{table}
-\caption{Reports to Police vs Trends, Daily}
-
-\input{figures/police_trend_daily.tex}
-\end{table}
-
-
-\begin{table}
-\caption{Reports to Police vs Trends, Week by State}
-
-\input{figures/police_trend_week_by_state.tex}
-\end{table}
-
-
-\begin{table}
-\caption{Reports to Police before/after High Trends, Daily}
-
-\input{figures/police_trend_daily_ES.tex}
-\end{table}
-
-
-\begin{table}
-\caption{Reports to Police before/after High Trends, Week by State}
-
-\input{figures/police_trend_wbs_ES.tex}
-\end{table}
+\chapter{States included in FBI reporting}
 
 
 \end{document}
