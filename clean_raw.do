@@ -371,8 +371,6 @@ forv i = 1(1)3{
 */
 if 1 ==1{
 
-g rape_alc = 
-
 foreach i in 17{
 loc j = `i' + 7
 	gen rapealc_vic_`i'_`j' = 0
@@ -464,16 +462,18 @@ replace rdt = idt if rdt == .
 
 gen sundayofweek = cond(dow(rdt) == 0, rdt, rdt - dow(rdt))
 
-collapse (sum) rape*  (firstnm) population1  months* agency* city state_nibrs rep*, by(rdt stabb cfips1) fast
+collapse (sum) rape*  (firstnm) population1  months* agency* city state_nibrs rep*, by(rdt ori) fast
+
+collapse (sum) rape*  population1 (firstnm)   months* agency* city state_nibrs rep*, by(rdt stabb cfips1) fast
 
 save "clean/police_daily_by_county", replace
 
-collapse (sum) rape*  (firstnm) population1  months* agency* city state_nibrs rep*, by(rdt stabb) fast
+collapse (sum) rape* population1 (firstnm)  months* agency* city state_nibrs rep*, by(rdt stabb) fast
 
 save "clean/police_daily_by_state", replace
 
 
-collapse (sum) rape*  (firstnm) population1  months* agency* city state_nibrs rep*, by(rdt) fast
+collapse (sum) rape*  population1 (firstnm)  months* agency* city state_nibrs rep*, by(rdt) fast
 
 save "clean/police_daily", replace
 
