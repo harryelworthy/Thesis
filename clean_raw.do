@@ -327,13 +327,19 @@ forv i = 1(1)3{
 	}
 
 	g rapealc = 0
+	g rapenonalc = 0
 
 forv i = 1(1)3{
 	replace rapealc = 1 if alc`i' == 1 & (offense`i' == "11A" | offense`i'== "11B" | offense`i'== "11C")
 	}
 
-	*Rapes by Race
+	replace rapenonalc = 1 if rapealc == 0
 
+	*Rapes by Race
+	g rape_vblk = (rape == 1 & vrace == "B")
+	g rape_vwht = (rape == 1 & vrace == "W")
+	g rape_voth = (rape == 1 & vrace != "W" & vrace != "B")
+	
 	g rape_vblk_17_24 =  (rape == 1 & vrace == "B" & vage >= 17 & vage <= 24)
 	g rape_vwht_17_24 =  (rape == 1 & vrace == "W" & vage >= 17 & vage <= 24)
 	g rape_voth_17_24 =  (rape == 1 & vrace != "W" & vrace != "B" & vage >= 17 & vage <= 24)
@@ -364,6 +370,8 @@ forv i = 1(1)3{
 	g byte rape_hr_17_24 = (vrelate == "HR" & rape== 1 & vage >= 17 & vage <= 24)
 */
 if 1 ==1{
+
+g rape_alc = 
 
 foreach i in 17{
 loc j = `i' + 7
