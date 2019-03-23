@@ -490,11 +490,11 @@ g dow = dow(date)
 
 
 
-eststo: qui xtreg rape  lead2 lead1 trend lag1 lag2 i.date, fe
+*eststo: qui xtreg rape  lead2 lead1 trend lag1 lag2 i.date, fe
 
 * lead7 lead6 lead5 lead4 lead3
 
-esttab /*using "figures/police_trend_daily_by_state.tex"*/, se ar2 keep(lead2 lead1 trend lag1 lag2 ) replace
+*esttab /*using "figures/police_trend_daily_by_state.tex"*/, se ar2 keep(lead2 lead1 trend lag1 lag2 ) replace
 
 
 
@@ -848,7 +848,7 @@ gen lag_bin2 = (lag6 + lag7 + lag8)/3
 eststo: qui reg rape lead_bin2 lead_bin1 event_bin lag_bin* i.year i.woy i.dow
 test event_bin
 coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("Reports to Police vs. Trends, Daily")
-
+graph export "figures/events_police_binned_alle.eps", as(eps) replace
 esttab, se ar2 drop(*year* *dow* *woy* )
 
 
@@ -877,7 +877,7 @@ gen lag_bin2 = (lag6 + lag7 + lag8)/3
 eststo: qui reg rape lead_bin2 lead_bin1 event_bin lag_bin* i.year i.woy i.dow
 test event_bin
 coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("Reports to Police vs. Trends, Daily")
-
+graph export "figures/events_police_binned_big.eps", as(eps) replace
 esttab, se ar2 drop(*year* *dow* *woy* )
 
 
