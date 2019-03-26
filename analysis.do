@@ -1083,3 +1083,13 @@ gen dow = dow(date)
 
 
 ivregress 2sls rape i.year i.woy i.dow (trend = case_date) 
+
+
+
+*** TABLE OF HP EVENTS
+
+clear
+use "clean/high_profile_events"
+drop notes event_date
+order date name allegation big_allegations
+dataout, save("figures/hpevents") tex replace

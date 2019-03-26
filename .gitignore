@@ -565,3 +565,9 @@ clean_raw.log
 raw/*
 clean/*
 
+processed/county_police_cases.dta
+processed/police_daily_by_county_cases.dta
+processed/police_daily_by_state_cases.dta
+processed/police_daily_cases.dta
+processed/police_daily_county_cases.dta
+processed/county_police_cases.dta
