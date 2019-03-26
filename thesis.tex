@@ -299,7 +299,7 @@ We see also see no significant individual days after allegations. After 'big all
 
 The main extra result that needs to get added in is that IV analysis using the events gives a result for the first estimate (of reports on google trends) that is very close to the estimate of the time series, with p<0.05. Need to talk with PB about what exactly this means and how to integrate it. Probably lose a lot of the graphs above and have a couple of tables with lots of results.
 
-Below I look at national and state-level daily trends before/after T9 cases get opened (in those states). Not sure how to interpret this - the cases don't influence national trends and yet have a single significant coefficient, which is more than the 35 events I have can say (although perhaps it is significant because there are 300 instead of 35 events). 
+Below I look at national and state-level daily trends before/after T9 cases get opened (in those states). Not sure how to interpret this - the cases don't influence national trends and yet have a single significant coefficient, which is more than the 35 events I have can say (although perhaps it is significant because there are 300 instead of 35 events). The national trend also looks weirdly like it doesn't have DOW fixed effects (though it does). 
 
 \begin{figure}
 \includegraphics[width=\linewidth]{figures/police_national_cases.eps}
@@ -310,10 +310,10 @@ Below I look at national and state-level daily trends before/after T9 cases get 
 \end{figure}
 
 \clearpage
-Below I look at incident dates of incidents reported within a month after a high profile event, compared to the same for a sample of placebo dates:
+Below I look at incident dates of incidents reported within a month after a high profile event, compared to the same for a sample of placebo dates. No clue why following each other so closely, nor why error bars are the same size when there are 500 placebo events. 
 
 \begin{figure}
-\includegraphics[width=\linewidth]{figures/police_state_cases.eps}
+\includegraphics[width=\linewidth]{figures/idt_analysis.eps}
 \end{figure}
 
 
