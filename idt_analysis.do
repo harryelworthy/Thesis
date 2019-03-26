@@ -1,3 +1,5 @@
+/*
+
 
 *This file reads in and organizes nibrs data for all years
 * Data from: https://www.icpsr.umich.edu/icpsrweb/NACJD/search/studies?q=NIBRS&
@@ -419,7 +421,50 @@ keep  rape* population*  months* agency* city state_nibrs rep* stabb cfips* ori 
 collapse (sum) rape* (firstnm) population*  months* agency* city ori state_nibrs rep* stabb cfips* idt rdt, by(ino) fast
 
 save "raw/intermediate", replace
+*/
 
+clear
+use "clean/high_profile_events"
+levelsof date, local(dates_of_events)
+
+clear
+set obs 500
+set seed 98034
+local a = 18099
+local b = 20877
+generate dates = floor((20877 - 18099 + 1)*runiform() + 18099)
+levelsof dates, local(dates_of_placebo)
+
+/*
+foreach edate in `dates_of_placebo' {
+	loc in_e = inlist(`edate',`dates_of_events')
+	*display `in_e'
+	forv i = 1(1)7{
+		if inlist( `edate' - `i', `dates_of_events') == 1 {
+			loc in_e = 1
+		}
+		if inlist( `edate' + `i', `dates_of_events') == 1 {
+			loc in_e = 1
+		}
+		*loc l_dt = `edate' - `i'
+		*loc r_dt = `edate' + `i'
+		*replace `in_e' = 1 if (inlist( `edate' - `i', `dates_of_events') == 1)
+	*	replace `in_e' = 1 if inlist(`edate' + `i', `dates_of_events') == 1
+	}
+	if `in_e' == 1{
+		display `edate'
+	}
+}
+
+
+foreach edate in `dates_of_placebo'{
+	loc in_e = inlist(`edate',`dates_of_events')
+	display `in_e'
+}
+*/
+
+
+clear
 use "raw/intermediate"
 
 drop if rape == 0
@@ -433,16 +478,17 @@ drop if rdt == .
 drop if idt == .
 
 preserve
-loc ldate = 19000 - 30
-loc rdate = 19000 + 30
+loc ldate = 20000 - 30
+loc rdate = 20000 + 30
 drop if idt > `rdate'
-drop if idt < `ldate'
-drop if rdt < 19000
-drop if rdt > `ldt'
+*drop if idt < `ldate'
+drop if rdt < 20000
+drop if rdt > `rdate'
 collapse (sum) rape, by(idt) fast
-g days_from_event = idt - `edate'
+g days_from_event = idt - 20000
 g placebo = 1
 save "clean/idt_analysis", replace
+restore
 
 
 foreach edate of local dates_of_events {
@@ -450,32 +496,33 @@ foreach edate of local dates_of_events {
 	loc ldate = `edate' - 30
 	loc rdate = `edate' + 30
 	drop if idt > `rdate'
-	drop if idt < `ldate'
+	*drop if idt < `ldate'
 	drop if rdt < `edate'
-	drop if rdt > `ldate'
-	collapse (sum) rape, by(idt) fast
-	g days_from_event = idt - `edate'
-	g placebo = 0
-	append using "clean/idt_analysis"
-	save "clean/idt_analysis", replace
+	drop if rdt > `rdate'
+	if _N > 0 {
+		collapse (sum) rape, by(idt) fast
+		g days_from_event = idt - `edate'
+		g placebo = 0
+		append using "clean/idt_analysis"
+		save "clean/idt_analysis", replace
+	}
 	restore
 }
 
-drop if idt < 18000
-save "clean/idt_analysis", replace
-
 foreach edate of local dates_of_placebo {
-	preserve
-	loc ldate = `edate' - 30
-	loc rdate = `edate' + 30
-	drop if idt > `rdate'
-	drop if idt < `ldate'
-	drop if rdt < `edate'
-	drop if rdt > `ldate'
-	collapse (sum) rape, by(idt) fast
-	g days_from_event = idt - `edate'
-	g placebo = 1
-	append using "clean/idt_analysis"
-	save "clean/idt_analysis", replace
-	restore
+		preserve
+		loc ldate = `edate' - 30
+		loc rdate = `edate' + 30
+		drop if idt > `rdate'
+		*drop if idt < `ldate'
+		drop if rdt < `edate'
+		drop if rdt > `rdate'
+		if _N > 0 {
+			collapse (sum) rape, by(idt) fast
+			g days_from_event = idt - `edate'
+			g placebo = 1
+			append using "clean/idt_analysis"
+			save "clean/idt_analysis", replace
+		}
+		restore
 }

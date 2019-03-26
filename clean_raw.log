@@ -954,3 +954,144 @@ Duplicates in terms of all variables
 . 
 . *save step3, replace
 . 
+. collapse (sum) rape* (firstnm) population*  months* agency* city ori state_ni
+> brs rep* stabb cfips* idt rdt, by(ino) fast
+
+. 
+. drop if rape == 0
+(23,535,784 observations deleted)
+
+. * DO I DO THIS????
+. 
+. compress
+  variable idt was float now int
+  variable rdt was float now int
+  variable rape was double now byte
+  variable rape_victim_10_to_19 was double now byte
+  variable rape_victim_20_to_29 was double now byte
+  variable rape_victim_30_to_39 was double now byte
+  variable rape_victim_40_to_49 was double now byte
+  variable rape_victim_50_to_59 was double now byte
+  variable rape_victim_60_to_69 was double now byte
+  variable rape_victim_under_18 was double now byte
+  variable rape_victim_18_to_24 was double now byte
+  variable rape_v17_24_o_resid was double now byte
+  variable rape_vic_res was double now byte
+  variable rape_v17_24_o13_16 was double now byte
+  variable rape_vic_13_16 was double now byte
+  variable rape_v17_24_o17_20 was double now byte
+  variable rape_vic_17_20 was double now byte
+  variable rape_v17_24_o21_24 was double now byte
+  variable rape_vic_21_24 was double now byte
+  variable rape_v17_24_o25_28 was double now byte
+  variable rape_vic_25_28 was double now byte
+  variable rape_vic_18_24 was double now byte
+  variable rapealc was double now byte
+  variable rapenonalc was double now int
+  variable rape_vblk was double now byte
+  variable rape_vwht was double now byte
+  variable rape_voth was double now byte
+  variable rape_vblk_17_24 was double now byte
+  variable rape_vwht_17_24 was double now byte
+  variable rape_voth_17_24 was double now byte
+  variable rape_oblk_17_24 was double now byte
+  variable rape_owht_17_24 was double now byte
+  variable rape_ooth_17_24 was double now byte
+  variable rape_femv_17_24 was double now byte
+  variable rapealc_vic_17_24 was double now byte
+  (139,038,822 bytes saved)
+
+. 
+. 
+. 
+. 
+. preserve
+
+. 
+. replace rdt = idt if rdt == .
+(540,012 real changes made)
+
+. 
+. g year = year(rdt)
+
+. 
+. collapse (sum) rape* (firstnm) population1 months* agency* city state_nibrs r
+> ep* stabb cfips*, by(ori year) fast
+
+. 
+. save "clean/police_yearly", replace
+file clean/police_yearly.dta saved
+
+. 
+. restore
+
+. 
+. 
+. 
+. 
+. 
+. preserve
+
+. 
+. replace rdt = idt if rdt == .
+(540,012 real changes made)
+
+. 
+. gen sundayofweek = cond(dow(rdt) == 0, rdt, rdt - dow(rdt))
+
+. 
+. 
+. collapse (sum) rape* (firstnm) population1 months* agency* city state_nibrs r
+> ep*, by(sundayofweek stabb cfips1) fast
+
+. 
+. save "clean/police_week_by_county", replace
+file clean/police_week_by_county.dta saved
+
+. 
+. 
+. collapse (sum) rape* (firstnm) population1 months* agency* city state_nibrs r
+> ep*, by(sundayofweek stabb) fast
+
+. 
+. save "clean/police_week_by_state", replace
+file clean/police_week_by_state.dta saved
+
+. 
+. 
+. collapse (sum) rape* (firstnm) population1  months* agency* city state_nibrs 
+> rep* stabb, by(sundayofweek) fast
+
+. 
+. save "clean/police_weekly", replace
+file clean/police_weekly.dta saved
+
+. 
+. restore
+
+. 
+. 
+. 
+. 
+. preserve
+
+. 
+. replace rdt = idt if rdt == .
+(540,012 real changes made)
+
+. 
+. gen sundayofweek = cond(dow(rdt) == 0, rdt, rdt - dow(rdt))
+
+. 
+. collapse (sum) rape*  (firstnm) population1  months* agency* city state_nibrs
+>  rep*, by(rdt ori) fast
+
+. 
+. collapse (sum) rape*  population1 (firstnm)   months* agency* city state_nibr
+> s rep*, by(rdt stabb cfips1) fast
+variable stabb not found
+(error in option by())
+r(111);
+
+end of do-file
+r(111);

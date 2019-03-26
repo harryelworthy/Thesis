@@ -1,4 +1,4 @@
-,set graphics off
+set graphics off
 set scheme plotplain
 
 clear
@@ -1087,9 +1087,26 @@ ivregress 2sls rape i.year i.woy i.dow (trend = case_date)
 
 
 *** TABLE OF HP EVENTS
-
+/*
 clear
 use "clean/high_profile_events"
 drop notes event_date
 order date name allegation big_allegations
 dataout, save("figures/hpevents") tex replace
+*/
+
+
+
+use "/Users/harry/Google Drive/GDocuments/F18/Thesis/DATA/Final/clean/idt_analysis.dta", clear
+drop if days_from_event < -60
+g new_d = days_from_event + 100
+regress rape i.new_d i.placebo
+margins new_d, over(placebo)
+marginsplot
+g woy = week(idt)
+g dow = dow(idt)
+g year = year(idt)
+qui regress rape i.new_d i.placebo i.woy i.dow i.year
+qui margins new_d, over(placebo)
+marginsplot
+graph export "figures/idt_analysis.eps", as(eps) replace

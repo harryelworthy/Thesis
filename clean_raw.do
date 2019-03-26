@@ -465,7 +465,7 @@ replace rdt = idt if rdt == .
 
 gen sundayofweek = cond(dow(rdt) == 0, rdt, rdt - dow(rdt))
 
-collapse (sum) rape*  (firstnm) population1  months* agency* city state_nibrs rep*, by(rdt ori) fast
+collapse (sum) rape*  (firstnm) population1  stabb cfips1 months* agency* city state_nibrs rep*, by(rdt ori) fast
 
 collapse (sum) rape*  population1 (firstnm)   months* agency* city state_nibrs rep*, by(rdt stabb cfips1) fast
 
