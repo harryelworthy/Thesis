@@ -236,14 +236,22 @@ I begin by running a time-series regression of reports of sexual assault to the 
 
 There is a clear, statistically significant effect on the first lead variable. \todo{I think I worked out that I had miscoded this, and that it was on the first lag variable. Need to go over and fix. Also fix x axis.} I discuss interpretations of the effect magnitude below. \todo{Don't actually show below yet. Probably use the Bill Cosby case as it's within sample, maybe also with a smaller case, as well as all 35 of my events. Show their graphs, eyeball approximate estimates, for the full 35 event sample calculate average effect.}
 
-This increase in reporting is driven by reporters under 20, as shown in Figure~\ref{figure:police_trends_daily_by_age}:
+This increase in reporting is driven by white reporters under 20 and to a lesser extent under 30, reporting incidents that did not involve alcohol, as shown in Figure~\ref{figure:police_trends_daily_by_age}, Figure~\ref{figure:police_trends_daily_by_race}, and Figure~\ref{figure:police_trends_daily_by_alc}:
 
 \begin{figure}
 \includegraphics[width=\linewidth]{figures/police_trend_daily_agegroup.eps}
 \caption{Estimates of effects of Google Trends on FBI reports of sexual assault by age group} \label{figure:police_trends_daily_by_age}
 \end{figure}
 
-\todo{Lots of x axes are bad, this is especially so. Groups are in 10 year chunks, first is 10 to 20.}
+\begin{figure}
+\includegraphics[width=\linewidth]{figures/police_trend_daily_race.eps}
+\caption{Estimates of effects of Google Trends on FBI reports of sexual assault by race} \label{figure:police_trends_daily_by_race}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=\linewidth]{figures/police_trend_daily_alc.eps}
+\caption{Estimates of effects of Google Trends on FBI reports of sexual assault by alcohol involvement} \label{figure:police_trends_daily_by_alc}
+\end{figure}
 
 Here I'd look at how state by state variation in trends impacts reporting across states, but that regression has been giving me grief and is not presentable. I think it's going to be a small or 0 effect.
 
@@ -284,9 +292,32 @@ I also estimate the effects of just events related to sexual assault allegations
 \caption{Reports to the FBI before and after 'Big Allegations'}\label{figure:events_police_binned_big}
 \end{figure}
 
-We see also see no significant individual days after allegations. After 'big allegations,' we see a large, statistically significant increase in reports 2 days after the event. 30 reports occuring that would otherwise not have after each of these high profile cases is huge. 
+We see also see no significant individual days after allegations. After 'big allegations,' we see a large, statistically significant increase in reports 2 days after the event. A spike in 30 reports after each of these high profile cases is huge.
 
-Here I think I want to bring up school reporting again. My narrative would go something like this:
+\clearpage
+\section{Extra figures and results}
+
+The main extra result that needs to get added in is that IV analysis using the events gives a result for the first estimate (of reports on google trends) that is very close to the estimate of the time series, with p<0.05. Need to talk with PB about what exactly this means and how to integrate it. Probably lose a lot of the graphs above and have a couple of tables with lots of results.
+
+Below I look at national and state-level daily trends before/after T9 cases get opened (in those states). Not sure how to interpret this - the cases don't influence national trends and yet have a single significant coefficient, which is more than the 35 events I have can say (although perhaps it is significant because there are 300 instead of 35 events). 
+
+\begin{figure}
+\includegraphics[width=\linewidth]{figures/police_national_cases.eps}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=\linewidth]{figures/police_state_cases.eps}
+\end{figure}
+
+\clearpage
+Below I look at incident dates of incidents reported within a month after a high profile event, compared to the same for a sample of placebo dates:
+
+\begin{figure}
+\includegraphics[width=\linewidth]{figures/police_state_cases.eps}
+\end{figure}
+
+
+Bring up school reporting again? Don't think so. If I did my narrative would go something like this:
 \begin{itemize}
     \item Maybe we also see effects for much more local cases
     \item Potential evidencefor this: school reporting after title IX cases
@@ -295,7 +326,7 @@ Here I think I want to bring up school reporting again. My narrative would go so
     \item Figure showing that effect is only on the first case, not subsequent ones
     \item Figures showing no increase in nearby schools or police stations (still need to rerun this, especially daily police) - maybe there is a small increase
 \end{itemize}
-
+If not, should have somewhere that school data was not feasible for x reasons (?)
 \section{Discussion}
 
 TBD
