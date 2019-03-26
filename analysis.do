@@ -1,4 +1,4 @@
-set graphics off
+,set graphics off
 set scheme plotplain
 
 clear
@@ -366,6 +366,59 @@ eststo: qui reg rape  lag7 lag6 lag5 lag4 lag3 lag2 lag1 trend lead* i.year i.wo
 coefplot(est1), vertical drop(*year* *woy* *dow _cons) title("Reports to Police vs. Trends, Daily") xlabel(1 "-7" 2 "-6" 3 "-5" 4 "-4" 5 "-3" 6 "-2" 7 "-1" 8 "0" 9 "1" 10 "2" 11 "3" 12 "4" 13 "5" 14 "6" 15 "7") xtitle("Days surrounding event at t=0") ytitle("Estimated effect of Google Trends on Reports") yline(0)
 graph export "figures/police_trend_daily.eps", as(eps) replace
 
+estimates clear
+
+**** LOG TREND
+
+estimates clear
+clear
+use "processed/trends_police_daily"
+
+replace trend = log(trend)
+
+tsset date
+g dow = dow(date)
+g woy = week(date)
+g year = year(date)
+
+forv i = 1(1)7{
+	g lag`i' = trend[_n-`i']
+	g lead`i' = trend[_n+`i']
+}
+
+eststo: qui reg rape  lag7 lag6 lag5 lag4 lag3 lag2 lag1 trend lead* i.year i.woy i.dow
+
+
+coefplot(est1), vertical drop(*year* *woy* *dow _cons) title("Reports to Police vs. Trends, Daily") xlabel(1 "-7" 2 "-6" 3 "-5" 4 "-4" 5 "-3" 6 "-2" 7 "-1" 8 "0" 9 "1" 10 "2" 11 "3" 12 "4" 13 "5" 14 "6" 15 "7") xtitle("Days surrounding event at t=0") ytitle("Estimated effect of Google Trends on Reports") yline(0)
+graph export "figures/police_trend_daily_logtrend.eps", as(eps) replace
+
+
+**** LOG BOTH
+
+estimates clear
+clear
+use "processed/trends_police_daily"
+
+replace trend = log(trend)
+g log_rape = log(rape)
+
+tsset date
+g dow = dow(date)
+g woy = week(date)
+g year = year(date)
+
+forv i = 1(1)7{
+	g lag`i' = trend[_n-`i']
+	g lead`i' = trend[_n+`i']
+}
+
+eststo: qui reg log_rape  lag7 lag6 lag5 lag4 lag3 lag2 lag1 trend lead* i.year i.woy i.dow
+
+
+coefplot(est1), vertical drop(*year* *woy* *dow _cons) title("Reports to Police vs. Trends, Daily") xlabel(1 "-7" 2 "-6" 3 "-5" 4 "-4" 5 "-3" 6 "-2" 7 "-1" 8 "0" 9 "1" 10 "2" 11 "3" 12 "4" 13 "5" 14 "6" 15 "7") xtitle("Days surrounding event at t=0") ytitle("Estimated effect of Google Trends on Reports") yline(0)
+graph export "figures/police_trend_daily_logboth.eps", as(eps) replace
+
+
 clear
 use "processed/trends_police_daily_plus"
 
@@ -586,7 +639,7 @@ esttab using "figures/police_trend_wbs_ES.tex", se ar2 drop(*year* *woy*) replac
 
 
 *****************************
-****** AGES *****************
+****** AGES AND RACES *******
 *****************************
 
 
@@ -606,6 +659,8 @@ forv i = 1(1)7{
 	g lead`i' = trend[_n+`i']
 }
 
+preserve
+
 forv j = 10(10)60{
 	loc k = `j' + 9
 	rename lead1 lead1_`j'_to_`k'
@@ -615,6 +670,37 @@ forv j = 10(10)60{
 
 coefplot(est*), vertical drop(*year* *woy* *dow lead7 lead6 lead5 lead4 lead3 lead2 trend lag* _cons) yline(0) title("Reports to Police vs. Trends, by Age Group")
 graph export "figures/police_trend_daily_agegroup.eps", as(eps) replace
+
+restore
+preserve
+estimates clear
+
+rename lead1 lead1_wht
+eststo: qui reg rape_vwht lead7 lead6 lead5 lead4 lead3 lead2 lead1_wht trend lag* i.year i.woy i.dow
+
+rename lead1 lead1_blk
+eststo: qui reg rape_vblk lead7 lead6 lead5 lead4 lead3 lead2 lead1_blk trend lag* i.year i.woy i.dow
+
+rename lead1 lead1_oth
+eststo: qui reg rape_voth lead7 lead6 lead5 lead4 lead3 lead2 lead1_oth trend lag* i.year i.woy i.dow
+
+coefplot(est*), vertical drop(*year* *woy* *dow lead7 lead6 lead5 lead4 lead3 lead2 trend lag* _cons) yline(0) title("Reports to Police vs. Trends, by Race of Victim")
+graph export "figures/police_trend_daily_race.eps", as(eps) replace
+
+restore
+estimates clear
+g rapenonalc = rape - rapealc
+
+rename lead1 lead1_alc
+eststo: qui reg rapealc lead7 lead6 lead5 lead4 lead3 lead2 lead1_alc trend lag* i.year i.woy i.dow
+
+rename lead1 lead1_nonalc
+eststo: qui reg rapenonalc lead7 lead6 lead5 lead4 lead3 lead2 lead1_nonalc trend lag* i.year i.woy i.dow
+
+coefplot(est*), vertical drop(*year* *woy* *dow lead7 lead6 lead5 lead4 lead3 lead2 trend lag* _cons) yline(0) title("Reports to Police vs. Trends, Alcohol Involvement")
+graph export "figures/police_trend_daily_alc.eps", as(eps) replace
+
+
 
 
 
@@ -917,3 +1003,83 @@ gen lag_bin2 = elag6 + elag7 + elag8
 
 ivregress 2sls rape i.year i.woy i.dow (trend = event_bin) 
 
+
+
+
+*** T9 Cases event study by state by day
+* SIGNIF IF NO FE? ESPECIALLY IF log_rape? UNSURE
+
+clear
+use "processed/police_daily_by_state_cases"
+
+rename rdt date
+rename stabb state
+
+estimates clear
+
+g log_rape = log(rape)
+
+encode state, gen(si)
+
+gen woy = week(date)
+gen year = year(date)
+gen dow = dow(date)
+
+sort state date
+
+forv j = 1(1)7{
+	by state: g lag`j' = event_date[_n-`j']
+	by state: g lead`j' = event_date[_n+`j']
+}
+
+xtset si date
+eststo: qui xtreg rape lead7 lead6 lead5 lead4 lead3 lead2 lead1 event_date lag* i.year i.woy i.dow, fe
+
+coefplot(est*), vertical drop(*year* *woy* *dow* _cons) yline(0) title("Reports before/after T9 Investigation, Daily, Within State") xlabel(1 "-7" 2 "-6" 3 "-5" 4 "-4" 5 "-3" 6 "-2" 7 "-1" 8 "0" 9 "1" 10 "2" 11 "3" 12 "4" 13 "5" 14 "6" 15 "7") xtitle("Days surrounding event at t=0") ytitle("Reports to Police") yline(0)
+graph export "figures/police_state_cases.eps", as(eps) replace
+
+
+*** T9 Cases event study by day Nationally
+
+clear
+use "processed/police_daily_cases"
+
+rename rdt date
+
+estimates clear
+
+g log_rape = log(rape)
+
+gen woy = week(date)
+gen year = year(date)
+gen dow = dow(date)
+
+forv j = 1(1)7{
+	g lag`j' = event_date[_n-`j']
+	g lead`j' = event_date[_n+`j']
+}
+
+eststo: qui reg log_rape lead7 lead6 lead5 lead4 lead3 lead2 lead1 event_date lag* i.year i.woy i.dow
+
+coefplot(est*), vertical drop(*year* *woy* *dow* _cons) yline(0) title("Reports before/after T9 Investigation, Daily, Nationally") xlabel(1 "-7" 2 "-6" 3 "-5" 4 "-4" 5 "-3" 6 "-2" 7 "-1" 8 "0" 9 "1" 10 "2" 11 "3" 12 "4" 13 "5" 14 "6" 15 "7") xtitle("Days surrounding event at t=0") ytitle("Reports to Police") yline(0)
+graph export "figures/police_national_cases.eps", as(eps) replace
+
+
+*** T9 Cases instrumental
+
+clear
+use "processed/police_daily_cases"
+drop _merge
+
+rename rdt date
+rename event_date case_date
+
+merge 1:1 date using "processed/trends_events"
+rename value trend
+
+gen woy = week(date)
+gen year = year(date)
+gen dow = dow(date)
+
+
+ivregress 2sls rape i.year i.woy i.dow (trend = case_date) 

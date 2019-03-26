@@ -73,14 +73,13 @@ file raw/out_allyears.dta saved
  12.   rename bh023 pop2
  13.   rename bh027 pop3
  14.   rename bh031 pop4
- 15.   destring pop1, replace
- 16. 
-. 
+ 15.    rename bh035 pop5
+ 16.   destring pop1, replace
+ 17. 
 . 
 .   *year specific
 . 
-.    rename bh035 pop5
- 17.    rename bh039 rep_indicator
+.    rename bh039 rep_indicator
  18.    rename bh040 monthsreported
  19.    rename bh042 rep_jan
  20.    rename bh043 rep_feb
@@ -614,6 +613,22 @@ cfips1 generated as str3
        values)
 
 . 
+.   destring pop2, replace
+pop2 has all characters numeric; replaced as long
+(82 missing values generated)
+
+.   destring pop3, replace
+pop3 has all characters numeric; replaced as long
+(82 missing values generated)
+
+.   destring pop4, replace
+pop4 has all characters numeric; replaced as byte
+(82 missing values generated)
+
+.   destring pop5, replace
+pop5 has all characters numeric; replaced as byte
+(82 missing values generated)
+
 . 
 . 
 .    *Data is now at the offender-by-victim level. We now know what offenses an
@@ -890,10 +905,6 @@ year_nibrs has all characters numeric; replaced as int
 > */
 . if 1 ==1{
 . 
-. g rape_alc = 
-invalid syntax
-r(198);
-. 
 . foreach i in 17{
   2. loc j = `i' + 7
   3.         gen rapealc_vic_`i'_`j' = 0
@@ -906,8 +917,40 @@ r(198);
 . 
 .                 }
   7.         }
+(6,624 real changes made)
+(7 real changes made)
+(0 real changes made)
 . }
-r(198);
 
-end of do-file
-r(198);
+. 
+. 
+. 
+. 
+. gen population1 = pop1 + pop2 + pop3 + pop4 + pop5
+
+. 
+. drop pop1 pop2 pop3 pop4 pop5
+
+. 
+. sort state_nibrs ori year month day
+
+. 
+. duplicates drop
+
+Duplicates in terms of all variables
+
+(1,492,196 observations deleted)
+
+. 
+. 
+. *append groupB crimes:
+. *       append using "dataconstruction/datafiles\GroupB_1991_2012.dta"
+. *compress
+. keep  rape* population*  months* agency* city state_nibrs rep* stabb cfips* o
+> ri idt rdt ino
+
+. * drop otherfam
+. 
+. 
+. *save step3, replace
+. 

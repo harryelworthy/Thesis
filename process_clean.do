@@ -8,9 +8,17 @@ gen id6s = substr(tmp, 1, 6)
 drop tmp
 
 preserve
-keep id6s state
-collapse (firstnm) state, by (id6s)
-save "processed/school_state_id6s", replace
+
+tostring countycd, gen(cstring)
+rename state stabb
+gen cfips1 = substr(cstring, 3, 3)
+
+gen county = stabb + cfips1
+
+keep id6s stabb cfips1 county
+collapse (firstnm) stabb cfips1 county, by (id6s)
+save "processed/school_county_id6s", replace
+
 restore
 
 merge m:1 id6s using "clean/first_cases"
@@ -29,7 +37,6 @@ merge m:1 id6s using "processed/school_state_id6s"
 drop if _merge != 3
 drop _merge
 save "processed/all_cases_states", replace
-
 
 
 
@@ -53,7 +60,12 @@ form fd %td
 preserve
 collapse (firstnm) cfips1 stabb fd, by (county)
 
-save "processed/county_cases", replace
+*save "processed/county_cases", replace
+
+collapse (firstnm) fd, by (stabb)
+*save "processed/state_cases", replace
+
+
 restore
 
 
@@ -469,3 +481,119 @@ replace allegation = 0 if allegation == .
 replace big_allegation = 0 if big_allegation == .
 keep date rape* event_date allegation big_allegation
 save "processed/police_daily_events_plus", replace
+
+
+
+
+
+
+***** POLICE DAILY CASES MERGE BY COUNTY
+
+clear
+use "clean/police_daily_by_county"
+
+gen county = stabb + cfips1
+
+merge m:1 county using  "processed/county_cases"
+
+save "processed/police_daily_county_cases", replace
+
+
+
+***** POLICE DAILY CASES MERGE BY State
+
+clear
+use "clean/police_daily_by_state"
+
+
+merge m:1 stabb using  "processed/state_cases"
+
+save "processed/police_daily_state_cases", replace
+
+
+****** CASES WITH COUNTY Police
+
+**** THIS GIVES 15 MERGES!!!???
+clear
+use "clean/all_cases"
+g event_date = 1
+rename date_op rdt
+keep id6s rdt
+g event_date = 1
+
+merge m:1 id6s using "processed/school_county_id6s"
+keep if _merge == 3
+drop _merge
+drop id6s
+
+duplicates drop rdt stabb cfips1, force
+
+save "processed/cases_counties", replace
+
+merge 1:1 rdt stabb cfips1 using "clean/police_daily_by_county"
+
+replace event_date = 0 if event_date == .
+
+sort rdt stabb
+
+save "processed/police_daily_by_county_cases", replace
+
+
+
+***** 
+
+****** CASES WITH State Police
+
+clear
+use "clean/all_cases"
+g event_date = 1
+rename date_op rdt
+keep id6s rdt
+g event_date = 1
+
+merge m:1 id6s using "processed/school_county_id6s"
+keep if _merge == 3
+drop _merge
+drop id6s
+
+duplicates drop rdt stabb, force
+
+save "processed/cases_state", replace
+
+merge 1:1 rdt stabb using "clean/police_daily_by_state"
+
+replace event_date = 0 if event_date == .
+
+sort rdt stabb
+
+save "processed/police_daily_by_state_cases", replace
+
+
+
+****** CASES WITH National Police
+
+clear
+use "clean/all_cases"
+g event_date = 1
+rename date_op rdt
+keep id6s rdt
+g event_date = 1
+
+merge m:1 id6s using "processed/school_county_id6s"
+keep if _merge == 3
+drop _merge
+drop id6s
+
+duplicates drop rdt, force
+
+save "processed/cases_national", replace
+
+merge 1:1 rdt using "clean/police_daily"
+
+replace event_date = 0 if event_date == .
+
+sort rdt
+
+save "processed/police_daily_cases", replace
+
+

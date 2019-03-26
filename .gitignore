@@ -560,3 +560,8 @@ clean/police_daily_by_county_plus.dta
 *.ipynb
 raw/high_profile_events.csv
 notes_for_last_draft.md
+idt_analysis.log
+clean_raw.log
+raw/*
+clean/*
+

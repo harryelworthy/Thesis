@@ -38,13 +38,12 @@ di "year: `i'"
   rename bh023 pop2
   rename bh027 pop3
   rename bh031 pop4
+   rename bh035 pop5
   destring pop1, replace
-
 
 
   *year specific
 
-   rename bh035 pop5
    rename bh039 rep_indicator
    rename bh040 monthsreported
    rename bh042 rep_jan
@@ -179,7 +178,7 @@ g mdy = mdy(month,day,year)
 g dow = dow(mdy)
 g doy = doy(mdy)
 
-,
+
 
 *keep crimes against person
 
@@ -251,6 +250,10 @@ drop cfips2 cfips3 cfips4 cfips5
 
 append using "raw/out_allyears"
 
+  destring pop2, replace
+  destring pop3, replace
+  destring pop4, replace
+  destring pop5, replace
 
 
    *Data is now at the offender-by-victim level. We now know what offenses an offender committed against a victim, their relationship to the victim, the location of each offense and whether substances were involved for each offense.
@@ -386,9 +389,9 @@ loc j = `i' + 7
 
 
 
-rename pop1 population1
+gen population1 = pop1 + pop2 + pop3 + pop4 + pop5
 
-drop pop2 pop3 pop4 pop5
+drop pop1 pop2 pop3 pop4 pop5
 
 sort state_nibrs ori year month day
 
