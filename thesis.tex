@@ -264,16 +264,16 @@ There looks to be a possible effect, but it's not showing as significant on any 
 
 There is still not a significant coefficient (p value is 0.15). I need to think about this and maybe bin more. Regardless, we have what looks to be a positive coefficient but SE's that are too large to confirm it. More events (higher n) would help with this.
 
-I also estimate the effects of just events related to sexual assault allegations in Figure~\ref{figure:events_police_allegations}, and the effects of 'big allegations' in Figure~\ref{figure:events_police_big}. Both of these figures are in 3-day bins to get consistent effect estimates.
+I also estimate the effects of just events related to sexual assault allegations in Figure~\ref{figure:events_police_binned_alle}, and the effects of 'big allegations' in Figure~\ref{figure:events_police_binned_big}. Both of these figures are in 3-day bins to get consistent effect estimates.
 
 \begin{figure}
-\includegraphics[width=\linewidth]{figures/events_police_allegations.eps}
-\caption{Reports to the FBI before and after allegations of sexual assault}\label{figure:events_police_allegations}
+\includegraphics[width=\linewidth]{figures/events_police_binned_alle.eps}
+\caption{Reports to the FBI before and after allegations of sexual assault}\label{figure:events_police_binned_alle}
 \end{figure}
 
 \begin{figure}
-\includegraphics[width=\linewidth]{figures/events_police_big.eps}
-\caption{Reports to the FBI before and after 'Big Allegations'}\label{figure:events_police_big}
+\includegraphics[width=\linewidth]{figures/events_police_binned_big.eps}
+\caption{Reports to the FBI before and after 'Big Allegations'}\label{figure:events_police_binned_big}
 \end{figure}
 
 We see also see no significant individual days after allegations. After 'big allegations,' we see a large, statistically significant increase in reports 2 days after the event. 30 reports occuring that would otherwise not have after each of these high profile cases is huge. 
@@ -293,41 +293,36 @@ Here I think I want to bring up school reporting again. My narrative would go so
 TBD
 
 \clearpage
+\section{To Discuss}
+
+\begin{itemize}
+    \item IDT analysis graph - hopefully. Otherwise methodology of it. Probably just qualitative. I'm found of using it as a way to discuss possible next steps.
+    \item Talk about local/national T9 results with P Bayer. Bad news for my other results - other mechanisms? Although not the same type of event
+    \item Talk about methodology on trend. Log? Original Trend?
+    \item Best tables? Just one with overall effect, subgroups, columns are naive, instrument, log, log instrument? or something?
+    \item Tables/Figures draft approx sequence
+    \item Should make numbers national equivalent in tables? 
+    \item Should I run with year interactions/something to check changing effect? Not that many years?
+    \item IRF? Not sure I see what would be different than the graphs I have already
+\end{itemize}
+
+
+\clearpage 
 \section{Next Steps}
 
 \begin{itemize}
-    \item Break down by race and alc
-    \begin{itemize}
-        \item Done in clean raw, needs to be run, then put into analysis
-    \end{itemize}
-    \item Think through binning. How do I interpret? Am I doing it right?
-    \item Write down IV arrows, think about how to run
-    \item If makes sense, merge police, trend and events into one
-    \item Merge T9 investigations into police data by county and state (have this code approx higher up)
-    \item Run police daily event studies within county/state after T9 case is opened
-    \item Do T9 case nationally, no effect?
-    \item Go over clean\_raw and get population correct. Change main graph of reports to per capita. Check how much it's changing over time. Think about doing per cap and weighting.
-    \item Show line graph of Bill Cosby with fixed effects? possible?, extrapolate how many reports it increased approx. UNSURE ON THIS
-    \item Talk to PB about methodology on trend. Maybe just use original trend? Check only over time period I'm using too.
-    \item Calculate average event effect, per cap? make equivalent to the US. Note the assumption in homogeneous effect.
-    \item Think more about how to think about perpetrator behaviour. Have events by incident date, think there should be some way to look at this (although probably too noisy to get good results). At least outline how it would be useful for future work. This is most interesting stuff
-    \item Obviously write a whole lot more of every section
-    \item Think about log forms
-    \item Think about how this may be people reporting more quickly - 
-    \item Re go over leads and lags - make sure not going crazy
-    \item Do IRF? From advisor. Think event study is kind of that, but also for impact g trend has on reports.
-    \item Fix up state panel data with date fixed effects
-    \item decide how want to break this up into tables of results and which tables are worth keeping
-    \item Schools should be weighted by school size or not done per-capita (?) - nah per capita good and good for states too, as not as many people available to make decision
-    \item Try to get 2017 data. Would be really good as full of events, etc. In state by state SQL files, need to work out how difficult it would be to merge in
-    \item Go back to 2004 with trend analysis
-    \item Think about also doing 'rape' term analysis
+    \item Run state fixed effects with weights by population (once decided) as well as state cases
+    \item Finish idt\_analysis. Graph
+    \item Do same for 50/100/200 random generated time segments depending on time the above takes, compare shapes
+    \item Check results on population1 - use if not ridiculous
+    \item Calculate average event effect, equivalent to the US. Note the assumption in homogeneous effect.
+    \item Find any more 
+    \item Write a paragraph on future work. More on perpetrator behavior. More on whether increased reports are true new reports or just earlier reports.
+    \item Put in methodology/somewhere about how this may be people reporting more quickly, not new reports. Assume some are new at least.
+    \item Include state panel data with date fixed effects somewhere - null
     \item Look for more high-profile cases for event study. Go back before 2008, re-go-over already done dates
 \end{itemize}
 
-Another interesting possibility would be to pull in age/race data for victims in the police data, and look at how subgroups respond to information - one could imagine that younger victims might feel empowered to come forward by a prominent sexual assault case in the news, while older victims might feel the opposite.
-
-There is a decent amount of qualitative work to be done. I am trying to talk with Title IX coordinators at schools that have had investigations opened, to get an insight into what changed on the ground after these openings.
 
 % The appendix command is issued once, prior to all appendices, if any.
 \clearpage
