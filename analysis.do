@@ -689,6 +689,7 @@ graph export "figures/police_trend_daily_race.eps", as(eps) replace
 
 restore
 estimates clear
+drop rapenonalc
 g rapenonalc = rape - rapealc
 
 rename lead1 lead1_alc
@@ -889,24 +890,34 @@ tsset date
 g dow = dow(date)
 g woy = week(date)
 g year = year(date)
+g my = mofd(date)
+g wy = wofd(date)
+g twy = cond(mod(wy, 2) == 0, wy, wy - 1)
 
-forv i = 1(1)8{
+forv i = 1(1)14{
 	g lag`i' = event_date[_n-`i']
 	g lead`i' = event_date[_n+`i']
 }
 
+gen lead_bin4 = (lead12 + lead11 + lead10)/3
+gen lead_bin3 = (lead9 + lead8 + lead7)/3
 gen lead_bin2 = (lead6 + lead5 + lead4)/3
 gen lead_bin1 = (lead3 + lead2 + lead1)/3
 gen event_bin = (event_date + lag1 + lag2)/3
 gen lag_bin1 = (lag3 + lag4 + lag5)/3
 gen lag_bin2 = (lag6 + lag7 + lag8)/3
+gen lag_bin3 = (lag9 + lag10 + lag11)/3
+gen lag_bin4 = (lag12 + lag13 + lag14)/3
 
-eststo: qui reg rape lead_bin2 lead_bin1 event_bin lag_bin* i.year i.woy i.dow
+*eststo: qui reg rape lead_bin4 lead_bin3 lead_bin2 lead_bin1 event_bin lag_bin* i.year i.woy
+*eststo: qui reg rape lead_bin4 lead_bin3 lead_bin2 lead_bin1 event_bin lag_bin* i.my
+*eststo: qui reg rape lead_bin4 lead_bin3 lead_bin2 lead_bin1 event_bin lag_bin* i.wy
+*eststo: qui reg rape lead_bin4 lead_bin3 lead_bin2 lead_bin1 event_bin lag_bin* i.twy
 test event_bin
-coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("Reports to Police  before and after High-Profile Events, Binned") xlabel(1 "-2" 2 "-1" 3 "0" 4 "1" 5 "2") xtitle("3 day bins surrounding event, with t=0 being event date and two lags") ytitle("Reports to Police") yline(0)
+coefplot(est1), vertical drop(*year* *woy* *dow *my* *wy* _cons) yline(0) title("Reports to Police  before and after High-Profile Events, Binned") xlabel(1 "-2" 2 "-1" 3 "0" 4 "1" 5 "2") xtitle("3 day bins surrounding event, with t=0 being event date and two lags") ytitle("Reports to Police") yline(0)
 graph export "figures/events_police_binned.eps", as(eps) replace
 
-esttab, se ar2 drop(*year* *dow* *woy* )
+esttab, se ar2 drop(*year* *dow* *woy* *my* )
 
 
 *** ALLEGATIONS
@@ -948,6 +959,8 @@ tsset date
 g dow = dow(date)
 g woy = week(date)
 g year = year(date)
+g wy = wofd(date)
+
 
 forv i = 1(1)8{
 	g lag`i' = big_allegation[_n-`i']
@@ -961,10 +974,12 @@ gen event_bin = (big_allegation + lag1 + lag2)/3
 gen lag_bin1 = (lag3 + lag4 + lag5)/3
 gen lag_bin2 = (lag6 + lag7 + lag8)/3
 eststo: qui reg rape lead_bin2 lead_bin1 event_bin lag_bin* i.year i.woy i.dow
+*eststo: qui reg rape lead_bin2 lead_bin1 event_bin lag_bin* i.wy
+
 test event_bin
-coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("Reports to Police vs. Trends, Daily")
+coefplot(est1), vertical drop(*year* *woy* *wy* *dow _cons) yline(0) title("Reports to Police vs. Trends, Daily")
 graph export "figures/events_police_binned_big.eps", as(eps) replace
-esttab, se ar2 drop(*year* *dow* *woy* )
+esttab, se ar2 drop(*year* *dow* *woy* *wy*)
 
 
 
@@ -984,6 +999,9 @@ tsset date
 g dow = dow(date)
 g woy = week(date)
 g year = year(date)
+g my = mofd(date)
+g wy = wofd(date)
+g twy = cond(mod(wy, 2) == 0, wy, wy - 1)
 
 forv i = 1(1)8{
 	g elag`i' = event_date[_n-`i']
@@ -1001,7 +1019,65 @@ gen event_bin = event_date + elag1 + elag2
 gen lag_bin1 = elag3 + elag4 + elag5
 gen lag_bin2 = elag6 + elag7 + elag8
 
-ivregress 2sls rape i.year i.woy i.dow (trend = event_bin) 
+ivregress 2sls rape i.year i.woy (trend = event_bin)
+
+
+**** DIFFERING INSTRUMENT
+
+estimates clear
+clear
+use "processed/trends_events"
+
+merge 1:1 date using "processed/police_daily_events"
+
+rename value trend
+g log_trend = log(trend)
+g log_reports = log(rape)
+
+tsset date
+g dow = dow(date)
+g woy = week(date)
+g year = year(date)
+g my = mofd(date)
+g wy = wofd(date)
+g twy = cond(mod(wy, 2) == 0, wy, wy - 1)
+
+forv i = 1(1)8{
+	g elag`i' = event_date[_n-`i']
+	g elead`i' = event_date[_n+`i']
+}
+
+forv i = 1(1)8{
+	g e2lag`i' = name[_n-`i']
+	g e2lead`i' = name[_n+`i']
+}
+
+
+forv i = 1(1)7{
+	g lag`i' = trend[_n-`i']
+	g lead`i' = trend[_n+`i']
+}
+
+gen lead_bin2 = elead6 + elead5 + elead4
+gen lead_bin1 = elead3 + elead2 + elead1 
+gen event_bin = event_date + elag1 + elag2
+gen lag_bin1 = elag3 + elag4 + elag5
+gen lag_bin2 = elag6 + elag7 + elag8
+
+g event_bin2 = name + e2lag1 + e2lag2
+encode event_bin2, gen(ei)
+replace ei = 0 if ei == .
+
+eststo: qui ivregress 2sls log_reports i.year i.woy i.dow (log_trend = event_bin)
+eststo: qui ivregress 2sls log_reports i.my i.dow (log_trend = event_bin)
+eststo: qui ivregress 2sls log_reports i.wy i.dow (log_trend = event_bin)
+eststo: qui ivregress 2sls log_reports i.twy i.dow (log_trend = event_bin)
+eststo: qui ivregress 2sls log_reports i.year i.woy (log_trend = i.ei)
+eststo: qui ivregress 2sls log_reports i.my (log_trend = i.ei)
+eststo: qui ivregress 2sls log_reports i.wy (log_trend = i.ei)
+eststo: qui ivregress 2sls log_reports i.twy (log_trend = i.ei)
+
+esttab, se ar2 drop(*year* *woy* *wy* *twy* *my* *dow*)
 
 
 
@@ -1110,3 +1186,137 @@ qui regress rape i.new_d i.placebo i.woy i.dow i.year
 qui margins new_d, over(placebo)
 marginsplot
 graph export "figures/idt_analysis.eps", as(eps) replace
+
+use "/Users/harry/Google Drive/GDocuments/F18/Thesis/DATA/Final/clean/idt_analysis.dta", clear
+drop if days_from_event < -60
+collapse (mean) rape, by(days_from_event placebo)
+g rape_event = rape if placebo == 0
+g rape_plac = rape if placebo == 1
+line rape_plac rape_event days_from_event
+graph export "figures/idt_analysis_2.eps", as(eps) replace
+
+
+
+
+*** OUTPUT A BUNCH OF TABLES TO COMBINE INTO ONE. Overall effect, then by subgroups, for TS, Instrumental 1 and instrumental 2 specs
+
+
+estimates clear
+clear
+use "processed/trends_events"
+merge 1:1 date using "processed/police_daily_events"
+rename value trend
+
+g log_trend = log(trend)
+g log_reports = log(rape)
+
+tsset date
+g dow = dow(date)
+g woy = week(date)
+g year = year(date)
+g my = mofd(date)
+g wy = wofd(date)
+g twy = cond(mod(wy, 2) == 0, wy, wy - 1)
+
+forv i = 1(1)8{
+	g elag`i' = event_date[_n-`i']
+	g elead`i' = event_date[_n+`i']
+}
+
+forv i = 1(1)8{
+	g e2lag`i' = name[_n-`i']
+	g e2lead`i' = name[_n+`i']
+}
+
+gen event_bin = event_date + elag1 + elag2
+g event_bin2 = name + e2lag1 + e2lag2
+encode event_bin2, gen(ei)
+replace ei = 0 if ei == .
+
+* LAGS FOR TREND
+forv i = 1(1)7{
+	g lag`i' = log_trend[_n-`i']
+	g lead`i' = log_trend[_n+`i']
+}
+rename log_trend ev_d
+rename lead1 log_trend
+
+* OVERALL EFFECT
+
+* First Form
+eststo: qui reg log_reports lag7 lag6 lag5 lag4 lag3 lag2 lag1 ev_d log_trend lead* i.year i.woy i.dow
+coefplot(est1), vertical drop(*year* *woy* *dow _cons) title("Reports to Police vs. Trends, Daily") xlabel(1 "-7" 2 "-6" 3 "-5" 4 "-4" 5 "-3" 6 "-2" 7 "-1" 8 "0" 9 "1" 10 "2" 11 "3" 12 "4" 13 "5" 14 "6" 15 "7") xtitle("Days surrounding event at t=0") ytitle("Estimated effect of Google Trends on Reports") yline(0)
+graph export "figures/police_trend_daily_logboth.eps", as(eps) replace
+estimates clear
+* Drop leads for actual regression
+eststo: qui reg log_reports ev_d log_trend lead* i.year i.woy i.dow
+* Second Form
+eststo: qui ivregress 2sls log_reports i.wy i.dow (log_trend = event_bin)
+
+* Third form
+eststo: qui ivregress 2sls log_reports i.wy (log_trend = i.ei)
+
+esttab using "figures/tbc_1.tex", se ar2 drop(*wy* *dow* _cons *ev_d* *lead* *year* *woy* *dow*) replace
+
+* AGE GROUPS
+
+
+forv j = 10(10)60{
+	estimates clear
+	loc k = `j' + 9
+	rename log_trend log_trend_`j'_to_`k'
+	g log_rep_`j'_to_`k' = log(rape_victim_`j'_to_`k')
+	eststo: qui reg log_rep_`j'_to_`k' ev_d log_trend_`j'_to_`k' lead* i.year i.woy i.dow
+	
+	eststo: qui ivregress 2sls log_rep_`j'_to_`k' i.wy i.dow (log_trend = i.event_date)
+	
+	eststo: qui ivregress 2sls log_rep_`j'_to_`k' i.wy (log_trend = i.ei)
+	
+	esttab using figures/tbc_`j'_`k'.tex, se ar2 drop(*wy* *dow* _cons *ev_d* *lead* *year* *woy* *dow*) replace
+}
+
+* Races
+estimates clear
+rename log_trend log_trend_white
+g log_rep_white = log(rape_vwht)
+eststo: qui reg log_rep_white ev_d log_trend_white lead* i.year i.woy i.dow
+eststo: qui ivregress 2sls log_rep_white i.wy i.dow (log_trend = i.event_date)
+eststo: qui ivregress 2sls log_rep_white i.wy (log_trend = i.ei)
+esttab using "figures/tbc_white.tex", se ar2 drop(*wy* *dow* _cons *ev_d* *lead* *year* *woy* *dow*) replace
+	
+estimates clear
+rename log_trend log_trend_black
+g log_rep_black = log(rape_vblk)
+eststo: qui reg log_rep_black ev_d log_trend_black lead* i.year i.woy i.dow
+eststo: qui ivregress 2sls log_rep_black i.wy i.dow (log_trend = i.event_date)
+eststo: qui ivregress 2sls log_rep_black i.wy (log_trend = i.ei)
+esttab using "figures/tbc_black.tex", se ar2 drop(*wy* *dow* _cons *ev_d* *lead* *year* *woy* *dow*) replace
+
+estimates clear
+rename log_trend log_trend_other
+g log_rep_other = log(rape_voth)
+eststo: qui reg log_rep_other ev_d log_trend_other lead* i.year i.woy i.dow
+eststo: qui ivregress 2sls log_rep_other i.wy i.dow (log_trend = i.event_date)
+eststo: qui ivregress 2sls log_rep_other i.wy (log_trend = i.ei)
+esttab using "figures/tbc_other.tex", se ar2 drop(*wy* *dow* _cons *ev_d* *lead* *year* *woy* *dow*) replace
+
+* Alc*
+
+drop rapenonalc
+g rapenonalc = rape - rapealc
+
+estimates clear
+rename log_trend log_trend_alc
+g log_rep_alc = log(rapealc)
+eststo: qui reg log_rep_alc ev_d log_trend_alc lead* i.year i.woy i.dow
+eststo: qui ivregress 2sls log_rep_alc i.wy i.dow (log_trend = i.event_date)
+eststo: qui ivregress 2sls log_rep_alc i.wy (log_trend = i.ei)
+esttab using "figures/tbc_alc.tex", se ar2 drop(*wy* *dow* _cons *ev_d* *lead* *year* *woy* *dow*) replace
+
+estimates clear
+rename log_trend log_trend_non_alc
+g log_rep_non_alc = log(rapealc)
+eststo: qui reg log_rep_non_alc ev_d log_trend_non_alc lead* i.year i.woy i.dow
+eststo: qui ivregress 2sls log_rep_non_alc i.wy i.dow (log_trend = i.event_date)
+eststo: qui ivregress 2sls log_rep_non_alc i.wy (log_trend = i.ei)
+esttab using "figures/tbc_nonalc.tex", se ar2 drop(*wy* *dow* _cons *ev_d* *lead* *year* *woy* *dow*) replace
