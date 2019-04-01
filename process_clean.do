@@ -442,7 +442,7 @@ merge 1:1 date using "clean/high_profile_events"
 replace event_date = 0 if event_date == .
 replace allegation = 0 if allegation == .
 replace big_allegation = 0 if big_allegation == .
-keep value date event_date allegation big_allegation
+keep value date event_date allegation big_allegation name
 save "processed/trends_events", replace
 
 *** NOTABLE EVENTS REPORTS
@@ -453,7 +453,7 @@ merge 1:1 date using "clean/high_profile_events"
 replace event_date = 0 if event_date == .
 replace allegation = 0 if allegation == .
 replace big_allegation = 0 if big_allegation == .
-keep date rape* event_date allegation big_allegation
+keep date rape* event_date allegation big_allegation name
 save "processed/police_daily_events", replace
 
 

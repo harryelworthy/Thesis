@@ -266,6 +266,9 @@ gen rdt = .
 
 replace idt = mdy if datereport == "0"
 replace rdt = mdy if datereport == "1"
+replace idt = mdy if datereport == ""
+replace rdt = mdy if datereport == "R"
+
 
 
 keep date_nibrs ino pop* offense* vage oage vrace orace vfemale offusing* months* agency* city state_nibrs dow rep* month day stabb cfips* year ori mdy idt rdt
