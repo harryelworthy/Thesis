@@ -1071,13 +1071,11 @@ replace ei = 0 if ei == .
 eststo: qui ivregress 2sls log_reports i.year i.woy i.dow (log_trend = event_bin)
 eststo: qui ivregress 2sls log_reports i.my i.dow (log_trend = event_bin)
 eststo: qui ivregress 2sls log_reports i.wy i.dow (log_trend = event_bin)
-eststo: qui ivregress 2sls log_reports i.twy i.dow (log_trend = event_bin)
 eststo: qui ivregress 2sls log_reports i.year i.woy (log_trend = i.ei)
 eststo: qui ivregress 2sls log_reports i.my (log_trend = i.ei)
 eststo: qui ivregress 2sls log_reports i.wy (log_trend = i.ei)
-eststo: qui ivregress 2sls log_reports i.twy (log_trend = i.ei)
 
-esttab, se ar2 drop(*year* *woy* *wy* *twy* *my* *dow*)
+esttab, se ar2 drop(*year* *woy* *wy* *my* *dow*)
 
 
 
@@ -1250,73 +1248,111 @@ graph export "figures/police_trend_daily_logboth.eps", as(eps) replace
 estimates clear
 * Drop leads for actual regression
 eststo: qui reg log_reports ev_d log_trend lead* i.year i.woy i.dow
+preserve
+rename log_trend lead1
+rename ev_d log_trend
+
 * Second Form
 eststo: qui ivregress 2sls log_reports i.wy i.dow (log_trend = event_bin)
 
 * Third form
 eststo: qui ivregress 2sls log_reports i.wy (log_trend = i.ei)
+restore
 
-esttab using "figures/tbc_1.tex", se ar2 drop(*wy* *dow* _cons *ev_d* *lead* *year* *woy* *dow*) replace
+esttab using "figures/tbc_1.tex", se ar2 drop(*wy* *dow* _cons *ev_d* *lead* *year* *woy* *dow*) star(+ 0.10 * 0.05 ** 0.01 *** 0.001) replace
 
 * AGE GROUPS
 
 
 forv j = 10(10)60{
-	estimates clear
 	loc k = `j' + 9
-	rename log_trend log_trend_`j'_to_`k'
 	g log_rep_`j'_to_`k' = log(rape_victim_`j'_to_`k')
+	preserve
+	estimates clear
+	rename log_trend log_trend_`j'_to_`k'
 	eststo: qui reg log_rep_`j'_to_`k' ev_d log_trend_`j'_to_`k' lead* i.year i.woy i.dow
-	
-	eststo: qui ivregress 2sls log_rep_`j'_to_`k' i.wy i.dow (log_trend = i.event_date)
-	
-	eststo: qui ivregress 2sls log_rep_`j'_to_`k' i.wy (log_trend = i.ei)
-	
-	esttab using figures/tbc_`j'_`k'.tex, se ar2 drop(*wy* *dow* _cons *ev_d* *lead* *year* *woy* *dow*) replace
+	restore
+	preserve
+	rename log_trend lead1
+	rename ev_d log_trend_`j'_to_`k'
+	eststo: qui ivregress 2sls log_rep_`j'_to_`k' i.wy i.dow (log_trend_`j'_to_`k' = event_bin)
+	eststo: qui ivregress 2sls log_rep_`j'_to_`k' i.wy (log_trend_`j'_to_`k' = i.ei)
+	restore
+	esttab using figures/tbc_`j'_`k'.tex, se ar2 drop(*wy* *dow* _cons *ev_d* *lead* *year* *woy* *dow*) star(+ 0.10 * 0.05 ** 0.01 *** 0.001) replace
 }
 
 * Races
 estimates clear
-rename log_trend log_trend_white
 g log_rep_white = log(rape_vwht)
+preserve
+rename log_trend log_trend_white
 eststo: qui reg log_rep_white ev_d log_trend_white lead* i.year i.woy i.dow
-eststo: qui ivregress 2sls log_rep_white i.wy i.dow (log_trend = i.event_date)
-eststo: qui ivregress 2sls log_rep_white i.wy (log_trend = i.ei)
+restore
+preserve
+rename log_trend lead1
+rename ev_d log_trend_white
+eststo: qui ivregress 2sls log_rep_white i.wy i.dow (log_trend_white = event_bin)
+eststo: qui ivregress 2sls log_rep_white i.wy (log_trend_white = i.ei)
+restore
 esttab using "figures/tbc_white.tex", se ar2 drop(*wy* *dow* _cons *ev_d* *lead* *year* *woy* *dow*) replace
 	
 estimates clear
-rename log_trend log_trend_black
 g log_rep_black = log(rape_vblk)
+preserve
+rename log_trend log_trend_black
 eststo: qui reg log_rep_black ev_d log_trend_black lead* i.year i.woy i.dow
-eststo: qui ivregress 2sls log_rep_black i.wy i.dow (log_trend = i.event_date)
-eststo: qui ivregress 2sls log_rep_black i.wy (log_trend = i.ei)
+restore
+preserve
+rename log_trend lead1
+rename ev_d log_trend_black
+eststo: qui ivregress 2sls log_rep_black i.wy i.dow (log_trend_black = event_bin)
+eststo: qui ivregress 2sls log_rep_black i.wy (log_trend_black = i.ei)
+restore
 esttab using "figures/tbc_black.tex", se ar2 drop(*wy* *dow* _cons *ev_d* *lead* *year* *woy* *dow*) replace
 
 estimates clear
-rename log_trend log_trend_other
 g log_rep_other = log(rape_voth)
+preserve
+rename log_trend log_trend_other
 eststo: qui reg log_rep_other ev_d log_trend_other lead* i.year i.woy i.dow
-eststo: qui ivregress 2sls log_rep_other i.wy i.dow (log_trend = i.event_date)
-eststo: qui ivregress 2sls log_rep_other i.wy (log_trend = i.ei)
+restore
+preserve
+rename log_trend lead1
+rename ev_d log_trend_other
+eststo: qui ivregress 2sls log_rep_other i.wy i.dow (log_trend_other = event_bin)
+eststo: qui ivregress 2sls log_rep_other i.wy (log_trend_other = i.ei)
+restore
 esttab using "figures/tbc_other.tex", se ar2 drop(*wy* *dow* _cons *ev_d* *lead* *year* *woy* *dow*) replace
 
 * Alc*
 
 drop rapenonalc
 g rapenonalc = rape - rapealc
+g log_rep_non_alc = log(rapenonalc)
 
 estimates clear
-rename log_trend log_trend_alc
 g log_rep_alc = log(rapealc)
+preserve
+rename log_trend log_trend_alc
 eststo: qui reg log_rep_alc ev_d log_trend_alc lead* i.year i.woy i.dow
-eststo: qui ivregress 2sls log_rep_alc i.wy i.dow (log_trend = i.event_date)
-eststo: qui ivregress 2sls log_rep_alc i.wy (log_trend = i.ei)
+restore
+preserve
+rename log_trend lead1
+rename ev_d log_trend_alc
+eststo: qui ivregress 2sls log_rep_alc i.wy i.dow (log_trend_alc = event_bin)
+eststo: qui ivregress 2sls log_rep_alc i.wy (log_trend_alc = i.ei)
 esttab using "figures/tbc_alc.tex", se ar2 drop(*wy* *dow* _cons *ev_d* *lead* *year* *woy* *dow*) replace
+restore
 
 estimates clear
+preserve
 rename log_trend log_trend_non_alc
-g log_rep_non_alc = log(rapealc)
 eststo: qui reg log_rep_non_alc ev_d log_trend_non_alc lead* i.year i.woy i.dow
-eststo: qui ivregress 2sls log_rep_non_alc i.wy i.dow (log_trend = i.event_date)
-eststo: qui ivregress 2sls log_rep_non_alc i.wy (log_trend = i.ei)
+restore
+preserve
+rename log_trend lead1
+rename ev_d log_trend_non_alc
+eststo: qui ivregress 2sls log_rep_non_alc i.wy i.dow (log_trend_non_alc = event_bin)
+eststo: qui ivregress 2sls log_rep_non_alc i.wy (log_trend_non_alc = i.ei)
 esttab using "figures/tbc_nonalc.tex", se ar2 drop(*wy* *dow* _cons *ev_d* *lead* *year* *woy* *dow*) replace
+restore
