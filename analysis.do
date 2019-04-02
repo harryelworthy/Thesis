@@ -543,9 +543,9 @@ g dow = dow(date)
 
 
 
-*eststo: qui xtreg rape  lead2 lead1 trend lag1 lag2 i.date, fe
+eststo: qui xtreg rape  lead2 lead1 trend lag1 lag2 i.date, fe
 
-* lead7 lead6 lead5 lead4 lead3
+lead7 lead6 lead5 lead4 lead3
 
 *esttab /*using "figures/police_trend_daily_by_state.tex"*/, se ar2 keep(lead2 lead1 trend lag1 lag2 ) replace
 
@@ -725,6 +725,8 @@ estimates clear
 clear
 use "processed/trends_events"
 
+replace value = log(value)
+
 tsset date
 g dow = dow(date)
 g woy = week(date)
@@ -738,6 +740,18 @@ forv i = 1(1)7{
 eststo: qui reg value lead7 lead6 lead5 lead4 lead3 lead2 lead1 event_date lag* i.year i.woy i.dow
 coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("Google Trends before and after High-Profile Events") xlabel(1 "-7" 2 "-6" 3 "-5" 4 "-4" 5 "-3" 6 "-2" 7 "-1" 8 "0" 9 "1" 10 "2" 11 "3" 12 "4" 13 "5" 14 "6" 15 "7") xtitle("Days surrounding event at t=0") ytitle("Relative Google Trend") yline(0)
 graph export "figures/events_trend.eps", as(eps) replace
+
+forv i = 1(1)7{
+	replace lag`i' = big_allegations[_n-`i']
+	replace lead`i' = big_allegations[_n+`i']
+}
+
+drop event_date
+rename big_allegations event_date
+
+eststo: qui reg value lead7 lead6 lead5 lead4 lead3 lead2 lead1 event_date lag* i.year i.woy i.dow
+
+esttab
 
 * W REPORTS
 
@@ -899,17 +913,15 @@ forv i = 1(1)14{
 	g lead`i' = event_date[_n+`i']
 }
 
-gen lead_bin4 = (lead12 + lead11 + lead10)/3
-gen lead_bin3 = (lead9 + lead8 + lead7)/3
+
 gen lead_bin2 = (lead6 + lead5 + lead4)/3
 gen lead_bin1 = (lead3 + lead2 + lead1)/3
 gen event_bin = (event_date + lag1 + lag2)/3
 gen lag_bin1 = (lag3 + lag4 + lag5)/3
 gen lag_bin2 = (lag6 + lag7 + lag8)/3
-gen lag_bin3 = (lag9 + lag10 + lag11)/3
-gen lag_bin4 = (lag12 + lag13 + lag14)/3
 
-*eststo: qui reg rape lead_bin4 lead_bin3 lead_bin2 lead_bin1 event_bin lag_bin* i.year i.woy
+
+eststo: qui reg rape lead_bin2 lead_bin1 event_bin lag_bin* i.year i.woy i.dow
 *eststo: qui reg rape lead_bin4 lead_bin3 lead_bin2 lead_bin1 event_bin lag_bin* i.my
 *eststo: qui reg rape lead_bin4 lead_bin3 lead_bin2 lead_bin1 event_bin lag_bin* i.wy
 *eststo: qui reg rape lead_bin4 lead_bin3 lead_bin2 lead_bin1 event_bin lag_bin* i.twy
@@ -1075,7 +1087,7 @@ eststo: qui ivregress 2sls log_reports i.year i.woy (log_trend = i.ei)
 eststo: qui ivregress 2sls log_reports i.my (log_trend = i.ei)
 eststo: qui ivregress 2sls log_reports i.wy (log_trend = i.ei)
 
-esttab, se ar2 drop(*year* *woy* *wy* *my* *dow*)
+esttab using "figures/iv_robustness.tex", se ar2 drop(*year* *woy* *wy* *my* *dow*)
 
 
 
@@ -1356,3 +1368,72 @@ eststo: qui ivregress 2sls log_rep_non_alc i.wy i.dow (log_trend_non_alc = event
 eststo: qui ivregress 2sls log_rep_non_alc i.wy (log_trend_non_alc = i.ei)
 esttab using "figures/tbc_nonalc.tex", se ar2 drop(*wy* *dow* _cons *ev_d* *lead* *year* *woy* *dow*) replace
 restore
+
+
+
+*** BY STATE, FIXED EFFECTS
+
+clear 
+clear matrix
+clear mata
+set maxvar 10000
+set matsize 10000
+set emptycells drop
+
+estimates clear
+clear
+use "processed/trends_police_daily_by_state"
+merge m:1 date using "processed/police_daily_events"
+
+g log_reports = log(rape)
+g log_trend = log(trend)
+
+sort state date 
+
+forv i = 1(1)7{
+	by state: g lag`i' = log_trend[_n-`i']
+	by state: g lead`i' = log_trend[_n+`i']
+}
+
+encode state, gen(si)
+xtset date si
+g woy = week(date)
+g year = year(date)
+g dow = dow(date)
+
+rename log_trend t1
+rename lead1 log_trend 
+
+eststo: qui xtreg log_reports  t1 log_trend lead* i.date, fe
+
+rename log_trend t2
+rename t1 log_trend
+
+g my = mofd(date)
+g wy = wofd(date)
+g twy = cond(mod(wy, 2) == 0, wy, wy - 1)
+
+sort state date 
+forv i = 1(1)8{
+	by state: g elag`i' = event_date[_n-`i']
+	by state: g elead`i' = event_date[_n+`i']
+}
+
+sort state date 
+forv i = 1(1)8{
+	by state: g e2lag`i' = name[_n-`i']
+	by state: g e2lead`i' = name[_n+`i']
+}
+
+gen event_bin = event_date + elag1 + elag2
+g event_bin2 = name + e2lag1 + e2lag2
+encode event_bin2, gen(ei)
+replace ei = 0 if ei == .
+
+
+* Second Form
+eststo: qui xtivreg log_reports i.wy i.dow (log_trend = event_bin), fe [aweight=
+
+
+
+esttab using "figures/state_daily_reports_trend_iv.tex", se ar2 keep(log_trend) replace
