@@ -198,15 +198,35 @@ In the first half of this section I'll discuss sexual assault, both the crime an
     \item Talk about the two in tandem, and again why hopefully reporting affects the second, and thus is important. If possible, this link would be great to try to estimate, but very difficult given the nature of the data. 
 \end{itemize}
 
-In this paper, I'll run a number of time-series, panel-data and event-study type regressions. The general form of these regression equations is outlined below. My time-series regressions are at the daily level, and are of the form: 
+My initial regressions are time series regressions. They are at the daily level, and are of the form: 
 
 $$ 
 y_{t} = \beta_{0} + \sum_{b=-7}^{7} \delta_{b} x_{t+b} + \gamma_{t} + \varepsilon_{t}
 $$
 
-Where $y_{t}$ is the outcome variable in question; $x_{t+b}$ is the independent variable in question along with a set of leads and lags, and $\gamma{t}$ is a vector including day-of-week, week-of-year and year fixed-effects. These fixed effects should take care of most seasonality in the data. \todo{I need to decide on a good reason for how many leads and lags I will be including, then put this reasoning here. Advisor also said that in final form, i.e. for tables rather than graphing, I should drop leads from this.}
+Where $y_{t}$ is the outcome variable in question; $x_{t+b}$ is the independent variable in question along with a set of leads and lags, and $\gamma{t}$ is a vector including day-of-week, week-of-year and year fixed-effects. These fixed effects should take care of most seasonality in the data. I include 7 leads and lags as a way to account for events happening in close proximity to each other without reducing degrees of freedom unnecessarily.
 
-My panel data regressions are of the form:
+To accompany these time series results, I find events that are plausibly exogenous shocks to the volume of coverage of sexual assault-related topics, and use these shocks to instrument for the effect of an increase in such coverage on numbers of reports of sexual assault. These events are collected using Google's "Related Queries" function, that collects searches that are made in conjunction with the term in question over a specified time period. I look at times at which the Google Trend for 'sexual assault' is above 60\% of its 6-month maximum for the 9 years in question, which gives 563 days. For each day, I look for distinct related queries. For example, on November 19, 2014, 'Bill Cosby' is the top related query, as he is for the next several days. I count only the first occurrence of these terms as a distinct 'high profile event.' 
+
+To use these events as instruments for the Google Trend, they must be correlated with the Google Trend and uncorrelated with the error term. To test the effect of these 'high profile events' on the Google Trend, I graph the response of the Trend before and after an event takes place, including fixed effects for year, week of year and day of week. This is shown in Figure~\ref{figure:events_trend}. As can be seen, these events have sizable effects on the Google Trend for 'sexual assault' that last for about 3 days. Thus they look to be good examples of random positive shocks to the google trend. To check whether reports seem to be impacted by these events occurring, I look at reports to police before and after these events in three day bins, including the same fixed effects as above. This is shown in Figure~\ref{figure:events_police_binned}. We see that reports do indeed increase around the date of an event, albeit with large standard errors. 
+
+\begin{figure}
+\includegraphics[width=\linewidth]{figures/events_trend.eps}
+\caption{Google Trends before and after High Profile Events} \label{figure:events_trend}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=\linewidth]{figures/events_police_binned.eps}
+\caption{Reports to the FBI before and after High Profile Events, Binned} \label{figure:events_police_binned}
+\end{figure}
+
+\todo{Should have a discussion here about why this is plausibly exogenous, why it is not correlated with the error term, and why that is useful}
+
+I use these events in a number of two stage least squares regressions. To take advantage of the 3 day window of significant effects on the Google Trend and reduce the standard errors of results, I bin results into the three day period including the event and two lag variables.
+
+\todo{Outline here the first stage (different for each?) and the second stage, in equations}
+
+My panel data regressions are of the form: \todo{Remove if not showing, or at least check over}
 
 $$ 
 y_{i,t} = \beta_{0} + \sum_{b=-7}^{7} \delta_{b} x_{i,t+b} + \alpha_{i} + \gamma_{t} + \varepsilon_{i,t}
@@ -214,7 +234,7 @@ $$
 
 Where $y_{i,t}$ is the outcome variable in question; $x_{i,t+b}$ is the independent variable in question along with a set of leads and lags, $\alpha_{i}$ is a fixed effect at the level of the panel, usually by state or by school, and $\gamma{t}$ is a vector including year fixed-effects, as well as day-of-week and week-of-year fixed effects if the data is at the daily level.
 
-My event study regressions are of the form:
+My event study regressions are of the form: \todo{LIKELY DELETE}
 
 $$ 
 y_{t} = \beta_{0} + \sum_{b=-7}^{7} \delta_{b} x_{t+b} + \gamma_{t} + \varepsilon_{t}
@@ -224,56 +244,33 @@ Where $y_{t}$ is the outcome variable in question; $x_{t+b}$ is a dummy for the 
 
 \section{Results}
 
-First table:
+I begin by running a time-series regression of reports of sexual assault to the FBI by report-date on national Google Trends for 'sexual assault'\todo{How best to note that it is in log form? once at the start? In every graph, in axes, in title?}. The results of this are shown in Figure~\ref{figure:police_trends_daily_logboth}.
+
+\begin{figure}
+\includegraphics[width=\linewidth]{figures/police_trend_daily_logboth.eps}
+\caption{Time-Series Regression of FBI Reports of Sexual Assault on Google Trends for 'sexual assault'} \label{figure:police_trends_daily_logboth}
+\end{figure}
+
+There is a clear, statistically significant effect on the first lag variable. I show this effect, as well as the same effect broken down by subgroups of age and race of the victim and whether the event was reported as involving alcohol. These results are reported in the first column of Table~\ref{table:combinedtable}. To complement this time series analysis, I perform the same subgroup analysis with two different instrumental variable specifications as discussed in the methodology section, shown in columns 2 and 3 of Table~\ref{table:combinedtable}.
 
 \clearpage
 \begin{table}[]
-\caption{}
+\caption{Combined results of effect of increases in Google Trend on reports of sexual assault} \label{table:combinedtable}
 \input{figures/combinedtable.tex}
 \end{table}
 
-\todo{I think this could maybe be split into primary and secondary results, or 'evidence from schools' or something, but need to work out narrative better first}
+This increase appears to be driven by white reporters under 20 and to a lesser extent under 30, reporting incidents that did not involve alcohol. There are, however, significant limitations with this sub-group analysis, which I discuss below. \todo{Make this a much more beefed up paragraph interpreting results}
 
-In general, I may drop uninteresting things from this section as I decide exactly on the narrative on my paper. I'll also include more tables in the final paper (and probably less graphs) but graphs are just nicer to glance through.
+I next look at variation in effect by state, to try to determine whether states with relatively higher trends on a given day have higher numbers of reports. \todo{Bad sentence here} I consider this using both a normal panel regression and using the same instrument as in Model 2 above. Results are shown in Table 
 
-I begin by running a time-series regression of reports of sexual assault to the FBI by report-date on national Google Trends for 'sexual assault'. The results of this are shown in Figure~\ref{figure:police_trends_daily}
+\clearpage
+\begin{table}[]
+\caption{Combined results of effect of increases in Google Trend on reports of sexual assault} \label{table:combinedtable}
+\input{figures/combinedtable.tex}
+\end{table}
 
-\begin{figure}
-\includegraphics[width=\linewidth]{figures/police_trend_daily.eps}
-\caption{Time-Series Regression of FBI Reports of Sexual Assault on Google Trends for 'sexual assault'} \label{figure:police_trends_daily}
-\end{figure}
 
-There is a clear, statistically significant effect on the first lead variable. \todo{I think I worked out that I had miscoded this, and that it was on the first lag variable. Need to go over and fix. Also fix x axis.} I discuss interpretations of the effect magnitude below. \todo{Don't actually show below yet. Probably use the Bill Cosby case as it's within sample, maybe also with a smaller case, as well as all 35 of my events. Show their graphs, eyeball approximate estimates, for the full 35 event sample calculate average effect.}
-
-This increase in reporting is driven by white reporters under 20 and to a lesser extent under 30, reporting incidents that did not involve alcohol, as shown in Figure~\ref{figure:police_trends_daily_by_age}, Figure~\ref{figure:police_trends_daily_by_race}, and Figure~\ref{figure:police_trends_daily_by_alc}:
-
-\begin{figure}
-\includegraphics[width=\linewidth]{figures/police_trend_daily_agegroup.eps}
-\caption{Estimates of effects of Google Trends on FBI reports of sexual assault by age group} \label{figure:police_trends_daily_by_age}
-\end{figure}
-
-\begin{figure}
-\includegraphics[width=\linewidth]{figures/police_trend_daily_race.eps}
-\caption{Estimates of effects of Google Trends on FBI reports of sexual assault by race} \label{figure:police_trends_daily_by_race}
-\end{figure}
-
-\begin{figure}
-\includegraphics[width=\linewidth]{figures/police_trend_daily_alc.eps}
-\caption{Estimates of effects of Google Trends on FBI reports of sexual assault by alcohol involvement} \label{figure:police_trends_daily_by_alc}
-\end{figure}
-
-Here I'd look at how state by state variation in trends impacts reporting across states, but that regression has been giving me grief and is not presentable. I think it's going to be a small or 0 effect.
-
-I now turn to an event study of 35 high-profile sexual-assault related stories from 2008 to 2016. To check that these events were indeed high-profile, I run an event-study regression of Google Trends on each of these event dates, results shown in Figure~\ref{figure:events_trend}:
-
-\begin{figure}
-\includegraphics[width=\linewidth]{figures/events_trend.eps}
-\caption{Google Trends before and after High Profile Events} \label{figure:events_trend}
-\end{figure}
-
-As can be seen, these events have sizable effects on the google trend for sexual assault that last for about 3 days. Thus they look to be good examples of random positive shocks to the google trend. \todo{Should explain this more}
-
-I now look at the effects these events have on reports to the FBI. The results of a simple event-study regression are shown in Figure~\ref{figure:events_police}:
+ Figure~\ref{figure:events_police}:
 
 \begin{figure}
 \includegraphics[width=\linewidth]{figures/events_police.eps}
