@@ -86,14 +86,31 @@ Files available at \url{github.com/harryelworthy/Thesis}
 %\end{itemize}
 
 \clearpage
-An estimated 18.3\% of women and 1.4\% of men in the United States are sexually assaulted at some point in their lives, with more than a third of these assaults occurring before the victim turns 18  \cite{black_national_2011}. About 20\% to 25\% of women nationally are sexually assaulted at some point during their college careers \cite{fisher_sexual_2000}. At Duke, this figure is estimated at closer to 40\%, as well as 10\% of men \cite{fox_university_2017}. Despite this, very few assaults are reported to police. \todo{Need a sentence here about proportion of assaults reported to police} These non-reports occur for reasons including self-blame, guilt, fear of the perpetrator or fear of not being believed \cite{du_mont_role_2003}. 
+An estimated 18.3\% of women and 1.4\% of men in the United States are sexually assaulted at some point in their lives, with more than a third of these assaults occurring before the victim turns 18  \cite{black_national_2011}. About 20\% to 25\% of women nationally are sexually assaulted at some point during their college careers \cite{fisher_sexual_2000}. At Duke, this figure is estimated at closer to 40\%, as well as 10\% of men \cite{fox_university_2017}. Despite this, very few assaults are reported to police. \todo{Need a sentence here about proportion of assaults reported to police} These non-reports occur for reasons including self-blame, guilt, fear of the perpetrator or fear of not being believed \cite{du_mont_role_2003}.
 
-There are many good reasons for policymakers to seek to increase the proportion of sexual assaults that are reported. \todo{MUCH MORE NEEDED HERE}
-The Federal Government has in the past made an effort to increase reporting of sexual assaults, primarily at college campuses. 
+There are many good reasons for policymakers to seek to increase the proportion of sexual assaults that are reported. Victims of rape that report the crime to the police are 9 times more likely to receive medical care than those that do not. Primarily, sexual assaults that are not reported w
+
+From Sable: "There are a number of reasons to encourage survivors to report assaults. For society, the major benefit would be to heighten awareness of the consequences of the crime, which might result in preventing rape or sexual asasult. For survivors, the major benefit may be an increased opportunity to receive the medical and psychological first aid to assist in recovering from an event with significant psychological and physical trauma."
+
+According to Fisher, "fewer than 5\% of attempted or completed sexual assault against college age women are reported to law enforcement. 66\% of victims tell friends but not family or school officials." Based on a phone survey to college-age women in 1996.
+
+Abel: finds that non-incarcerated rapists have high recidivism rates, suggesting that unreported rapes pose a serious threat to others.
+
+Bachmann et al: finds that "men's propensity to commit sexual assault was significantly decreased by the threat of formal sanctions, such as arrest or university dismissal." 
+
+Antunes and Hunt also find that would-be rapists are detered by the threat of formal sanctions.
+
+Bachmann 1998: "Obviously, reporting an incident of rape to the police is a necessary condition for any police response." "An unreported incident of rape eliminates the possibility that an offender will be arrested or convicted. This may, in turn, reduce the perceived likelihood that rape and sexual assault, in general, will be punished. 
+
+From Resnick: "One in five victims reported an adult rape to police or other authorities; these women were nine times more likely to receive medical care than those who did not. Public health efforts are needed to increase the proportion of rape victims who receive immediate post-rape medical care."
+
+From Greenfield: In a household survey in 1995, 260300 completed or attempted rapes were reported, of which only a third were reported to the police. This initial number still is likely an underestimate, as although a household survey is easier to report to than the police, there are undoubtedly still non-reporters.
 
 In this paper, I explore these questions using incident-level FBI data of crime reports from 1991 to 2016, along with data from Google Trends. I also conduct a number of event studies using Title IX investigations of universities and a novel dataset of high-profile sexual assault allegations. 
 
 A number of different measures have been taken by many schools to address campus sexual assault, including significant federal reform via Title IX reform in 2011, which affected almost every school in the US. These changes aimed to make reporting easier for an assault victim, thus increasing reports and hopefully, in equilibrium, decreasing assault.
+
+The Federal Government has in the past made an effort to increase reporting of sexual assaults, primarily at college campuses. 
 
 The issue of non-reporting has been especially salient over the past years, as first Harvey Weinstein, then Supreme Court nominee - now Justice - Brett Kavanaugh made national headlines being accused of sexual assaults that were not reported to police at the time they were committed \todo{Not completely sure this the case for Weinstein}. President Trump tweeted in response to the Kavanaugh claims: "I have no doubt that, if the attack on Dr. Ford was as bad as she says, charges would have been immediately filed with local Law Enforcement Authorities by either her or her loving parents" \citeyear{trump_i_2018}. As above, there are many reasons why an individual may not report: social pressures, abusive relationships, and fear of not being believed, for example. More importantly, however, this tweet illustrates a source of motivation for this paper: had Dr. Ford reported when the crime had been committed, her testimony now would be more impervious to detractors. There are many reasons that increased reporting would be a desirable outcome - this is just one of them. \todo{Need more on why reporting is desirable}
 
@@ -158,30 +175,6 @@ I have four main data sources for this project: \todo{Need to include sources fo
         \item National and statewide trends.
         \item Relative trends out of 100, scaled to 2008 numbers, so some numbers later on are higher.
         \item Merge daily with police data for most of my investigation. Thus have reports of sexual assault grouped by either report or incident date together with Google Trends, daily, from 2008 to 2016. 
-    \end{itemize}
-    \item Related Events with Prominent News Coverage
-    \begin{itemize}
-        \item This is very recent, I need to go over it with my advisor etc, but I think it is useful. 
-        \item I've created a dataset of 35 big-headline sexual assault events from 2008 until 2016, along with the dates that they were first in the news.
-        \item To do this I used Google's Related Topics tool. This tool shows for a given time period what related searches were to a given search.
-        \item I looked at related search terms to 'sexual assault' each day that the trend for 'sexual assault' was above 70\% of its 6 month maximum. For events that had coverage for multiple days, I only included the first day. If there was more than a month between coverage I counted these as separate events. 
-        \item The 35 events I found are shown in Appendix 1. I also categorize them into allegations and 'big allegations,' which are events that held the google trend above 75 for more than 3 days in a row. 
-        \item I am sure that I've missed some events as my process could have been better, but each of these events is definitely a high profile sexual assault event. For an event study, it would definitely be better to get more events, but my results should be relatively good estimators as is (just with large standard errors from low n)
-    \end{itemize}
-    \item Campus Safety and Security (CSS) Data
-    \begin{itemize}
-        \item Collected and distributed by the Department of Education, 2005 to 2016
-        \item Reports of Sexual Assault by year by university, for all schools that receive financial aid (7663 schools that span the full time period)
-        \item Not granular at all - because of an internal standards change in 2013 for how to count sexual assault reports, have to include all assaults, including non-forcible ones/statutory assault/etc.
-        \item Can tie in a lot of auxiliary data by school ID from other sources, such as funding, SAT scores, enrollment by race/sex, etc.
-    \end{itemize}
-    \item Title IX Cases
-    \begin{itemize}
-        \item Opened when a student believes they were mistreated by a school's reporting system
-        \item Only began after 2011
-        \item Data for each start/end date by school
-        \item Used in \citeA{lindo_any_2018} to test effects on enrollment/applications/etc. They find increase in these factors, not decrease, even for women. They also find that case opening has sizable impact on google trends for “[school name] rape” – so somewhat salient. I hope to expand this salience check.
-        \item I am basing my panel data models off of theirs'
     \end{itemize}
 \end{itemize}
 
@@ -273,7 +266,7 @@ To test the robustness of my instrumental variable analysis, I run my regression
 
 \begin{table}[]
 \caption{Instrumental Variable Fixed Effects Robustness Checks} \label{table:iv_robust}
-\input{figures/iv_robust.tex}
+\input{figures/iv_robustness.tex}
 \end{table}
 
 \clearpage
