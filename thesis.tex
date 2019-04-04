@@ -30,6 +30,7 @@
 % with 1.5 corresponding to "double" spacing.
 \draftSpacing{1.5}
 \setlength{\marginparwidth}{4cm}
+\setlength{\parskip}{1em}
 
 \begin{document}
 
@@ -86,9 +87,11 @@ Files available at \url{github.com/harryelworthy/Thesis}
 %\end{itemize}
 
 \clearpage
+\section{Introduction}
+
 An estimated 18.3\% of women and 1.4\% of men in the United States are sexually assaulted at some point in their lives, with more than a third of these assaults occurring before the victim turns 18  \cite{black_national_2011}. About 20\% to 25\% of women nationally are sexually assaulted at some point during their college careers \cite{fisher_sexual_2000}. At Duke, this figure is estimated at closer to 40\%, as well as 10\% of men \cite{fox_university_2017}. Despite this, very few assaults are reported to police. According to \citeA{fisher_sexual_2000}, "fewer than 5\% of attempted or completed sexual assault against college age women are reported to law enforcement. 66\% of victims tell friends but not family or school officials." \citeA{resnick_predictors_2000} finds that 1/5 of women that experience sexual assault report it to police, while \citeA{greenfield_sex_1997} estimates this number at 1/3 of women. Because these studies use self-reported survey data, there are still almost certainly non-reporting women and thus these estimates are likely upper bounds. Victims do not report to police for a number of reasons, discussed more in-depth below, including self-blame, guilt, fear of the perpetrator or fear of not being believed \cite{du_mont_role_2003}.
 
-There are many reasons to seek to increase the proportion of sexual assaults that are reported. Some victims of of sexual assault do not want to report their crime to police because they do not wish their perpetrator to face justice, often because they are friends or are otherwise close. However, many victims would prefer to report their crime to the police, and balance this desire against the costs they see in reporting, costs summarized above and discussed in more depth below\todo{Need a source here}. There also obviously cannot be a criminal investigation if the crime is not reported to the police, and so women may wish to report in order to see justice for their assaulter. Victims of rape that report the crime to the police are also 9 times more likely to receive medical care than those that do not \cite{resnick_predictors_2000} as well as more likely to receive psychological care \cite{sable_barriers_2006} meaning that it is often in the interest of the victim's health for them to report the crime to police. Equally, there is a benefit to society of reporting. \citeA{bachman_factors_1998} notes that "an unreported incident of rape eliminates the possibility that an offender will be arrested or convicted. This may, in turn, reduce the perceived likelihood that rape and sexual assault, in general, will be punished." This reduction in perceived likelihood of punishment has significant consequences. A number of studies have found that the propensity of men to commit sexual assault is significantly decreased by the threat of formal sanctions such as arrest \cite{bachman_rationality_1992, antunes_impact_nodate}. Additionally, \citeA{abel_self-reported_1987} finds that non-incarcerated rapists have high recidivism rates, suggesting that unreported assaults pose a serious threat to others. Finally, increased reporting can be a sign that the barriers to reporting that victims feel, barriers often steeped in misogyny, are declining in severity. This is surely a thing to strive for.
+There are many reasons to seek to increase the proportion of sexual assaults that are reported. Some victims of of sexual assault do not want to report their crime to police because they do not wish their perpetrator to face justice, often because they are friends or are otherwise close. However, many victims would prefer to report their crime to the police, and balance this desire against the costs they see in reporting, costs summarized above and discussed in more depth below\todo{Need a source here}. There also obviously cannot be a criminal investigation if the crime is not reported to the police, and so women may wish to report in order to see justice for their assaulter. Victims of rape that report the crime to the police are also 9 times more likely to receive medical care than those that do not \cite{resnick_predictors_2000} as well as more likely to receive psychological care \cite{sable_barriers_2006} meaning that it is often in the interest of the victim's health for them to report the crime to police. Equally, there is a benefit to society of reporting. \citeA{bachman_factors_1998} notes that "an unreported incident of rape eliminates the possibility that an offender will be arrested or convicted. This may, in turn, reduce the perceived likelihood that rape and sexual assault, in general, will be punished." This reduction in perceived likelihood of punishment has significant consequences. A number of studies have found that the propensity of men to commit sexual assault is significantly decreased by the threat of formal sanctions such as arrest \cite{bachman_rationality_1992, antunes_impact_1974}. Additionally, \citeA{abel_self-reported_1987} finds that non-incarcerated rapists have high recidivism rates, suggesting that unreported assaults pose a serious threat to others. Finally, increased reporting can be a sign that the barriers to reporting that victims feel, barriers often steeped in misogyny, are declining in severity. This is surely a thing to strive for.
 
 Previous research has focused on many factors affecting the reporting decision, including relations of the victim to the perpetrator, whether the act was violent, whether alcohol was involved, and much more. This research is discussed more thoroughly in the next section. One factor not previously investigated, however, is the response of reporting behaviour to prominent coverage of sexual assault allegations and cases. The \#metoo movement that the Harvey Weinstein allegations started focused on women coming forward with their sexual assault stories because they saw others come forward with theirs - thus the 'me too.' This idea highlights an important question: are victims of sexual assault encouraged to report to police or other authorities by coverage of other victims reporting?
 
@@ -98,28 +101,18 @@ In this paper, I explore these questions using incident-level FBI data of crime 
 
 Since Becker outlined his economic model of crime, illicit activities have continued to have a place in the economic literature. Sexual assault has received a share of this attention, although perhaps less so than other crimes. One reason for this deficit is the difficulty of gathering accurate data on sexual assault. Crime is under-reported in general, sexual assault especially \cite{fisher_sexual_2000}. This under-reporting makes the study of sexual assault inherently difficult, because no study will ever be able to accurately gauge how many assaults actually occurred over a given time period. Studies that use surveys to estimate this under-reporting are always subject to under-reporting of their own, as even simply answering a survey question about sexual assault is difficult for many victims.\todo{Need source} When observing an increase in reports, the inability to observe assault numbers also creates issues of inference. Are reports increasing because people feel more safe reporting their assaults, or because assaults themselves are increasing? Different papers approach these issues in different ways when dealing with sexual assault.
 
-Recently, several papers in economics have focused on sexual assault and harassment. \citeA{lindo_college_2018} looks at the effect of partying culture on reports of sexual assault using the plausible exogeneity of Division 1 football games. The authors find a 28\% increase in rape reports associated with game days.\footnote{This paper also uses the FBI incident-level data, and I use their code in my analysis.} \cite{bi}
-\begin{itemize}
-    \item Discuss the Girja paper, prostitution and assault very shortly.
-\end{itemize}
-\citeA{allen_reporting_2007} investigates the factors that influence an individual's decision to report a rape to law enforcement using survey data from The National Sample of Rape Victims, completed in 1985 and released in 2000, and finds that victims will be more likely to report sexual assault given more 'social support and ancillary evidence associated with the crime.' \todo{More on this paper needed}
+Recently, several papers in economics have focused on sexual assault and harassment. \citeA{lindo_college_2018} looks at the effect of partying culture on reports of sexual assault using the plausible exogeneity of Division 1 football games. The authors find a 28\% increase in rape reports associated with game days.\footnote{This paper also uses the FBI incident-level data, and I use their code in my analysis.} \citeA{bisschop_street_2017} investigates the effect of opening a 'Tippelzone,' an area of a city where street prostitution is legalized, on reported sexual assaults. Using a difference-in-difference approach across different cities, the authors find decreases in registered sex crime of 30 to 40\% in the two years after the zone is opened. Depending on the type of zone, there are also decreases in associated crimes such as crimes related to drugs. \citeA{borker_safety_2018} investigates how perceived risk of street harassment affects women's human capital attainment, finding that women are willing to spend twice the annual cost of tuition of a university for a route to university that is perceived to be one standard deviation safer from sexual harassment, and to attend worse universities to increase their perceived safety.
 
+Only one recent economics paper focuses on the decision for a victim of sexual assault to report: \citeA{allen_reporting_2007} investigates the factors that influence an individual's decision to report a rape to law enforcement using survey data from the National Crime Victimization Survey and finds that victims will be more likely to report sexual assault given more 'social support' as well as if the victim has ancillary evidence associated with the crime. The author defines a number of variables as contributing to each of these categories. The victim being married, their offender being a stranger, their neighborhood being predominantly divorced households or households that have lived in the area for more than five years, and the victim's family income are all considered as factors that contribute to 'social support' for the victim, and each increase the propensity for a victim to report.
 
-More attention is paid to the reporting decision by other fields, especially law. 
-\begin{itemize}
-    \item Summarize a number of papers here, Bachmann etc. Get 3 or 4 really concrete results
-\end{itemize}
+More attention is paid to the reporting decision by other fields, especially law. A number of studies find that a victim's propensity to report is increased when the offender uses physical force \cite{bachman_predicting_1993,du_mont_role_2003}. This is likely because of both a desire to receive medical care - as seen above, those that report their assault to the police are much more likely to receive medical care than those that are not - and because physical violence often provides the victim evidence of the crime. \citeA{bachman_predicting_1993} also investigates whether the reporting decision is affected by the relation of the victim to the offender or by whether the event occurred at the victim's house, but finds no significant effects. All of these studies use the same National Crime Victimization Survey data for their studies, over different periods of time. Other survey-style studies exist too. \todo{Need to grab them from bachman references.}
 
-These studies have their limitations. 
-\begin{itemize}
-    \item Talk about self-reported surveys, low n, etc.
-\end{itemize}
+These studies have their limitations. Because they all use self-reported surveys, they suffer from some sort of selection bias, in that there will always be people that are asked but do not participate. There will also always be people that report things incorrectly. In the case of sexual assault surveys, there are very likely victims that do not report their assault even to surveyors because doing so may be traumatic. This selection bias and misreporting is a problem that is very hard to avoid in a survey-style study, because there is no way to know if the characteristics of these people are the same as those that fill out the survey accurately. Consider an example. Suppose people who are violently assaulted but do not report their assault to police are ashamed of their non-reporting, and so when asked by surveyors they say they have never been assaulted. This behavior would undermine the results of \citeA{bachman_predicting_1993}, i.e. that victims report to police more often when their assault involves violence, because we cannot see the non-reporters of violent attacks. In addition to this, these studies tend to struggle to convincingly infer causality. As an example, \citeA{du_mont_role_2003} concludes that women that visit the hospital after an assault are more likely to report their assault to the police. \citeA{resnick_predictors_2000}, using the same dataset, concludes that women that report their assault to the police are more likely to receive medical care. Because these studies use single time period survey data, there is no simple way to solve this issue of causality.
 
-My paper aims to contribute to the literature by using actual reports to police as catalogued by the FBI rather than survey data. There are clear limitations to this approach as well, which I discuss in my conclusion section, but it does avoid many of the problems discussed above. \begin{itemize}
-    \item Beef this up, address above limitations
-\end{itemize}{}
+My paper aims to contribute to the literature by considering the effect that national coverage of sexual assault cases and allegations have on sexual assault reporting. This research question is interesting because it has not been approached before, but also because it lends itself to a different type of analysis: time-series and instrumental variable analysis of FBI data of actual reports to police. This data would not be able to answer many of the questions above because it does not have the detailed information that the NCVS has on victims, nor does it have any indication of victims that do not report. However, for something like news coverage, which I measure at a national level and for which a number of exogenous shocks can be identified, the FBI data works well. By using actual reports to police instead of reports and non-reports to police from survey data, I am able to escape the issue of selection-bias \todo{Explain why}. I am also able to address causality more clearly, through instruments using exogenous shocks \todo{and just the fact that causality in one direction is just likely much stronger}. There are clear limitations to my approach as well, which I discuss in my conclusion section, but it does avoid many of the problems discussed above.
 
-This question of the effect that news coverage has is important. 
+This question of the effect that news coverage has is important. Most important is its sign, because a negative effect of news coverage could have serious police implications. If research found that coverage of sexual assault cases had a significant deppresing effect on the reporting of new sexual assaults, this might be cause for policy either within the media industry or from government to reduce such coverage. An allegory that comes to mind is the coverage of suicide cases. It is well established that media coverage of suicide tends to have a copycat effect \cite{stack_media_2003}. This is undesirable for a society that wishes to minimize loss of life, and so many countries such as New Zealand, Australia and Canada have strict guidelines on how the media can report on suicide. In the US, there are a number of organizations that advocate for 
+There are a number of organizations that advocate safe su
 \begin{itemize}
     \item Add more about why this is important. Mostly: if the effect was negative, it would be pressing to reduce this coverage, as with suicide
 \end{itemize}
@@ -128,15 +121,6 @@ Previous economic research has used search volume in similar ways.
 \begin{itemize}
     \item Needed! Have close to nothing here
 \end{itemize}
-
-I'd also like to include something like Figure~\ref{figure:police_yearly} below.
-
-\begin{figure}
-
-\includegraphics[width=\linewidth]{figures/police_yearly_reports.eps}
-
-\caption{Reports to Police per Person, 1991 to 2015} \label{figure:police_yearly}
-\end{figure}
 
 \section{Data Summary}
 
@@ -163,13 +147,16 @@ I'd like to have a small table of summary statistics here.
 
 \section{Methodology}
 
-In the first half of this section I'll discuss sexual assault, both the crime and the reporting of it, from an economic standpoint. This is outlined below. Second half, I outline the regression equations I'll be using.
+I spend the first half of this section looking at this decision from a theoretical perspective, and consider why news coverage of sexual assault cases and allegations could be a cost or a benefit. The second half details my empirical methodology.
+
+The decision to report can be considered as a probabilistic decision that factors in both costs and benefits of reporting \cite{allen_reporting_2007}. 
+
+
 
 \begin{itemize}
     \item Discussion of why someone might not report, fueled by \citeA{allen_reporting_2007} (where we see that a social safety net helps ease the reporting decision among other things) and \citeA{du_mont_role_2003} as well as any other papers I find about this
     \item Pull that discussion into a more formal discussion of the costs and uncertainty that one faces in reporting, and how coverage of sexual assault might affect that in one way or another: by lowering or raising expected cost of social stigma, by inspiring and perhaps increasing expected benefit, the idea that reporting can help reduce sexual assault. More here, need to come up with as exhaustive a list as I can, as this is important.
-    \item Then spend some time discussing a similar thing but for potential perpetators - expected cost of assault. Obviously even more than the other one this is a behaviour that is tough to rationalize, but it's not wild to think (and one would seriously hope) that at the margin these people can be influenced one way or another
-    \item Talk about the two in tandem, and again why hopefully reporting affects the second, and thus is important. If possible, this link would be great to try to estimate, but very difficult given the nature of the data. 
+    \item Also discuss possible expectations about subgroups. 
 \end{itemize}
 
 My initial regressions are time series regressions. They are at the daily level, and are of the form: 
@@ -243,14 +230,6 @@ I next look at variation in effect by state, to try to determine whether states 
 \input{figures/state_daily_reports_trend_iv.tex}
 \end{table}
 
-To test the robustness of my instrumental variable analysis, I run my regressions with a number of different time fixed effects. Results are shown in Table~\ref{table:iv_robust}. The first three columns are using instrumental method 1, and the next three use method 2. Columns 1 and 4 are using year and week-of-year fixed effects; columns 2 and 5 use monthly fixed effects; and columns 3 and 6 use weekly fixed effects. The first three columns also use day of week fixed effects - I can't use these when I use method 2, as discussed in footnote above\todo{refer to this footnote!!}. All results are still positive, although some of them lose their significance. This means that we can be very confident in the sign of our result, but not especially confident of its magnitude.\todo{Finish this up}
-
-\begin{table}[]
-\caption{Instrumental Variable Fixed Effects Robustness Checks} \label{table:iv_robust}
-\input{figures/iv_robustness.tex}
-\end{table}
-
-\clearpage
 \section{Extra figures and results}
 
 Below I look at incident dates of incidents reported within a month after a high profile event, compared to the same for a sample of placebo dates. Trying to work out how to interpret this, and add error bars. \todo{Probably refer to this in conclusion under next possible steps}
@@ -270,9 +249,10 @@ Bring up school reporting again? Don't think so. If I did my narrative would go 
     \item Figures showing no increase in nearby schools or police stations (still need to rerun this, especially daily police) - maybe there is a small increase
 \end{itemize}
 If not, should have somewhere that school data was not feasible for x reasons (?)
-\section{Discussion}
+\section{Conclusion}
 
-TBD
+Then spend some time discussing a similar thing but for potential perpetators - expected cost of assault. Obviously even more than the other one this is a behaviour that is tough to rationalize, but it's not wild to think (and one would seriously hope) that at the margin these people can be influenced one way or another
+    \item Talk about the two in tandem, and again why hopefully reporting affects the second, and thus is important. If possible, this link would be great to try to estimate, but very difficult given the nature of the data. 
 
 \clearpage
 \section{To Discuss}
