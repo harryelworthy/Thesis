@@ -1,0 +1,2641 @@
+
+  ___  ____  ____  ____  ____ (R)
+ /__    /   ____/   /   ____/
+___/   /   /___/   /   /___/   14.1   Copyright 1985-2015 StataCorp LP
+  Statistics/Data Analysis            StataCorp
+                                      4905 Lakeway Drive
+     Special Edition                  College Station, Texas 77845 USA
+                                      800-STATA-PC        http://www.stata.com
+                                      979-696-4600        stata@stata.com
+                                      979-696-4601 (fax)
+
+20-user Stata network perpetual license:
+       Serial number:  401406215644
+         Licensed to:  Duke University Economics
+                       Durham
+
+Notes:
+      1.  Stata is running in batch mode.
+      2.  Unicode is supported; see help unicode_advice.
+      3.  Maximum number of variables is set to 5000; see help set_maxvar.
+
+. do arrest_analysis 
+
+. clear all
+
+. 
+. forv i = 2013(1)2016{
+  2. di "year: `i'"
+  3. 
+. 
+.   use "raw/`i'_raw"
+  4.   ren *, lower
+  5.   
+.   
+.   rename v40071 offense1
+  6.   rename v40081 offense2
+  7.   rename v40091 offense3
+  8.   rename v40101 offense4
+  9.   rename v40111 offense5
+ 10.   rename v40121 offense6
+ 11.   rename v40131 offense7
+ 12.   rename v40141 offense8
+ 13.   rename v40151 offense9
+ 14.   rename v40161 offense10
+ 15.   
+.   g rape = 0
+ 16.   forv j = 1(1)6{
+ 17.         replace  rape = 1 if offense`j'  == 111 |  offense`j'== 112 | offe
+> nse`j'== 113
+ 18.   }
+ 19.   drop if rape == 0
+ 20.   
+.   
+.   rename bh005 date_added
+ 21.   rename bh006 date_nibrs
+ 22.   rename bh007 city
+ 23.   rename bh008 stabb
+ 24.   rename bh009 pop_group
+ 25.   rename bh012 agency_indic
+ 26.   *keep only city police
+.   *keep if agency_indic==1
+. 
+. 
+.   rename bh019 pop1
+ 27.   rename bh023 pop2
+ 28.   rename bh027 pop3
+ 29.   rename bh031 pop4
+ 30.    rename bh035 pop5
+ 31.   destring pop1, replace
+ 32. 
+. 
+.   *year specific
+. 
+.    rename bh039 rep_indicator
+ 33.    rename bh040 monthsreported
+ 34.    rename bh042 rep_jan
+ 35.    rename bh043 rep_feb
+ 36.    rename bh044 rep_march
+ 37.    rename bh045 rep_apr
+ 38.    rename bh046 rep_may
+ 39.    rename bh047 rep_june
+ 40.    rename bh048 rep_july
+ 41.    rename bh049 rep_aug
+ 42.    rename bh050 rep_sep
+ 43.    rename bh051 rep_oct
+ 44.    rename bh052 rep_nov
+ 45.    rename bh053 rep_dec
+ 46.    rename bh054 cfips1
+ 47.    rename bh055 cfips2
+ 48.    rename bh056 cfips3
+ 49.    rename bh057 cfips4
+ 50.    rename bh058 cfips5
+ 51. 
+.   rename incnum ino
+ 52.   rename incdate idate
+ 53.   destring idate, replace
+ 54.   rename v1006 datereport
+ 55.   rename v1007 ihour
+ 56. 
+. 
+. 
+.   rename v20061 offensecode
+ 57.   rename v20081 offusing1
+ 58.   rename v20091 offusing2
+ 59.   rename v20101 offusing3
+ 60.   rename v20111 location
+ 61.   rename v20171 weapon1
+ 62.   rename v20181 weapon2
+ 63.   rename v20191 weapon3v
+ 64.   rename v40061 vseqno
+ 65. 
+. 
+. 
+. 
+.   rename v40181 vage
+ 66.     replace vage=. if vage<0
+ 67. 
+. 
+.   rename v40191 vsex
+ 68.     gen vfemale=vsex==0
+ 69.     quietly replace vfemale=. if vsex==-6
+ 70.   rename v40261 vinjury1
+ 71.   rename v40271 vinjury2
+ 72.   rename v40281 vinjury3
+ 73.   rename v40291 vinjury4
+ 74.   rename v40301 vinjury5
+ 75.   rename v40311 oseqno1
+ 76.   rename v40321 vrelate1
+ 77.   rename v40331 oseqno2
+ 78.   rename v40341 vrelate2
+ 79.   rename v40351 oseqno3
+ 80.   rename v40361 vrelate3
+ 81.   rename v40371 oseqno4
+ 82.   rename v40381 vrelate4
+ 83.   rename v40391 oseqno5
+ 84.   rename v40401 vrelate5
+ 85.   rename v40411 oseqno6
+ 86.   rename v40421 vrelate6
+ 87.   rename v40431 oseqno7
+ 88.   rename v40441 vrelate7
+ 89.   rename v40451 oseqno8
+ 90.   rename v40461 vrelate8
+ 91.   rename v40471 oseqno9
+ 92.   rename v40481 vrelate9
+ 93.   rename v40491 oseqno10
+ 94.   rename v40501 vrelate10
+ 95.   rename v40201 vrace
+ 96.   *No injury
+.   gen byte injuryNone=vinjury1==1
+ 97.   *Serious injury
+.   *Minor injury
+.   gen byte injuryMinor= (vinjury1==2|vinjury2==2|vinjury3==2|vinjury4==2|vinj
+> ury5==2)
+ 98. 
+.   gen byte injurySerious= !injuryMinor & !injuryNone & vinjury1!=-6
+ 99. 
+.   rename v50061 oseqno
+100.   rename v50071 oage
+101.     replace oage=. if oage==0
+102.   rename v50081 osex
+103.     gen ofemale=osex==0
+104.     quietly replace ofemale=. if osex==-6
+105.         rename v50091 orace
+106. 
+.   drop offense7 offense8 offense9 offense10
+107.   
+.     ***Dates
+.         g year = int(idate/10000)
+108.         g temp = idate-year*10000
+109.         g month = int(temp/100)
+110.         g day = temp - month*100
+111.         drop temp
+112.         g mdy = mdy(month,day,year)
+113.         g dow = dow(mdy)
+114.         g doy = doy(mdy)
+115. 
+. 
+. 
+.         rename vrace tempr
+116.         gen vrace = "W" if tempr == 1
+117.         replace vrace = "B" if tempr == 2
+118.         replace vrace = "O" if tempr > 2
+119.         drop tempr
+120. 
+.         rename orace tempr
+121.         gen orace = "W" if tempr == 1
+122.         replace orace = "B" if tempr == 2
+123.         replace orace = "O" if tempr > 2
+124.         drop tempr
+125. 
+.         rename date_added tempr
+126.         tostring tempr, gen(date_added)
+127.         drop tempr
+128. 
+.         rename date_nibrs tempr
+129.         tostring tempr, gen(date_nibrs)
+130.         drop tempr
+131. 
+.         rename pop2 tempr
+132.         tostring tempr, gen(pop2)
+133.         drop tempr
+134. 
+.         rename pop3 tempr
+135.         tostring tempr, gen(pop3)
+136.         drop tempr
+137. 
+.         rename pop4 tempr
+138.         tostring tempr, gen(pop4)
+139.         drop tempr
+140. 
+.         rename pop5 tempr
+141.         tostring tempr, gen(pop5)
+142.         drop tempr
+143. 
+.         rename datereport tempr
+144.         tostring tempr, gen(datereport)
+145.         drop tempr
+146. 
+.         *save step2, replace
+. 
+.         drop pop_group rep_*
+147. 
+.         rename oseqno1 onum
+148. 
+.         rename cfips1 tempr
+149.         tostring tempr, gen(cfips1)
+150.         drop tempr
+151. 
+.         drop cfips2 cfips3 cfips4 cfips5
+152. 
+. 
+.   destring pop2, replace
+153.   destring pop3, replace
+154.   destring pop4, replace
+155.   destring pop5, replace
+156. 
+. 
+.            *Data is now at the offender-by-victim level. We now know what off
+> enses an offender committed against a victim, their relationship to the victi
+> m, the location of each offense and whether substances were involved for each
+>  offense.
+.         drop if monthsreported == 0
+157. 
+.         compress
+158. 
+.         gen idt = .
+159.         gen rdt = .
+160. 
+.         replace idt = mdy if datereport == "0"
+161.         replace rdt = mdy if datereport == "1"
+162.         replace idt = mdy if datereport == ""
+163.         replace rdt = mdy if datereport == "R"
+164. 
+.         *keep if ori is actively reporting to NIBRS
+.         g year_nibrs = substr(date_nibrs, 1,4)
+165.         destring year_nibrs, replace
+166.         keep if  year >= year_nibrs
+167. 
+.         g rape_arrest = 1
+168.         replace rape_arrest = 0 if v60061 == -8
+169. 
+.           sort ori ino
+170.         
+. save "raw/`i'_arrest_out", replace
+171. }
+year: 2013
+(National Incident-Based Reporting System, 2013: Extract Files, Incident-Level 
+> Fi)
+(35,845 real changes made)
+(709 real changes made)
+(33 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(4,961,987 observations deleted)
+pop1 already numeric; no replace
+idate already numeric; no replace
+(221 real changes made, 221 to missing)
+(0 real changes made)
+(9,043 missing values generated)
+(7,083 real changes made)
+(628 real changes made)
+(15,004 missing values generated)
+(9,289 real changes made)
+(498 real changes made)
+date_added generated as str8
+date_nibrs generated as str8
+pop2 generated as str6
+pop3 generated as str5
+pop4 generated as str1
+pop5 generated as str1
+datereport generated as str1
+cfips1 generated as str3
+pop2 has all characters numeric; replaced as long
+pop3 has all characters numeric; replaced as long
+pop4 has all characters numeric; replaced as byte
+pop5 has all characters numeric; replaced as byte
+(0 observations deleted)
+  variable state was int now byte
+  variable recsbh was int now byte
+  variable recsadm was int now byte
+  variable recsofs was int now byte
+  variable recsprp was int now byte
+  variable recsvic was int now byte
+  variable recsofr was int now byte
+  variable recsarr was int now byte
+  variable bh010 was int now byte
+  variable bh011 was int now byte
+  variable agency_indic was int now byte
+  variable bh013 was int now byte
+  variable bh017 was int now byte
+  variable bh032 was int now byte
+  variable bh033 was int now byte
+  variable bh034 was int now byte
+  variable bh036 was int now byte
+  variable bh037 was int now byte
+  variable bh038 was int now byte
+  variable monthsreported was int now byte
+  variable ihour was int now byte
+  variable v1008 was int now byte
+  variable v1009 was int now byte
+  variable v1010 was int now byte
+  variable v1011 was int now byte
+  variable v1013 was int now byte
+  variable v1016 was int now byte
+  variable v20071 was int now byte
+  variable v20072 was int now byte
+  variable v20073 was int now byte
+  variable offusing1 was int now byte
+  variable v20082 was int now byte
+  variable v20083 was int now byte
+  variable offusing2 was int now byte
+  variable v20092 was int now byte
+  variable v20093 was int now byte
+  variable offusing3 was int now byte
+  variable v20102 was int now byte
+  variable v20103 was int now byte
+  variable location was int now byte
+  variable v20112 was int now byte
+  variable v20113 was int now byte
+  variable v20121 was int now byte
+  variable v20122 was int now byte
+  variable v20123 was int now byte
+  variable v20131 was int now byte
+  variable v20132 was int now byte
+  variable v20133 was int now byte
+  variable v20141 was int now byte
+  variable v20142 was int now byte
+  variable v20143 was int now byte
+  variable v20151 was int now byte
+  variable v20152 was int now byte
+  variable v20153 was int now byte
+  variable v20161 was int now byte
+  variable v20162 was int now byte
+  variable v20163 was int now byte
+  variable v20201 was int now byte
+  variable v20202 was int now byte
+  variable v20203 was int now byte
+  variable v30061 was int now byte
+  variable v30062 was int now byte
+  variable v30063 was int now byte
+  variable v30071 was int now byte
+  variable v30072 was int now byte
+  variable v30073 was int now byte
+  variable v30081 was long now int
+  variable v30082 was long now int
+  variable v30083 was long now int
+  variable v30101 was int now byte
+  variable v30102 was int now byte
+  variable v30103 was int now byte
+  variable v30111 was int now byte
+  variable v30112 was int now byte
+  variable v30113 was int now byte
+  variable v30121 was int now byte
+  variable v30122 was int now byte
+  variable v30123 was int now byte
+  variable v30132 was long now byte
+  variable v30133 was long now byte
+  variable v30143 was int now byte
+  variable v30151 was int now byte
+  variable v30152 was int now byte
+  variable v30153 was int now byte
+  variable v30161 was int now byte
+  variable v30162 was int now byte
+  variable v30163 was int now byte
+  variable v30171 was long now int
+  variable v30172 was long now int
+  variable v30173 was long now byte
+  variable v30182 was int now byte
+  variable v30183 was int now byte
+  variable v30191 was int now byte
+  variable v30192 was int now byte
+  variable v30193 was int now byte
+  variable v30201 was int now byte
+  variable v30202 was int now byte
+  variable v30203 was int now byte
+  variable v30211 was long now int
+  variable v30212 was long now byte
+  variable v30213 was int now byte
+  variable v30222 was int now byte
+  variable v30223 was int now byte
+  variable v30231 was int now byte
+  variable v30232 was int now byte
+  variable v30233 was int now byte
+  variable vseqno was int now byte
+  variable v40102 was int now byte
+  variable v40103 was int now byte
+  variable v40112 was int now byte
+  variable v40113 was int now byte
+  variable offense6 was int now byte
+  variable v40122 was int now byte
+  variable v40123 was int now byte
+  variable v40132 was int now byte
+  variable v40133 was int now byte
+  variable v40142 was int now byte
+  variable v40143 was int now byte
+  variable v40152 was int now byte
+  variable v40153 was int now byte
+  variable v40162 was int now byte
+  variable v40163 was int now byte
+  variable v40171 was int now byte
+  variable v40172 was int now byte
+  variable v40173 was int now byte
+  variable v4017a1 was int now byte
+  variable v4017a2 was int now byte
+  variable v4017a3 was int now byte
+  variable v4017b1 was int now byte
+  variable v4017b2 was int now byte
+  variable v4017b3 was int now byte
+  variable vsex was int now byte
+  variable v40192 was int now byte
+  variable v40193 was int now byte
+  variable v40202 was int now byte
+  variable v40203 was int now byte
+  variable v40211 was int now byte
+  variable v40212 was int now byte
+  variable v40213 was int now byte
+  variable v40221 was int now byte
+  variable v40222 was int now byte
+  variable v40223 was int now byte
+  variable v40231 was int now byte
+  variable v40232 was int now byte
+  variable v40233 was int now byte
+  variable v40241 was int now byte
+  variable v40242 was int now byte
+  variable v40243 was int now byte
+  variable v40251 was int now byte
+  variable v40252 was int now byte
+  variable v40253 was int now byte
+  variable vinjury1 was int now byte
+  variable v40262 was int now byte
+  variable v40263 was int now byte
+  variable vinjury2 was int now byte
+  variable v40272 was int now byte
+  variable v40273 was int now byte
+  variable vinjury3 was int now byte
+  variable v40282 was int now byte
+  variable v40283 was int now byte
+  variable vinjury4 was int now byte
+  variable v40292 was int now byte
+  variable v40293 was int now byte
+  variable vinjury5 was int now byte
+  variable v40302 was int now byte
+  variable v40303 was int now byte
+  variable onum was int now byte
+  variable v40312 was int now byte
+  variable v40313 was int now byte
+  variable vrelate1 was int now byte
+  variable v40322 was int now byte
+  variable v40323 was int now byte
+  variable oseqno2 was int now byte
+  variable v40332 was int now byte
+  variable v40333 was int now byte
+  variable vrelate2 was int now byte
+  variable v40342 was int now byte
+  variable v40343 was int now byte
+  variable oseqno3 was int now byte
+  variable v40352 was int now byte
+  variable v40353 was int now byte
+  variable vrelate3 was int now byte
+  variable v40362 was int now byte
+  variable v40363 was int now byte
+  variable oseqno4 was int now byte
+  variable v40372 was int now byte
+  variable v40373 was int now byte
+  variable vrelate4 was int now byte
+  variable v40382 was int now byte
+  variable v40383 was int now byte
+  variable oseqno5 was int now byte
+  variable v40392 was int now byte
+  variable v40393 was int now byte
+  variable vrelate5 was int now byte
+  variable v40402 was int now byte
+  variable v40403 was int now byte
+  variable oseqno6 was int now byte
+  variable v40412 was int now byte
+  variable v40413 was int now byte
+  variable vrelate6 was int now byte
+  variable v40422 was int now byte
+  variable v40423 was int now byte
+  variable oseqno7 was int now byte
+  variable v40432 was int now byte
+  variable v40433 was int now byte
+  variable vrelate7 was int now byte
+  variable v40442 was int now byte
+  variable v40443 was int now byte
+  variable oseqno8 was int now byte
+  variable v40452 was int now byte
+  variable v40453 was int now byte
+  variable vrelate8 was int now byte
+  variable v40462 was int now byte
+  variable v40463 was int now byte
+  variable oseqno9 was int now byte
+  variable v40472 was int now byte
+  variable v40473 was int now byte
+  variable vrelate9 was int now byte
+  variable v40482 was int now byte
+  variable v40483 was int now byte
+  variable oseqno10 was int now byte
+  variable v40492 was int now byte
+  variable v40493 was int now byte
+  variable vrelate10 was int now byte
+  variable v40502 was int now byte
+  variable v40503 was int now byte
+  variable oseqno was int now byte
+  variable v50062 was int now byte
+  variable v50063 was int now byte
+  variable oage was int now byte
+  variable v50072 was int now byte
+  variable v50073 was int now byte
+  variable osex was int now byte
+  variable v50082 was int now byte
+  variable v50083 was int now byte
+  variable v50092 was int now byte
+  variable v50093 was int now byte
+  variable v50111 was int now byte
+  variable v50112 was int now byte
+  variable v50113 was int now byte
+  variable v60061 was int now byte
+  variable v60062 was int now byte
+  variable v60063 was int now byte
+  variable v60091 was int now byte
+  variable v60092 was int now byte
+  variable v60093 was int now byte
+  variable v60101 was int now byte
+  variable v60102 was int now byte
+  variable v60103 was int now byte
+  variable v60132 was int now byte
+  variable v60133 was int now byte
+  variable v60141 was int now byte
+  variable v60142 was int now byte
+  variable v60143 was int now byte
+  variable v60151 was int now byte
+  variable v60152 was int now byte
+  variable v60153 was int now byte
+  variable v60161 was int now byte
+  variable v60162 was int now byte
+  variable v60163 was int now byte
+  variable v60171 was int now byte
+  variable v60172 was int now byte
+  variable v60173 was int now byte
+  variable v60181 was int now byte
+  variable v60182 was int now byte
+  variable v60183 was int now byte
+  variable v60191 was int now byte
+  variable v60192 was int now byte
+  variable v60193 was int now byte
+  variable rape was float now byte
+  variable vfemale was float now byte
+  variable ofemale was float now byte
+  variable year was float now int
+  variable month was float now byte
+  variable day was float now byte
+  variable mdy was float now int
+  variable dow was float now byte
+  variable doy was float now int
+  variable v4017c1 was str9 now str2
+  variable v4017c3 was str9 now str2
+  variable allofns was str35 now str23
+  (12,183,471 bytes saved)
+(36,587 missing values generated)
+(36,587 missing values generated)
+(29,920 real changes made)
+(6,667 real changes made)
+(0 real changes made)
+(0 real changes made)
+year_nibrs has all characters numeric; replaced as int
+(0 observations deleted)
+(29,429 real changes made)
+file raw/2013_arrest_out.dta saved
+year: 2014
+(National Incident-Based Reporting System, 2014: Extract Files, Incident-Level 
+> Fi)
+(37,118 real changes made)
+(706 real changes made)
+(15 real changes made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(4,881,520 observations deleted)
+pop1 already numeric; no replace
+idate already numeric; no replace
+(255 real changes made, 255 to missing)
+(0 real changes made)
+(9,377 missing values generated)
+(7,157 real changes made)
+(689 real changes made)
+(15,571 missing values generated)
+(9,419 real changes made)
+(557 real changes made)
+date_added generated as str8
+date_nibrs generated as str8
+pop2 generated as str6
+pop3 generated as str5
+pop4 generated as str1
+pop5 generated as str1
+datereport generated as str1
+cfips1 generated as str3
+pop2 has all characters numeric; replaced as long
+pop3 has all characters numeric; replaced as long
+pop4 has all characters numeric; replaced as byte
+pop5 has all characters numeric; replaced as byte
+(0 observations deleted)
+  variable state was int now byte
+  variable recsbh was int now byte
+  variable recsadm was int now byte
+  variable recsofs was int now byte
+  variable recsprp was int now byte
+  variable recsvic was int now byte
+  variable recsofr was int now byte
+  variable recsarr was int now byte
+  variable bh010 was int now byte
+  variable bh011 was int now byte
+  variable agency_indic was int now byte
+  variable bh013 was int now byte
+  variable bh017 was int now byte
+  variable bh032 was int now byte
+  variable bh033 was int now byte
+  variable bh034 was int now byte
+  variable bh036 was int now byte
+  variable bh037 was int now byte
+  variable bh038 was int now byte
+  variable monthsreported was int now byte
+  variable ihour was int now byte
+  variable v1008 was int now byte
+  variable v1009 was int now byte
+  variable v1010 was int now byte
+  variable v1011 was int now byte
+  variable v1013 was int now byte
+  variable v1016 was int now byte
+  variable v20071 was int now byte
+  variable v20072 was int now byte
+  variable v20073 was int now byte
+  variable offusing1 was int now byte
+  variable v20082 was int now byte
+  variable v20083 was int now byte
+  variable offusing2 was int now byte
+  variable v20092 was int now byte
+  variable v20093 was int now byte
+  variable offusing3 was int now byte
+  variable v20102 was int now byte
+  variable v20103 was int now byte
+  variable location was int now byte
+  variable v20112 was int now byte
+  variable v20113 was int now byte
+  variable v20121 was int now byte
+  variable v20122 was int now byte
+  variable v20123 was int now byte
+  variable v20131 was int now byte
+  variable v20132 was int now byte
+  variable v20133 was int now byte
+  variable v20141 was int now byte
+  variable v20142 was int now byte
+  variable v20143 was int now byte
+  variable v20151 was int now byte
+  variable v20152 was int now byte
+  variable v20153 was int now byte
+  variable v20161 was int now byte
+  variable v20162 was int now byte
+  variable v20163 was int now byte
+  variable v20201 was int now byte
+  variable v20202 was int now byte
+  variable v20203 was int now byte
+  variable v2020b1 was int now byte
+  variable v2020b2 was int now byte
+  variable v2020b3 was int now byte
+  variable v2020c1 was int now byte
+  variable v2020c2 was int now byte
+  variable v2020c3 was int now byte
+  variable v2020d1 was int now byte
+  variable v2020d2 was int now byte
+  variable v2020d3 was int now byte
+  variable v2020e1 was int now byte
+  variable v2020e2 was int now byte
+  variable v2020e3 was int now byte
+  variable v30061 was int now byte
+  variable v30062 was int now byte
+  variable v30063 was int now byte
+  variable v30071 was int now byte
+  variable v30072 was int now byte
+  variable v30073 was int now byte
+  variable v30081 was long now int
+  variable v30082 was long now int
+  variable v30083 was long now int
+  variable v30101 was int now byte
+  variable v30102 was int now byte
+  variable v30103 was int now byte
+  variable v30111 was int now byte
+  variable v30112 was int now byte
+  variable v30113 was int now byte
+  variable v30121 was int now byte
+  variable v30122 was int now byte
+  variable v30123 was int now byte
+  variable v30131 was long now int
+  variable v30132 was long now byte
+  variable v30133 was long now byte
+  variable v30143 was int now byte
+  variable v30151 was int now byte
+  variable v30152 was int now byte
+  variable v30153 was int now byte
+  variable v30161 was int now byte
+  variable v30162 was int now byte
+  variable v30163 was int now byte
+  variable v30171 was long now byte
+  variable v30172 was long now byte
+  variable v30173 was long now byte
+  variable v30181 was int now byte
+  variable v30182 was int now byte
+  variable v30191 was int now byte
+  variable v30192 was int now byte
+  variable v30193 was int now byte
+  variable v30201 was int now byte
+  variable v30202 was int now byte
+  variable v30203 was int now byte
+  variable v30211 was long now byte
+  variable v30212 was long now int
+  variable v30213 was int now byte
+  variable v30221 was int now byte
+  variable v30231 was int now byte
+  variable v30232 was int now byte
+  variable v30233 was int now byte
+  variable vseqno was int now byte
+  variable v40062 was int now byte
+  variable v40063 was int now byte
+  variable v40093 was int now byte
+  variable v40102 was int now byte
+  variable v40103 was int now byte
+  variable v40112 was int now byte
+  variable v40113 was int now byte
+  variable offense6 was int now byte
+  variable v40122 was int now byte
+  variable v40123 was int now byte
+  variable v40132 was int now byte
+  variable v40133 was int now byte
+  variable v40142 was int now byte
+  variable v40143 was int now byte
+  variable v40152 was int now byte
+  variable v40153 was int now byte
+  variable v40162 was int now byte
+  variable v40163 was int now byte
+  variable v40171 was int now byte
+  variable v40172 was int now byte
+  variable v40173 was int now byte
+  variable v4017a1 was int now byte
+  variable v4017a2 was int now byte
+  variable v4017a3 was int now byte
+  variable v4017b1 was int now byte
+  variable v4017b2 was int now byte
+  variable v4017b3 was int now byte
+  variable vsex was int now byte
+  variable v40192 was int now byte
+  variable v40193 was int now byte
+  variable v40202 was int now byte
+  variable v40203 was int now byte
+  variable v40211 was int now byte
+  variable v40212 was int now byte
+  variable v40213 was int now byte
+  variable v40221 was int now byte
+  variable v40222 was int now byte
+  variable v40223 was int now byte
+  variable v40231 was int now byte
+  variable v40232 was int now byte
+  variable v40233 was int now byte
+  variable v40241 was int now byte
+  variable v40242 was int now byte
+  variable v40243 was int now byte
+  variable v40251 was int now byte
+  variable v40252 was int now byte
+  variable v40253 was int now byte
+  variable vinjury1 was int now byte
+  variable v40262 was int now byte
+  variable v40263 was int now byte
+  variable vinjury2 was int now byte
+  variable v40272 was int now byte
+  variable v40273 was int now byte
+  variable vinjury3 was int now byte
+  variable v40282 was int now byte
+  variable v40283 was int now byte
+  variable vinjury4 was int now byte
+  variable v40292 was int now byte
+  variable v40293 was int now byte
+  variable vinjury5 was int now byte
+  variable v40302 was int now byte
+  variable v40303 was int now byte
+  variable onum was int now byte
+  variable v40312 was int now byte
+  variable v40313 was int now byte
+  variable vrelate1 was int now byte
+  variable v40322 was int now byte
+  variable v40323 was int now byte
+  variable oseqno2 was int now byte
+  variable v40332 was int now byte
+  variable v40333 was int now byte
+  variable vrelate2 was int now byte
+  variable v40342 was int now byte
+  variable v40343 was int now byte
+  variable oseqno3 was int now byte
+  variable v40352 was int now byte
+  variable v40353 was int now byte
+  variable vrelate3 was int now byte
+  variable v40362 was int now byte
+  variable v40363 was int now byte
+  variable oseqno4 was int now byte
+  variable v40372 was int now byte
+  variable v40373 was int now byte
+  variable vrelate4 was int now byte
+  variable v40382 was int now byte
+  variable v40383 was int now byte
+  variable oseqno5 was int now byte
+  variable v40392 was int now byte
+  variable v40393 was int now byte
+  variable vrelate5 was int now byte
+  variable v40402 was int now byte
+  variable v40403 was int now byte
+  variable oseqno6 was int now byte
+  variable v40412 was int now byte
+  variable v40413 was int now byte
+  variable vrelate6 was int now byte
+  variable v40422 was int now byte
+  variable v40423 was int now byte
+  variable oseqno7 was int now byte
+  variable v40432 was int now byte
+  variable v40433 was int now byte
+  variable vrelate7 was int now byte
+  variable v40442 was int now byte
+  variable v40443 was int now byte
+  variable oseqno8 was int now byte
+  variable v40452 was int now byte
+  variable v40453 was int now byte
+  variable vrelate8 was int now byte
+  variable v40462 was int now byte
+  variable v40463 was int now byte
+  variable oseqno9 was int now byte
+  variable v40472 was int now byte
+  variable v40473 was int now byte
+  variable vrelate9 was int now byte
+  variable v40482 was int now byte
+  variable v40483 was int now byte
+  variable oseqno10 was int now byte
+  variable v40492 was int now byte
+  variable v40493 was int now byte
+  variable vrelate10 was int now byte
+  variable v40502 was int now byte
+  variable v40503 was int now byte
+  variable oseqno was int now byte
+  variable v50062 was int now byte
+  variable v50063 was int now byte
+  variable oage was int now byte
+  variable v50072 was int now byte
+  variable v50073 was int now byte
+  variable osex was int now byte
+  variable v50082 was int now byte
+  variable v50083 was int now byte
+  variable v50092 was int now byte
+  variable v50093 was int now byte
+  variable v50111 was int now byte
+  variable v50112 was int now byte
+  variable v50113 was int now byte
+  variable v60061 was int now byte
+  variable v60062 was int now byte
+  variable v60063 was int now byte
+  variable v60091 was int now byte
+  variable v60092 was int now byte
+  variable v60093 was int now byte
+  variable v60101 was int now byte
+  variable v60102 was int now byte
+  variable v60103 was int now byte
+  variable v60132 was int now byte
+  variable v60133 was int now byte
+  variable v60141 was int now byte
+  variable v60142 was int now byte
+  variable v60143 was int now byte
+  variable v60151 was int now byte
+  variable v60152 was int now byte
+  variable v60153 was int now byte
+  variable v60161 was int now byte
+  variable v60162 was int now byte
+  variable v60163 was int now byte
+  variable v60171 was int now byte
+  variable v60172 was int now byte
+  variable v60173 was int now byte
+  variable v60181 was int now byte
+  variable v60182 was int now byte
+  variable v60183 was int now byte
+  variable v60191 was int now byte
+  variable v60192 was int now byte
+  variable v60193 was int now byte
+  variable rape was float now byte
+  variable vfemale was float now byte
+  variable ofemale was float now byte
+  variable year was float now int
+  variable month was float now byte
+  variable day was float now byte
+  variable mdy was float now int
+  variable dow was float now byte
+  variable doy was float now int
+  variable v4017c1 was str9 now str2
+  variable v4017c2 was str9 now str2
+  variable v4017c3 was str9 now str2
+  variable allofns was str31 now str19
+  (13,546,720 bytes saved)
+(37,840 missing values generated)
+(37,840 missing values generated)
+(31,216 real changes made)
+(6,624 real changes made)
+(0 real changes made)
+(0 real changes made)
+year_nibrs has all characters numeric; replaced as int
+(0 observations deleted)
+(30,680 real changes made)
+file raw/2014_arrest_out.dta saved
+year: 2015
+(National Incident-Based Reporting System, 2015: Extract Files, Incident-Level 
+> Fi)
+(40,069 real changes made)
+(814 real changes made)
+(19 real changes made)
+(2 real changes made)
+(0 real changes made)
+(0 real changes made)
+(4,945,704 observations deleted)
+pop1 already numeric; no replace
+idate already numeric; no replace
+(258 real changes made, 258 to missing)
+(0 real changes made)
+(10,143 missing values generated)
+(7,706 real changes made)
+(764 real changes made)
+(16,985 missing values generated)
+(10,039 real changes made)
+(674 real changes made)
+date_added generated as str8
+date_nibrs generated as str8
+pop2 generated as str6
+pop3 generated as str5
+pop4 generated as str1
+pop5 generated as str1
+datereport generated as str1
+cfips1 generated as str3
+pop2 has all characters numeric; replaced as long
+pop3 has all characters numeric; replaced as long
+pop4 has all characters numeric; replaced as byte
+pop5 has all characters numeric; replaced as byte
+(0 observations deleted)
+  variable state was int now byte
+  variable recsbh was int now byte
+  variable recsadm was int now byte
+  variable recsofs was int now byte
+  variable recsprp was int now byte
+  variable recsvic was int now byte
+  variable recsofr was int now byte
+  variable recsarr was int now byte
+  variable bh010 was int now byte
+  variable bh011 was int now byte
+  variable agency_indic was int now byte
+  variable bh013 was int now byte
+  variable bh017 was int now byte
+  variable bh018 was long now byte
+  variable bh032 was int now byte
+  variable bh033 was int now byte
+  variable bh034 was int now byte
+  variable bh036 was int now byte
+  variable bh037 was int now byte
+  variable bh038 was int now byte
+  variable monthsreported was int now byte
+  variable ihour was int now byte
+  variable v1008 was int now byte
+  variable v1009 was int now byte
+  variable v1010 was int now byte
+  variable v1011 was int now byte
+  variable v1013 was int now byte
+  variable v1016 was int now byte
+  variable v20071 was int now byte
+  variable v20072 was int now byte
+  variable v20073 was int now byte
+  variable offusing1 was int now byte
+  variable v20082 was int now byte
+  variable v20083 was int now byte
+  variable offusing2 was int now byte
+  variable v20092 was int now byte
+  variable v20093 was int now byte
+  variable offusing3 was int now byte
+  variable v20102 was int now byte
+  variable v20103 was int now byte
+  variable location was int now byte
+  variable v20112 was int now byte
+  variable v20113 was int now byte
+  variable v20121 was int now byte
+  variable v20122 was int now byte
+  variable v20123 was int now byte
+  variable v20131 was int now byte
+  variable v20132 was int now byte
+  variable v20133 was int now byte
+  variable v20141 was int now byte
+  variable v20142 was int now byte
+  variable v20143 was int now byte
+  variable v20151 was int now byte
+  variable v20152 was int now byte
+  variable v20153 was int now byte
+  variable v20161 was int now byte
+  variable v20162 was int now byte
+  variable v20163 was int now byte
+  variable v20193 was int now byte
+  variable v20201 was int now byte
+  variable v20202 was int now byte
+  variable v20203 was int now byte
+  variable v2020b1 was int now byte
+  variable v2020b2 was int now byte
+  variable v2020b3 was int now byte
+  variable v2020c1 was int now byte
+  variable v2020c2 was int now byte
+  variable v2020c3 was int now byte
+  variable v2020d1 was int now byte
+  variable v2020d2 was int now byte
+  variable v2020d3 was int now byte
+  variable v2020e1 was int now byte
+  variable v2020e2 was int now byte
+  variable v2020e3 was int now byte
+  variable v30061 was int now byte
+  variable v30062 was int now byte
+  variable v30063 was int now byte
+  variable v30071 was int now byte
+  variable v30072 was int now byte
+  variable v30073 was int now byte
+  variable v30101 was int now byte
+  variable v30102 was int now byte
+  variable v30103 was int now byte
+  variable v30111 was int now byte
+  variable v30112 was int now byte
+  variable v30113 was int now byte
+  variable v30121 was int now byte
+  variable v30122 was int now byte
+  variable v30123 was int now byte
+  variable v30131 was long now byte
+  variable v30132 was long now byte
+  variable v30133 was long now byte
+  variable v30151 was int now byte
+  variable v30152 was int now byte
+  variable v30153 was int now byte
+  variable v30161 was int now byte
+  variable v30162 was int now byte
+  variable v30163 was int now byte
+  variable v30171 was long now int
+  variable v30172 was long now int
+  variable v30173 was int now byte
+  variable v30183 was int now byte
+  variable v30191 was int now byte
+  variable v30192 was int now byte
+  variable v30193 was int now byte
+  variable v30201 was int now byte
+  variable v30202 was int now byte
+  variable v30203 was int now byte
+  variable v30211 was long now byte
+  variable v30212 was int now byte
+  variable v30213 was long now byte
+  variable v30222 was int now byte
+  variable v30223 was int now byte
+  variable v30231 was int now byte
+  variable v30232 was int now byte
+  variable v30233 was int now byte
+  variable vseqno was int now byte
+  variable v40062 was int now byte
+  variable v40063 was int now byte
+  variable v40102 was int now byte
+  variable v40112 was int now byte
+  variable v40113 was int now byte
+  variable offense6 was int now byte
+  variable v40122 was int now byte
+  variable v40123 was int now byte
+  variable v40132 was int now byte
+  variable v40133 was int now byte
+  variable v40142 was int now byte
+  variable v40143 was int now byte
+  variable v40152 was int now byte
+  variable v40153 was int now byte
+  variable v40162 was int now byte
+  variable v40163 was int now byte
+  variable v40171 was int now byte
+  variable v40172 was int now byte
+  variable v40173 was int now byte
+  variable v4017a1 was int now byte
+  variable v4017a2 was int now byte
+  variable v4017a3 was int now byte
+  variable v4017b1 was int now byte
+  variable v4017b2 was int now byte
+  variable v4017b3 was int now byte
+  variable vsex was int now byte
+  variable v40192 was int now byte
+  variable v40193 was int now byte
+  variable v40202 was int now byte
+  variable v40203 was int now byte
+  variable v40211 was int now byte
+  variable v40212 was int now byte
+  variable v40213 was int now byte
+  variable v40221 was int now byte
+  variable v40222 was int now byte
+  variable v40223 was int now byte
+  variable v40231 was int now byte
+  variable v40232 was int now byte
+  variable v40233 was int now byte
+  variable v40241 was int now byte
+  variable v40242 was int now byte
+  variable v40243 was int now byte
+  variable v40251 was int now byte
+  variable v40252 was int now byte
+  variable v40253 was int now byte
+  variable vinjury1 was int now byte
+  variable v40262 was int now byte
+  variable v40263 was int now byte
+  variable vinjury2 was int now byte
+  variable v40272 was int now byte
+  variable v40273 was int now byte
+  variable vinjury3 was int now byte
+  variable v40282 was int now byte
+  variable v40283 was int now byte
+  variable vinjury4 was int now byte
+  variable v40292 was int now byte
+  variable v40293 was int now byte
+  variable vinjury5 was int now byte
+  variable v40302 was int now byte
+  variable v40303 was int now byte
+  variable onum was int now byte
+  variable v40312 was int now byte
+  variable v40313 was int now byte
+  variable vrelate1 was int now byte
+  variable v40322 was int now byte
+  variable v40323 was int now byte
+  variable oseqno2 was int now byte
+  variable v40332 was int now byte
+  variable v40333 was int now byte
+  variable vrelate2 was int now byte
+  variable v40342 was int now byte
+  variable v40343 was int now byte
+  variable oseqno3 was int now byte
+  variable v40352 was int now byte
+  variable v40353 was int now byte
+  variable vrelate3 was int now byte
+  variable v40362 was int now byte
+  variable v40363 was int now byte
+  variable oseqno4 was int now byte
+  variable v40372 was int now byte
+  variable v40373 was int now byte
+  variable vrelate4 was int now byte
+  variable v40382 was int now byte
+  variable v40383 was int now byte
+  variable oseqno5 was int now byte
+  variable v40392 was int now byte
+  variable v40393 was int now byte
+  variable vrelate5 was int now byte
+  variable v40402 was int now byte
+  variable v40403 was int now byte
+  variable oseqno6 was int now byte
+  variable v40412 was int now byte
+  variable v40413 was int now byte
+  variable vrelate6 was int now byte
+  variable v40422 was int now byte
+  variable v40423 was int now byte
+  variable oseqno7 was int now byte
+  variable v40432 was int now byte
+  variable v40433 was int now byte
+  variable vrelate7 was int now byte
+  variable v40442 was int now byte
+  variable v40443 was int now byte
+  variable oseqno8 was int now byte
+  variable v40452 was int now byte
+  variable v40453 was int now byte
+  variable vrelate8 was int now byte
+  variable v40462 was int now byte
+  variable v40463 was int now byte
+  variable oseqno9 was int now byte
+  variable v40472 was int now byte
+  variable v40473 was int now byte
+  variable vrelate9 was int now byte
+  variable v40482 was int now byte
+  variable v40483 was int now byte
+  variable oseqno10 was int now byte
+  variable v40492 was int now byte
+  variable v40493 was int now byte
+  variable vrelate10 was int now byte
+  variable v40502 was int now byte
+  variable v40503 was int now byte
+  variable oseqno was int now byte
+  variable v50062 was int now byte
+  variable v50063 was int now byte
+  variable oage was int now byte
+  variable v50072 was int now byte
+  variable v50073 was int now byte
+  variable osex was int now byte
+  variable v50082 was int now byte
+  variable v50083 was int now byte
+  variable v50092 was int now byte
+  variable v50093 was int now byte
+  variable v50111 was int now byte
+  variable v50112 was int now byte
+  variable v50113 was int now byte
+  variable v60061 was int now byte
+  variable v60062 was int now byte
+  variable v60063 was int now byte
+  variable v60091 was int now byte
+  variable v60092 was int now byte
+  variable v60093 was int now byte
+  variable v60101 was int now byte
+  variable v60102 was int now byte
+  variable v60103 was int now byte
+  variable v60132 was int now byte
+  variable v60133 was int now byte
+  variable v60141 was int now byte
+  variable v60142 was int now byte
+  variable v60143 was int now byte
+  variable v60151 was int now byte
+  variable v60152 was int now byte
+  variable v60153 was int now byte
+  variable v60161 was int now byte
+  variable v60162 was int now byte
+  variable v60163 was int now byte
+  variable v60171 was int now byte
+  variable v60172 was int now byte
+  variable v60173 was int now byte
+  variable v60181 was int now byte
+  variable v60182 was int now byte
+  variable v60183 was int now byte
+  variable v60191 was int now byte
+  variable v60192 was int now byte
+  variable v60193 was int now byte
+  variable rape was float now byte
+  variable vfemale was float now byte
+  variable ofemale was float now byte
+  variable year was float now int
+  variable month was float now byte
+  variable day was float now byte
+  variable mdy was float now int
+  variable dow was float now byte
+  variable doy was float now int
+  variable bh014 was str9 now str2
+  variable v4017c1 was str9 now str2
+  variable v4017c2 was str9 now str2
+  variable v4017c3 was str9 now str2
+  variable allofns was str31 now str23
+  (14,480,016 bytes saved)
+(40,904 missing values generated)
+(40,904 missing values generated)
+(33,967 real changes made)
+(6,937 real changes made)
+(0 real changes made)
+(0 real changes made)
+year_nibrs has all characters numeric; replaced as int
+(0 observations deleted)
+(33,682 real changes made)
+file raw/2015_arrest_out.dta saved
+year: 2016
+(National Incident-Based Reporting System, 2016: Extract Files, Incident-Level 
+> Fi)
+(43,761 real changes made)
+(957 real changes made)
+(30 real changes made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(5,248,787 observations deleted)
+pop1 already numeric; no replace
+idate already numeric; no replace
+(304 real changes made, 304 to missing)
+(0 real changes made)
+(11,053 missing values generated)
+(8,188 real changes made)
+(862 real changes made)
+(18,961 missing values generated)
+(10,897 real changes made)
+(680 real changes made)
+date_added generated as str8
+date_nibrs generated as str8
+pop2 generated as str6
+pop3 generated as str5
+pop4 generated as str1
+pop5 generated as str1
+datereport generated as str1
+cfips1 generated as str3
+pop2 has all characters numeric; replaced as long
+pop3 has all characters numeric; replaced as long
+pop4 has all characters numeric; replaced as byte
+pop5 has all characters numeric; replaced as byte
+(0 observations deleted)
+  variable state was int now byte
+  variable recsbh was int now byte
+  variable recsadm was int now byte
+  variable recsofs was int now byte
+  variable recsprp was int now byte
+  variable recsvic was int now byte
+  variable recsofr was int now byte
+  variable recsarr was int now byte
+  variable bh010 was int now byte
+  variable bh011 was int now byte
+  variable agency_indic was int now byte
+  variable bh013 was int now byte
+  variable bh017 was int now byte
+  variable bh032 was int now byte
+  variable bh033 was int now byte
+  variable bh034 was int now byte
+  variable bh036 was int now byte
+  variable bh037 was int now byte
+  variable bh038 was int now byte
+  variable monthsreported was int now byte
+  variable ihour was int now byte
+  variable v1008 was int now byte
+  variable v1009 was int now byte
+  variable v1010 was int now byte
+  variable v1011 was int now byte
+  variable v1013 was int now byte
+  variable v1016 was int now byte
+  variable v20071 was int now byte
+  variable v20072 was int now byte
+  variable v20073 was int now byte
+  variable offusing1 was int now byte
+  variable v20082 was int now byte
+  variable v20083 was int now byte
+  variable offusing2 was int now byte
+  variable v20092 was int now byte
+  variable v20093 was int now byte
+  variable offusing3 was int now byte
+  variable v20102 was int now byte
+  variable v20103 was int now byte
+  variable location was int now byte
+  variable v20112 was int now byte
+  variable v20113 was int now byte
+  variable v20121 was int now byte
+  variable v20122 was int now byte
+  variable v20123 was int now byte
+  variable v20131 was int now byte
+  variable v20132 was int now byte
+  variable v20133 was int now byte
+  variable v20141 was int now byte
+  variable v20142 was int now byte
+  variable v20143 was int now byte
+  variable v20151 was int now byte
+  variable v20152 was int now byte
+  variable v20153 was int now byte
+  variable v20161 was int now byte
+  variable v20162 was int now byte
+  variable v20163 was int now byte
+  variable v20201 was int now byte
+  variable v20202 was int now byte
+  variable v20203 was int now byte
+  variable v2020b1 was int now byte
+  variable v2020b2 was int now byte
+  variable v2020b3 was int now byte
+  variable v2020c1 was int now byte
+  variable v2020c2 was int now byte
+  variable v2020c3 was int now byte
+  variable v2020d1 was int now byte
+  variable v2020d2 was int now byte
+  variable v2020d3 was int now byte
+  variable v2020e1 was int now byte
+  variable v2020e2 was int now byte
+  variable v2020e3 was int now byte
+  variable v30061 was int now byte
+  variable v30062 was int now byte
+  variable v30063 was int now byte
+  variable v30071 was int now byte
+  variable v30072 was int now byte
+  variable v30073 was int now byte
+  variable v30082 was long now int
+  variable v30083 was long now int
+  variable v30101 was int now byte
+  variable v30102 was int now byte
+  variable v30103 was int now byte
+  variable v30111 was int now byte
+  variable v30112 was int now byte
+  variable v30113 was int now byte
+  variable v30121 was int now byte
+  variable v30122 was int now byte
+  variable v30123 was int now byte
+  variable v30131 was long now int
+  variable v30132 was long now byte
+  variable v30133 was long now byte
+  variable v30143 was int now byte
+  variable v30151 was int now byte
+  variable v30152 was int now byte
+  variable v30153 was int now byte
+  variable v30161 was int now byte
+  variable v30162 was int now byte
+  variable v30163 was int now byte
+  variable v30171 was long now int
+  variable v30172 was long now byte
+  variable v30173 was int now byte
+  variable v30183 was int now byte
+  variable v30191 was int now byte
+  variable v30192 was int now byte
+  variable v30193 was int now byte
+  variable v30201 was int now byte
+  variable v30202 was int now byte
+  variable v30203 was int now byte
+  variable v30211 was long now byte
+  variable v30212 was long now byte
+  variable v30213 was int now byte
+  variable v30221 was int now byte
+  variable v30222 was int now byte
+  variable v30223 was int now byte
+  variable v30231 was int now byte
+  variable v30232 was int now byte
+  variable v30233 was int now byte
+  variable vseqno was int now byte
+  variable v40062 was int now byte
+  variable v40063 was int now byte
+  variable v40102 was int now byte
+  variable v40112 was int now byte
+  variable v40113 was int now byte
+  variable offense6 was int now byte
+  variable v40122 was int now byte
+  variable v40123 was int now byte
+  variable v40132 was int now byte
+  variable v40133 was int now byte
+  variable v40142 was int now byte
+  variable v40143 was int now byte
+  variable v40152 was int now byte
+  variable v40153 was int now byte
+  variable v40162 was int now byte
+  variable v40163 was int now byte
+  variable v40171 was int now byte
+  variable v40172 was int now byte
+  variable v40173 was int now byte
+  variable v4017a1 was int now byte
+  variable v4017a2 was int now byte
+  variable v4017a3 was int now byte
+  variable v4017b1 was int now byte
+  variable v4017b2 was int now byte
+  variable v4017b3 was int now byte
+  variable vsex was int now byte
+  variable v40192 was int now byte
+  variable v40193 was int now byte
+  variable v40202 was int now byte
+  variable v40203 was int now byte
+  variable v40211 was int now byte
+  variable v40212 was int now byte
+  variable v40213 was int now byte
+  variable v40221 was int now byte
+  variable v40222 was int now byte
+  variable v40223 was int now byte
+  variable v40231 was int now byte
+  variable v40232 was int now byte
+  variable v40233 was int now byte
+  variable v40241 was int now byte
+  variable v40242 was int now byte
+  variable v40243 was int now byte
+  variable v40251 was int now byte
+  variable v40252 was int now byte
+  variable v40253 was int now byte
+  variable vinjury1 was int now byte
+  variable v40262 was int now byte
+  variable v40263 was int now byte
+  variable vinjury2 was int now byte
+  variable v40272 was int now byte
+  variable v40273 was int now byte
+  variable vinjury3 was int now byte
+  variable v40282 was int now byte
+  variable v40283 was int now byte
+  variable vinjury4 was int now byte
+  variable v40292 was int now byte
+  variable v40293 was int now byte
+  variable vinjury5 was int now byte
+  variable v40302 was int now byte
+  variable v40303 was int now byte
+  variable onum was int now byte
+  variable v40312 was int now byte
+  variable v40313 was int now byte
+  variable vrelate1 was int now byte
+  variable v40322 was int now byte
+  variable v40323 was int now byte
+  variable oseqno2 was int now byte
+  variable v40332 was int now byte
+  variable v40333 was int now byte
+  variable vrelate2 was int now byte
+  variable v40342 was int now byte
+  variable v40343 was int now byte
+  variable oseqno3 was int now byte
+  variable v40352 was int now byte
+  variable v40353 was int now byte
+  variable vrelate3 was int now byte
+  variable v40362 was int now byte
+  variable v40363 was int now byte
+  variable oseqno4 was int now byte
+  variable v40372 was int now byte
+  variable v40373 was int now byte
+  variable vrelate4 was int now byte
+  variable v40382 was int now byte
+  variable v40383 was int now byte
+  variable oseqno5 was int now byte
+  variable v40392 was int now byte
+  variable v40393 was int now byte
+  variable vrelate5 was int now byte
+  variable v40402 was int now byte
+  variable v40403 was int now byte
+  variable oseqno6 was int now byte
+  variable v40412 was int now byte
+  variable v40413 was int now byte
+  variable vrelate6 was int now byte
+  variable v40422 was int now byte
+  variable v40423 was int now byte
+  variable oseqno7 was int now byte
+  variable v40432 was int now byte
+  variable v40433 was int now byte
+  variable vrelate7 was int now byte
+  variable v40442 was int now byte
+  variable v40443 was int now byte
+  variable oseqno8 was int now byte
+  variable v40452 was int now byte
+  variable v40453 was int now byte
+  variable vrelate8 was int now byte
+  variable v40462 was int now byte
+  variable v40463 was int now byte
+  variable oseqno9 was int now byte
+  variable v40472 was int now byte
+  variable v40473 was int now byte
+  variable vrelate9 was int now byte
+  variable v40482 was int now byte
+  variable v40483 was int now byte
+  variable oseqno10 was int now byte
+  variable v40492 was int now byte
+  variable v40493 was int now byte
+  variable vrelate10 was int now byte
+  variable v40502 was int now byte
+  variable v40503 was int now byte
+  variable oseqno was int now byte
+  variable v50062 was int now byte
+  variable v50063 was int now byte
+  variable oage was int now byte
+  variable v50072 was int now byte
+  variable v50073 was int now byte
+  variable osex was int now byte
+  variable v50082 was int now byte
+  variable v50083 was int now byte
+  variable v50092 was int now byte
+  variable v50093 was int now byte
+  variable v50111 was int now byte
+  variable v50112 was int now byte
+  variable v50113 was int now byte
+  variable v60061 was int now byte
+  variable v60062 was int now byte
+  variable v60063 was int now byte
+  variable v60091 was int now byte
+  variable v60092 was int now byte
+  variable v60093 was int now byte
+  variable v60101 was int now byte
+  variable v60102 was int now byte
+  variable v60103 was int now byte
+  variable v60132 was int now byte
+  variable v60133 was int now byte
+  variable v60141 was int now byte
+  variable v60142 was int now byte
+  variable v60143 was int now byte
+  variable v60151 was int now byte
+  variable v60152 was int now byte
+  variable v60153 was int now byte
+  variable v60161 was int now byte
+  variable v60162 was int now byte
+  variable v60163 was int now byte
+  variable v60171 was int now byte
+  variable v60172 was int now byte
+  variable v60173 was int now byte
+  variable v60181 was int now byte
+  variable v60182 was int now byte
+  variable v60183 was int now byte
+  variable v60191 was int now byte
+  variable v60192 was int now byte
+  variable v60193 was int now byte
+  variable rape was float now byte
+  variable vfemale was float now byte
+  variable ofemale was float now byte
+  variable year was float now int
+  variable month was float now byte
+  variable day was float now byte
+  variable mdy was float now int
+  variable dow was float now byte
+  variable doy was float now int
+  variable v4017c1 was str9 now str2
+  variable v4017c2 was str9 now str2
+  variable v4017c3 was str9 now str2
+  variable allofns was str31 now str23
+  (15,617,401 bytes saved)
+(44,749 missing values generated)
+(44,749 missing values generated)
+(36,843 real changes made)
+(7,906 real changes made)
+(0 real changes made)
+(0 real changes made)
+year_nibrs has all characters numeric; replaced as int
+(0 observations deleted)
+(37,235 real changes made)
+file raw/2016_arrest_out.dta saved
+
+. 
+. di "year: 2013"
+year: 2013
+
+. use "raw/2013_arrest_out", clear
+(National Incident-Based Reporting System, 2013: Extract Files, Incident-Level 
+> Fi)
+
+. forvalues i = 2014(1)2016 {
+  2.   di "year: `i'"
+  3.   append using "raw/`i'_arrest_out"
+  4. }
+year: 2014
+(note: variable v30183 was byte, now int to accommodate using data's values)
+(note: variable v30212 was byte, now int to accommodate using data's values)
+(note: variable v30222 was byte, now int to accommodate using data's values)
+(note: variable v30223 was byte, now int to accommodate using data's values)
+(label STATE already defined)
+(label INCDATE already defined)
+(label RECSADM already defined)
+(label RECSOFS already defined)
+(label RECSPRP already defined)
+(label RECSVIC already defined)
+(label RECSOFR already defined)
+(label RECSARR already defined)
+(label BH010 already defined)
+(label BH011 already defined)
+(label BH012 already defined)
+(label BH013 already defined)
+(label BH015 already defined)
+(label BH017 already defined)
+(label BH018 already defined)
+(label BH020 already defined)
+(label BH021 already defined)
+(label BH024 already defined)
+(label BH025 already defined)
+(label BH028 already defined)
+(label BH029 already defined)
+(label BH032 already defined)
+(label BH033 already defined)
+(label BH036 already defined)
+(label BH037 already defined)
+(label BH059 already defined)
+(label V1007 already defined)
+(label V1008 already defined)
+(label V1009 already defined)
+(label V1010 already defined)
+(label V1011 already defined)
+(label V1013 already defined)
+(label V1014 already defined)
+(label V1016 already defined)
+(label V20061 already defined)
+(label V20062 already defined)
+(label V20063 already defined)
+(label V20071 already defined)
+(label V20072 already defined)
+(label V20073 already defined)
+(label V20081 already defined)
+(label V20082 already defined)
+(label V20083 already defined)
+(label V20091 already defined)
+(label V20092 already defined)
+(label V20093 already defined)
+(label V20101 already defined)
+(label V20102 already defined)
+(label V20103 already defined)
+(label V20111 already defined)
+(label V20112 already defined)
+(label V20113 already defined)
+(label V20121 already defined)
+(label V20122 already defined)
+(label V20123 already defined)
+(label V20131 already defined)
+(label V20132 already defined)
+(label V20133 already defined)
+(label V20141 already defined)
+(label V20142 already defined)
+(label V20143 already defined)
+(label V20151 already defined)
+(label V20152 already defined)
+(label V20153 already defined)
+(label V20161 already defined)
+(label V20162 already defined)
+(label V20163 already defined)
+(label V20171 already defined)
+(label V20172 already defined)
+(label V20173 already defined)
+(label V20181 already defined)
+(label V20182 already defined)
+(label V20183 already defined)
+(label V20191 already defined)
+(label V20192 already defined)
+(label V20193 already defined)
+(label V20201 already defined)
+(label V20202 already defined)
+(label V20203 already defined)
+(label V30061 already defined)
+(label V30062 already defined)
+(label V30063 already defined)
+(label V30071 already defined)
+(label V30072 already defined)
+(label V30073 already defined)
+(label V30081 already defined)
+(label V30082 already defined)
+(label V30083 already defined)
+(label V30091 already defined)
+(label V30092 already defined)
+(label V30093 already defined)
+(label V30101 already defined)
+(label V30102 already defined)
+(label V30103 already defined)
+(label V30111 already defined)
+(label V30112 already defined)
+(label V30113 already defined)
+(label V30121 already defined)
+(label V30122 already defined)
+(label V30123 already defined)
+(label V30131 already defined)
+(label V30132 already defined)
+(label V30133 already defined)
+(label V30141 already defined)
+(label V30142 already defined)
+(label V30143 already defined)
+(label V30151 already defined)
+(label V30152 already defined)
+(label V30153 already defined)
+(label V30161 already defined)
+(label V30162 already defined)
+(label V30163 already defined)
+(label V30171 already defined)
+(label V30172 already defined)
+(label V30173 already defined)
+(label V30181 already defined)
+(label V30182 already defined)
+(label V30183 already defined)
+(label V30191 already defined)
+(label V30192 already defined)
+(label V30193 already defined)
+(label V30201 already defined)
+(label V30202 already defined)
+(label V30203 already defined)
+(label V30211 already defined)
+(label V30212 already defined)
+(label V30213 already defined)
+(label V30221 already defined)
+(label V30222 already defined)
+(label V30223 already defined)
+(label V30231 already defined)
+(label V30232 already defined)
+(label V30233 already defined)
+(label V40061 already defined)
+(label V40062 already defined)
+(label V40063 already defined)
+(label V40071 already defined)
+(label V40072 already defined)
+(label V40073 already defined)
+(label V40081 already defined)
+(label V40082 already defined)
+(label V40083 already defined)
+(label V40091 already defined)
+(label V40092 already defined)
+(label V40093 already defined)
+(label V40101 already defined)
+(label V40102 already defined)
+(label V40103 already defined)
+(label V40111 already defined)
+(label V40112 already defined)
+(label V40113 already defined)
+(label V40121 already defined)
+(label V40122 already defined)
+(label V40123 already defined)
+(label V40132 already defined)
+(label V40133 already defined)
+(label V40142 already defined)
+(label V40143 already defined)
+(label V40152 already defined)
+(label V40153 already defined)
+(label V40162 already defined)
+(label V40163 already defined)
+(label V40171 already defined)
+(label V40172 already defined)
+(label V40173 already defined)
+(label V4017A1 already defined)
+(label V4017A2 already defined)
+(label V4017A3 already defined)
+(label V4017B1 already defined)
+(label V4017B2 already defined)
+(label V4017B3 already defined)
+(label V40191 already defined)
+(label V40192 already defined)
+(label V40193 already defined)
+(label V40202 already defined)
+(label V40203 already defined)
+(label V40211 already defined)
+(label V40212 already defined)
+(label V40213 already defined)
+(label V40221 already defined)
+(label V40222 already defined)
+(label V40223 already defined)
+(label V40231 already defined)
+(label V40232 already defined)
+(label V40233 already defined)
+(label V40241 already defined)
+(label V40242 already defined)
+(label V40243 already defined)
+(label V40251 already defined)
+(label V40252 already defined)
+(label V40253 already defined)
+(label V40261 already defined)
+(label V40262 already defined)
+(label V40263 already defined)
+(label V40271 already defined)
+(label V40272 already defined)
+(label V40273 already defined)
+(label V40281 already defined)
+(label V40282 already defined)
+(label V40283 already defined)
+(label V40291 already defined)
+(label V40292 already defined)
+(label V40293 already defined)
+(label V40301 already defined)
+(label V40302 already defined)
+(label V40303 already defined)
+(label V40311 already defined)
+(label V40312 already defined)
+(label V40313 already defined)
+(label V40321 already defined)
+(label V40322 already defined)
+(label V40323 already defined)
+(label V40331 already defined)
+(label V40332 already defined)
+(label V40333 already defined)
+(label V40341 already defined)
+(label V40342 already defined)
+(label V40343 already defined)
+(label V40351 already defined)
+(label V40352 already defined)
+(label V40353 already defined)
+(label V40361 already defined)
+(label V40362 already defined)
+(label V40363 already defined)
+(label V40371 already defined)
+(label V40372 already defined)
+(label V40373 already defined)
+(label V40381 already defined)
+(label V40382 already defined)
+(label V40383 already defined)
+(label V40391 already defined)
+(label V40392 already defined)
+(label V40393 already defined)
+(label V40401 already defined)
+(label V40402 already defined)
+(label V40403 already defined)
+(label V40411 already defined)
+(label V40412 already defined)
+(label V40413 already defined)
+(label V40421 already defined)
+(label V40422 already defined)
+(label V40423 already defined)
+(label V40431 already defined)
+(label V40432 already defined)
+(label V40433 already defined)
+(label V40441 already defined)
+(label V40442 already defined)
+(label V40443 already defined)
+(label V40451 already defined)
+(label V40452 already defined)
+(label V40453 already defined)
+(label V40461 already defined)
+(label V40462 already defined)
+(label V40463 already defined)
+(label V40471 already defined)
+(label V40472 already defined)
+(label V40473 already defined)
+(label V40481 already defined)
+(label V40482 already defined)
+(label V40483 already defined)
+(label V40491 already defined)
+(label V40492 already defined)
+(label V40493 already defined)
+(label V40501 already defined)
+(label V40502 already defined)
+(label V40503 already defined)
+(label V50061 already defined)
+(label V50062 already defined)
+(label V50063 already defined)
+(label V50071 already defined)
+(label V50072 already defined)
+(label V50073 already defined)
+(label V50081 already defined)
+(label V50082 already defined)
+(label V50083 already defined)
+(label V50092 already defined)
+(label V50093 already defined)
+(label V50111 already defined)
+(label V50112 already defined)
+(label V50113 already defined)
+(label V60061 already defined)
+(label V60062 already defined)
+(label V60063 already defined)
+(label V60081 already defined)
+(label V60082 already defined)
+(label V60083 already defined)
+(label V60091 already defined)
+(label V60092 already defined)
+(label V60093 already defined)
+(label V60101 already defined)
+(label V60102 already defined)
+(label V60103 already defined)
+(label V60111 already defined)
+(label V60112 already defined)
+(label V60113 already defined)
+(label V60121 already defined)
+(label V60122 already defined)
+(label V60123 already defined)
+(label V60131 already defined)
+(label V60132 already defined)
+(label V60133 already defined)
+(label V60141 already defined)
+(label V60142 already defined)
+(label V60143 already defined)
+(label V60151 already defined)
+(label V60152 already defined)
+(label V60153 already defined)
+(label V60161 already defined)
+(label V60162 already defined)
+(label V60163 already defined)
+(label V60171 already defined)
+(label V60172 already defined)
+(label V60173 already defined)
+(label V60181 already defined)
+(label V60182 already defined)
+(label V60183 already defined)
+(label V60191 already defined)
+(label V60192 already defined)
+(label V60193 already defined)
+year: 2015
+(note: variable v30081 was int, now long to accommodate using data's values)
+(note: variable v30082 was int, now long to accommodate using data's values)
+(note: variable v30083 was int, now long to accommodate using data's values)
+(note: variable v30143 was byte, now int to accommodate using data's values)
+(note: variable v30182 was byte, now int to accommodate using data's values)
+(note: variable v40103 was byte, now int to accommodate using data's values)
+(label STATE already defined)
+(label INCDATE already defined)
+(label RECSADM already defined)
+(label RECSOFS already defined)
+(label RECSPRP already defined)
+(label RECSVIC already defined)
+(label RECSOFR already defined)
+(label RECSARR already defined)
+(label BH010 already defined)
+(label BH011 already defined)
+(label BH012 already defined)
+(label BH013 already defined)
+(label BH015 already defined)
+(label BH017 already defined)
+(label BH018 already defined)
+(label BH020 already defined)
+(label BH021 already defined)
+(label BH024 already defined)
+(label BH025 already defined)
+(label BH028 already defined)
+(label BH029 already defined)
+(label BH032 already defined)
+(label BH033 already defined)
+(label BH036 already defined)
+(label BH037 already defined)
+(label BH059 already defined)
+(label V1007 already defined)
+(label V1008 already defined)
+(label V1009 already defined)
+(label V1010 already defined)
+(label V1011 already defined)
+(label V1013 already defined)
+(label V1014 already defined)
+(label V1016 already defined)
+(label V20061 already defined)
+(label V20062 already defined)
+(label V20063 already defined)
+(label V20071 already defined)
+(label V20072 already defined)
+(label V20073 already defined)
+(label V20081 already defined)
+(label V20082 already defined)
+(label V20083 already defined)
+(label V20091 already defined)
+(label V20092 already defined)
+(label V20093 already defined)
+(label V20101 already defined)
+(label V20102 already defined)
+(label V20103 already defined)
+(label V20111 already defined)
+(label V20112 already defined)
+(label V20113 already defined)
+(label V20121 already defined)
+(label V20122 already defined)
+(label V20123 already defined)
+(label V20131 already defined)
+(label V20132 already defined)
+(label V20133 already defined)
+(label V20141 already defined)
+(label V20142 already defined)
+(label V20143 already defined)
+(label V20151 already defined)
+(label V20152 already defined)
+(label V20153 already defined)
+(label V20161 already defined)
+(label V20162 already defined)
+(label V20163 already defined)
+(label V20171 already defined)
+(label V20172 already defined)
+(label V20173 already defined)
+(label V20181 already defined)
+(label V20182 already defined)
+(label V20183 already defined)
+(label V20191 already defined)
+(label V20192 already defined)
+(label V20193 already defined)
+(label V20201 already defined)
+(label V20202 already defined)
+(label V20203 already defined)
+(label V2020B1 already defined)
+(label V2020B2 already defined)
+(label V2020B3 already defined)
+(label V2020C1 already defined)
+(label V2020C2 already defined)
+(label V2020C3 already defined)
+(label V2020D1 already defined)
+(label V2020D2 already defined)
+(label V2020D3 already defined)
+(label V2020E1 already defined)
+(label V2020E2 already defined)
+(label V2020E3 already defined)
+(label V30061 already defined)
+(label V30062 already defined)
+(label V30063 already defined)
+(label V30071 already defined)
+(label V30072 already defined)
+(label V30073 already defined)
+(label V30081 already defined)
+(label V30082 already defined)
+(label V30083 already defined)
+(label V30091 already defined)
+(label V30092 already defined)
+(label V30093 already defined)
+(label V30101 already defined)
+(label V30102 already defined)
+(label V30103 already defined)
+(label V30111 already defined)
+(label V30112 already defined)
+(label V30113 already defined)
+(label V30121 already defined)
+(label V30122 already defined)
+(label V30123 already defined)
+(label V30131 already defined)
+(label V30132 already defined)
+(label V30133 already defined)
+(label V30141 already defined)
+(label V30142 already defined)
+(label V30143 already defined)
+(label V30151 already defined)
+(label V30152 already defined)
+(label V30153 already defined)
+(label V30161 already defined)
+(label V30162 already defined)
+(label V30163 already defined)
+(label V30171 already defined)
+(label V30172 already defined)
+(label V30173 already defined)
+(label V30181 already defined)
+(label V30182 already defined)
+(label V30183 already defined)
+(label V30191 already defined)
+(label V30192 already defined)
+(label V30193 already defined)
+(label V30201 already defined)
+(label V30202 already defined)
+(label V30203 already defined)
+(label V30211 already defined)
+(label V30212 already defined)
+(label V30213 already defined)
+(label V30221 already defined)
+(label V30222 already defined)
+(label V30223 already defined)
+(label V30231 already defined)
+(label V30232 already defined)
+(label V30233 already defined)
+(label V40061 already defined)
+(label V40062 already defined)
+(label V40063 already defined)
+(label V40071 already defined)
+(label V40072 already defined)
+(label V40073 already defined)
+(label V40081 already defined)
+(label V40082 already defined)
+(label V40083 already defined)
+(label V40091 already defined)
+(label V40092 already defined)
+(label V40093 already defined)
+(label V40101 already defined)
+(label V40102 already defined)
+(label V40103 already defined)
+(label V40111 already defined)
+(label V40112 already defined)
+(label V40113 already defined)
+(label V40121 already defined)
+(label V40122 already defined)
+(label V40123 already defined)
+(label V40132 already defined)
+(label V40133 already defined)
+(label V40142 already defined)
+(label V40143 already defined)
+(label V40152 already defined)
+(label V40153 already defined)
+(label V40162 already defined)
+(label V40163 already defined)
+(label V40171 already defined)
+(label V40172 already defined)
+(label V40173 already defined)
+(label V4017A1 already defined)
+(label V4017A2 already defined)
+(label V4017A3 already defined)
+(label V4017B1 already defined)
+(label V4017B2 already defined)
+(label V4017B3 already defined)
+(label V40191 already defined)
+(label V40192 already defined)
+(label V40193 already defined)
+(label V40202 already defined)
+(label V40203 already defined)
+(label V40211 already defined)
+(label V40212 already defined)
+(label V40213 already defined)
+(label V40221 already defined)
+(label V40222 already defined)
+(label V40223 already defined)
+(label V40231 already defined)
+(label V40232 already defined)
+(label V40233 already defined)
+(label V40241 already defined)
+(label V40242 already defined)
+(label V40243 already defined)
+(label V40251 already defined)
+(label V40252 already defined)
+(label V40253 already defined)
+(label V40261 already defined)
+(label V40262 already defined)
+(label V40263 already defined)
+(label V40271 already defined)
+(label V40272 already defined)
+(label V40273 already defined)
+(label V40281 already defined)
+(label V40282 already defined)
+(label V40283 already defined)
+(label V40291 already defined)
+(label V40292 already defined)
+(label V40293 already defined)
+(label V40301 already defined)
+(label V40302 already defined)
+(label V40303 already defined)
+(label V40311 already defined)
+(label V40312 already defined)
+(label V40313 already defined)
+(label V40321 already defined)
+(label V40322 already defined)
+(label V40323 already defined)
+(label V40331 already defined)
+(label V40332 already defined)
+(label V40333 already defined)
+(label V40341 already defined)
+(label V40342 already defined)
+(label V40343 already defined)
+(label V40351 already defined)
+(label V40352 already defined)
+(label V40353 already defined)
+(label V40361 already defined)
+(label V40362 already defined)
+(label V40363 already defined)
+(label V40371 already defined)
+(label V40372 already defined)
+(label V40373 already defined)
+(label V40381 already defined)
+(label V40382 already defined)
+(label V40383 already defined)
+(label V40391 already defined)
+(label V40392 already defined)
+(label V40393 already defined)
+(label V40401 already defined)
+(label V40402 already defined)
+(label V40403 already defined)
+(label V40411 already defined)
+(label V40412 already defined)
+(label V40413 already defined)
+(label V40421 already defined)
+(label V40422 already defined)
+(label V40423 already defined)
+(label V40431 already defined)
+(label V40432 already defined)
+(label V40433 already defined)
+(label V40441 already defined)
+(label V40442 already defined)
+(label V40443 already defined)
+(label V40451 already defined)
+(label V40452 already defined)
+(label V40453 already defined)
+(label V40461 already defined)
+(label V40462 already defined)
+(label V40463 already defined)
+(label V40471 already defined)
+(label V40472 already defined)
+(label V40473 already defined)
+(label V40481 already defined)
+(label V40482 already defined)
+(label V40483 already defined)
+(label V40491 already defined)
+(label V40492 already defined)
+(label V40493 already defined)
+(label V40501 already defined)
+(label V40502 already defined)
+(label V40503 already defined)
+(label V50061 already defined)
+(label V50062 already defined)
+(label V50063 already defined)
+(label V50071 already defined)
+(label V50072 already defined)
+(label V50073 already defined)
+(label V50081 already defined)
+(label V50082 already defined)
+(label V50083 already defined)
+(label V50092 already defined)
+(label V50093 already defined)
+(label V50111 already defined)
+(label V50112 already defined)
+(label V50113 already defined)
+(label V60061 already defined)
+(label V60062 already defined)
+(label V60063 already defined)
+(label V60081 already defined)
+(label V60082 already defined)
+(label V60083 already defined)
+(label V60091 already defined)
+(label V60092 already defined)
+(label V60093 already defined)
+(label V60101 already defined)
+(label V60102 already defined)
+(label V60103 already defined)
+(label V60111 already defined)
+(label V60112 already defined)
+(label V60113 already defined)
+(label V60121 already defined)
+(label V60122 already defined)
+(label V60123 already defined)
+(label V60131 already defined)
+(label V60132 already defined)
+(label V60133 already defined)
+(label V60141 already defined)
+(label V60142 already defined)
+(label V60143 already defined)
+(label V60151 already defined)
+(label V60152 already defined)
+(label V60153 already defined)
+(label V60161 already defined)
+(label V60162 already defined)
+(label V60163 already defined)
+(label V60171 already defined)
+(label V60172 already defined)
+(label V60173 already defined)
+(label V60181 already defined)
+(label V60182 already defined)
+(label V60183 already defined)
+(label V60191 already defined)
+(label V60192 already defined)
+(label V60193 already defined)
+year: 2016
+(label STATE already defined)
+(label INCDATE already defined)
+(label RECSADM already defined)
+(label RECSOFS already defined)
+(label RECSPRP already defined)
+(label RECSVIC already defined)
+(label RECSOFR already defined)
+(label RECSARR already defined)
+(label BH010 already defined)
+(label BH011 already defined)
+(label BH012 already defined)
+(label BH013 already defined)
+(label BH015 already defined)
+(label BH017 already defined)
+(label BH018 already defined)
+(label BH020 already defined)
+(label BH021 already defined)
+(label BH024 already defined)
+(label BH025 already defined)
+(label BH028 already defined)
+(label BH029 already defined)
+(label BH032 already defined)
+(label BH033 already defined)
+(label BH036 already defined)
+(label BH037 already defined)
+(label BH059 already defined)
+(label V1007 already defined)
+(label V1008 already defined)
+(label V1009 already defined)
+(label V1010 already defined)
+(label V1011 already defined)
+(label V1013 already defined)
+(label V1014 already defined)
+(label V1016 already defined)
+(label V20061 already defined)
+(label V20062 already defined)
+(label V20063 already defined)
+(label V20071 already defined)
+(label V20072 already defined)
+(label V20073 already defined)
+(label V20081 already defined)
+(label V20082 already defined)
+(label V20083 already defined)
+(label V20091 already defined)
+(label V20092 already defined)
+(label V20093 already defined)
+(label V20101 already defined)
+(label V20102 already defined)
+(label V20103 already defined)
+(label V20111 already defined)
+(label V20112 already defined)
+(label V20113 already defined)
+(label V20121 already defined)
+(label V20122 already defined)
+(label V20123 already defined)
+(label V20131 already defined)
+(label V20132 already defined)
+(label V20133 already defined)
+(label V20141 already defined)
+(label V20142 already defined)
+(label V20143 already defined)
+(label V20151 already defined)
+(label V20152 already defined)
+(label V20153 already defined)
+(label V20161 already defined)
+(label V20162 already defined)
+(label V20163 already defined)
+(label V20171 already defined)
+(label V20172 already defined)
+(label V20173 already defined)
+(label V20181 already defined)
+(label V20182 already defined)
+(label V20183 already defined)
+(label V20191 already defined)
+(label V20192 already defined)
+(label V20193 already defined)
+(label V20201 already defined)
+(label V20202 already defined)
+(label V20203 already defined)
+(label V2020B1 already defined)
+(label V2020B2 already defined)
+(label V2020B3 already defined)
+(label V2020C1 already defined)
+(label V2020C2 already defined)
+(label V2020C3 already defined)
+(label V2020D1 already defined)
+(label V2020D2 already defined)
+(label V2020D3 already defined)
+(label V2020E1 already defined)
+(label V2020E2 already defined)
+(label V2020E3 already defined)
+(label V30061 already defined)
+(label V30062 already defined)
+(label V30063 already defined)
+(label V30071 already defined)
+(label V30072 already defined)
+(label V30073 already defined)
+(label V30081 already defined)
+(label V30082 already defined)
+(label V30083 already defined)
+(label V30091 already defined)
+(label V30092 already defined)
+(label V30093 already defined)
+(label V30101 already defined)
+(label V30102 already defined)
+(label V30103 already defined)
+(label V30111 already defined)
+(label V30112 already defined)
+(label V30113 already defined)
+(label V30121 already defined)
+(label V30122 already defined)
+(label V30123 already defined)
+(label V30131 already defined)
+(label V30132 already defined)
+(label V30133 already defined)
+(label V30141 already defined)
+(label V30142 already defined)
+(label V30143 already defined)
+(label V30151 already defined)
+(label V30152 already defined)
+(label V30153 already defined)
+(label V30161 already defined)
+(label V30162 already defined)
+(label V30163 already defined)
+(label V30171 already defined)
+(label V30172 already defined)
+(label V30173 already defined)
+(label V30181 already defined)
+(label V30182 already defined)
+(label V30183 already defined)
+(label V30191 already defined)
+(label V30192 already defined)
+(label V30193 already defined)
+(label V30201 already defined)
+(label V30202 already defined)
+(label V30203 already defined)
+(label V30211 already defined)
+(label V30212 already defined)
+(label V30213 already defined)
+(label V30221 already defined)
+(label V30222 already defined)
+(label V30223 already defined)
+(label V30231 already defined)
+(label V30232 already defined)
+(label V30233 already defined)
+(label V40061 already defined)
+(label V40062 already defined)
+(label V40063 already defined)
+(label V40071 already defined)
+(label V40072 already defined)
+(label V40073 already defined)
+(label V40081 already defined)
+(label V40082 already defined)
+(label V40083 already defined)
+(label V40091 already defined)
+(label V40092 already defined)
+(label V40093 already defined)
+(label V40101 already defined)
+(label V40102 already defined)
+(label V40103 already defined)
+(label V40111 already defined)
+(label V40112 already defined)
+(label V40113 already defined)
+(label V40121 already defined)
+(label V40122 already defined)
+(label V40123 already defined)
+(label V40132 already defined)
+(label V40133 already defined)
+(label V40142 already defined)
+(label V40143 already defined)
+(label V40152 already defined)
+(label V40153 already defined)
+(label V40162 already defined)
+(label V40163 already defined)
+(label V40171 already defined)
+(label V40172 already defined)
+(label V40173 already defined)
+(label V4017A1 already defined)
+(label V4017A2 already defined)
+(label V4017A3 already defined)
+(label V4017B1 already defined)
+(label V4017B2 already defined)
+(label V4017B3 already defined)
+(label V40191 already defined)
+(label V40192 already defined)
+(label V40193 already defined)
+(label V40202 already defined)
+(label V40203 already defined)
+(label V40211 already defined)
+(label V40212 already defined)
+(label V40213 already defined)
+(label V40221 already defined)
+(label V40222 already defined)
+(label V40223 already defined)
+(label V40231 already defined)
+(label V40232 already defined)
+(label V40233 already defined)
+(label V40241 already defined)
+(label V40242 already defined)
+(label V40243 already defined)
+(label V40251 already defined)
+(label V40252 already defined)
+(label V40253 already defined)
+(label V40261 already defined)
+(label V40262 already defined)
+(label V40263 already defined)
+(label V40271 already defined)
+(label V40272 already defined)
+(label V40273 already defined)
+(label V40281 already defined)
+(label V40282 already defined)
+(label V40283 already defined)
+(label V40291 already defined)
+(label V40292 already defined)
+(label V40293 already defined)
+(label V40301 already defined)
+(label V40302 already defined)
+(label V40303 already defined)
+(label V40311 already defined)
+(label V40312 already defined)
+(label V40313 already defined)
+(label V40321 already defined)
+(label V40322 already defined)
+(label V40323 already defined)
+(label V40331 already defined)
+(label V40332 already defined)
+(label V40333 already defined)
+(label V40341 already defined)
+(label V40342 already defined)
+(label V40343 already defined)
+(label V40351 already defined)
+(label V40352 already defined)
+(label V40353 already defined)
+(label V40361 already defined)
+(label V40362 already defined)
+(label V40363 already defined)
+(label V40371 already defined)
+(label V40372 already defined)
+(label V40373 already defined)
+(label V40381 already defined)
+(label V40382 already defined)
+(label V40383 already defined)
+(label V40391 already defined)
+(label V40392 already defined)
+(label V40393 already defined)
+(label V40401 already defined)
+(label V40402 already defined)
+(label V40403 already defined)
+(label V40411 already defined)
+(label V40412 already defined)
+(label V40413 already defined)
+(label V40421 already defined)
+(label V40422 already defined)
+(label V40423 already defined)
+(label V40431 already defined)
+(label V40432 already defined)
+(label V40433 already defined)
+(label V40441 already defined)
+(label V40442 already defined)
+(label V40443 already defined)
+(label V40451 already defined)
+(label V40452 already defined)
+(label V40453 already defined)
+(label V40461 already defined)
+(label V40462 already defined)
+(label V40463 already defined)
+(label V40471 already defined)
+(label V40472 already defined)
+(label V40473 already defined)
+(label V40481 already defined)
+(label V40482 already defined)
+(label V40483 already defined)
+(label V40491 already defined)
+(label V40492 already defined)
+(label V40493 already defined)
+(label V40501 already defined)
+(label V40502 already defined)
+(label V40503 already defined)
+(label V50061 already defined)
+(label V50062 already defined)
+(label V50063 already defined)
+(label V50071 already defined)
+(label V50072 already defined)
+(label V50073 already defined)
+(label V50081 already defined)
+(label V50082 already defined)
+(label V50083 already defined)
+(label V50092 already defined)
+(label V50093 already defined)
+(label V50111 already defined)
+(label V50112 already defined)
+(label V50113 already defined)
+(label V60061 already defined)
+(label V60062 already defined)
+(label V60063 already defined)
+(label V60081 already defined)
+(label V60082 already defined)
+(label V60083 already defined)
+(label V60091 already defined)
+(label V60092 already defined)
+(label V60093 already defined)
+(label V60101 already defined)
+(label V60102 already defined)
+(label V60103 already defined)
+(label V60111 already defined)
+(label V60112 already defined)
+(label V60113 already defined)
+(label V60121 already defined)
+(label V60122 already defined)
+(label V60123 already defined)
+(label V60131 already defined)
+(label V60132 already defined)
+(label V60133 already defined)
+(label V60141 already defined)
+(label V60142 already defined)
+(label V60143 already defined)
+(label V60151 already defined)
+(label V60152 already defined)
+(label V60153 already defined)
+(label V60161 already defined)
+(label V60162 already defined)
+(label V60163 already defined)
+(label V60171 already defined)
+(label V60172 already defined)
+(label V60173 already defined)
+(label V60181 already defined)
+(label V60182 already defined)
+(label V60183 already defined)
+(label V60191 already defined)
+(label V60192 already defined)
+(label V60193 already defined)
+
+. 
+. duplicates drop
+
+Duplicates in terms of all variables
+
+(0 observations are duplicates)
+
+. 
+. collapse (sum) rape* (firstnm) idt rdt, by(ino) fast
+
+. 
+. compress
+  variable idt was float now int
+  variable rdt was float now int
+  variable rape was double now byte
+  variable rape_arrest was double now byte
+  (2,804,796 bytes saved)
+
+. 
+. collapse (sum) rape*  population1, by(rdt) fast
+variable population1 not found
+r(111);
+
+end of do-file
+r(111);
