@@ -99,7 +99,7 @@ In this paper, I explore these questions using incident-level FBI data of crime 
 
 \section{Background}
 
-Since Becker outlined his economic model of crime, illicit activities have continued to have a place in the economic literature. Sexual assault has received a share of this attention, although perhaps less so than other crimes. One reason for this deficit is the difficulty of gathering accurate data on sexual assault. Crime is under-reported in general, sexual assault especially \cite{fisher_sexual_2000}. This under-reporting makes the study of sexual assault inherently difficult, because no study will ever be able to accurately gauge how many assaults actually occurred over a given time period. Studies that use surveys to estimate this under-reporting are always subject to under-reporting of their own, as even simply answering a survey question about sexual assault is difficult for many victims.\todo{Need source} When observing an increase in reports, the inability to observe assault numbers also creates issues of inference. Are reports increasing because people feel more safe reporting their assaults, or because assaults themselves are increasing? Different papers approach these issues in different ways when dealing with sexual assault.
+Since Becker outlined his economic model of crime, illicit activities have continued to have a place in the economic literature. Sexual assault has received a share of this attention, although perhaps less so than other crimes. One reason for this deficit is the difficulty of gathering accurate data on sexual assault. Crime is under-reported in general, sexual assault especially \cite{fisher_sexual_2000}. This under-reporting makes the study of sexual assault inherently difficult, because no study will ever be able to accurately gauge how many assaults actually occurred over a given time period. Studies that use surveys to estimate this under-reporting are always subject to under-reporting of their own, as even simply answering a survey question about sexual assault is difficult for many victims \cite{du_mont_role_2003}. When observing an increase in reports, the inability to observe assault numbers also creates issues of inference. Are reports increasing because people feel more safe reporting their assaults, or because assaults themselves are increasing? Different papers approach these issues in different ways when dealing with sexual assault.
 
 Recently, several papers in economics have focused on sexual assault and harassment. \citeA{lindo_college_2018} looks at the effect of partying culture on reports of sexual assault using the plausible exogeneity of Division 1 football games. The authors find a 28\% increase in rape reports associated with game days.\footnote{This paper also uses the FBI incident-level data, and I use their code in my analysis.} \citeA{bisschop_street_2017} investigates the effect of opening a 'Tippelzone,' an area of a city where street prostitution is legalized, on reported sexual assaults. Using a difference-in-difference approach across different cities, the authors find decreases in registered sex crime of 30 to 40\% in the two years after the zone is opened. Depending on the type of zone, there are also decreases in associated crimes such as crimes related to drugs. \citeA{borker_safety_2018} investigates how perceived risk of street harassment affects women's human capital attainment, finding that women are willing to spend twice the annual cost of tuition of a university for a route to university that is perceived to be one standard deviation safer from sexual harassment, and to attend worse universities to increase their perceived safety.
 
@@ -111,11 +111,7 @@ These studies have their limitations. Because they all use self-reported surveys
 
 My paper aims to contribute to the literature by considering the effect that national coverage of sexual assault cases and allegations have on sexual assault reporting. This research question is interesting because it has not been approached before, but also because it lends itself to a different type of analysis: time-series and instrumental variable analysis of FBI data of actual reports to police. This data would not be able to answer many of the questions above because it does not have the detailed information that the NCVS has on victims, nor does it have any indication of victims that do not report. However, for something like news coverage, which I measure at a national level and for which a number of exogenous shocks can be identified, the FBI data works well. By using actual reports to police instead of reports and non-reports to police from survey data, I am able to escape the issue of selection-bias \todo{Explain why}. I am also able to address causality more clearly, through instruments using exogenous shocks \todo{and just the fact that causality in one direction is just likely much stronger}. There are clear limitations to my approach as well, which I discuss in my conclusion section, but it does avoid many of the problems discussed above.
 
-This question of the effect that news coverage has is important. Most important is its sign, because a negative effect of news coverage could have serious police implications. If research found that coverage of sexual assault cases had a significant deppresing effect on the reporting of new sexual assaults, this might be cause for policy either within the media industry or from government to reduce such coverage. An allegory that comes to mind is the coverage of suicide cases. It is well established that media coverage of suicide tends to have a copycat effect \cite{stack_media_2003}. This is undesirable for a society that wishes to minimize loss of life, and so many countries such as New Zealand, Australia and Canada have strict guidelines on how the media can report on suicide. In the US, there are a number of organizations that advocate for reduced and more careful reporting of suicide \cite{noauthor_home_nodate}. If reporting on sexual assault produced
-There are a number of organizations that advocate safe su
-\begin{itemize}
-    \item Add more about why this is important. Mostly: if the effect was negative, it would be pressing to reduce this coverage, as with suicide
-\end{itemize}
+This question of the effect that news coverage has is important. Most important is its sign, because a negative effect of news coverage could have serious police implications. If research found that coverage of sexual assault cases had a significant deppresing effect on the reporting of new sexual assaults, this might be cause for policy either within the media industry or from government to reduce such coverage. An allegory that comes to mind is the coverage of suicide cases. It is well established that media coverage of suicide tends to have a copycat effect \cite{stack_media_2003}. This is undesirable for a society that wishes to minimize loss of life, and so many countries such as New Zealand, Australia and Canada have strict guidelines on how the media can report on suicide. In the US, there are a number of organizations that advocate for reduced and more careful reporting of suicide \cite{noauthor_reportingonsuicide.org_2019}. If reporting on sexual assault produced the opposite of a copycat effect, i.e. it stopped people from reporting their assaults, one might be incline to recommend similar policy for the coverage of sexual assault cases. \todo{Need some reason that it's still interesting if positive!!}
 
 Previous economic research has used search volume in similar ways.
 \begin{itemize}
@@ -124,24 +120,9 @@ Previous economic research has used search volume in similar ways.
 
 \section{Data Summary}
 
-I have two main data sources for this project: The National Incident-Based Reporting System (NIBRS) and relative search volumes from Google Trends. 
+I have two main data sources for this project: The National Incident-Based Reporting System (NIBRS) and relative search volumes from Google Trends. The NIBRS has data on individual reports of crime to police stations, from 1991 to 2016. About 25\% of the population is covered, as some states only report summary statistics while others do not give data at all. This percentage increased since 1991 as more stations have begun reporting. There are timestamps for both report and incident date and time, and the data includes some auxiliary information about the victim in question, including their age, race, and whether the incident involved alcohol. Because the data is by incident, it can be collapsed to any specification: nationally daily, by state, etc. When collapsing, I remove from each day incidents that were both reported and occurred that day - i.e. I only keep reports of events from before the day in question. In this way, I hope to avoid findings that include shifts in assaulting behavior from coverage of sexual assault cases, and only include shifts in reporting behavior. 
 
-\begin{itemize}
-    \item National Incident-Based Reporting System (NIBRS) Data
-    \begin{itemize}
-        \item Individual reports of crime to police stations. 1991 to 2016.
-        \item About 40\% of population covered (some police stations don’t report) and this number has increased since 1991 as more stations have begun reporting.
-        \item Timestamped, both report and incident datetime, lots of auxiliary information i.e. about the victim in question
-        \item Because is by incident, can be collapsed to any specification: Nationally Daily, State-by-Week, etc. 
-    \end{itemize}
-    \item Google Trends data
-    \begin{itemize}
-        \item Daily and weekly trends for “sexual assault” 2008 to 2018 \footnote{Decided on "sexual assault" as "rape" tended to have a lot of unsavoury related searches, mostly pornography related, whereas searches for sexual assault tended to be related to cases of sexual assault. I test both for salience, and "rape" is not responsive to Title IX cases while "sexual assault" is. May try to add both back in.} \todo{Can probably change this to 2004 as not using News, need to rerun}
-        \item National and statewide trends.
-        \item Relative trends out of 100, scaled to 2008 numbers, so some numbers later on are higher.
-        \item Merge daily with police data for most of my investigation. Thus have reports of sexual assault grouped by either report or incident date together with Google Trends, daily, from 2008 to 2016. 
-    \end{itemize}
-\end{itemize}
+The data from Google Trends is relative search volume of a given term, scaled so that 100 is the highest volume over that time period. I collect data in six month periods, as this is required to get daily values, and then scale the data to the values in the first half of 2008 using values from overlapping dates. I use the search term “sexual assault”.\footnote{I decided on "sexual assault" as "rape" tended to have a lot of unsavoury related searches, mostly pornography related, whereas searches for sexual assault tended to be related to cases of sexual assault. "rape" also tended to be a lot noisier than "sexual assault" around times of a high profile sexual assault case} Google Trends can provide data nationally or by state, and I use both in my analysis. I merge the two datasets by day for national data and by day and state for state data.
 
 I'd like to have a small table of summary statistics here.
 
@@ -149,17 +130,21 @@ I'd like to have a small table of summary statistics here.
 
 I spend the first half of this section looking at this decision from a theoretical perspective, and consider why news coverage of sexual assault cases and allegations could be a cost or a benefit. The second half details my empirical methodology.
 
-The decision to report can be considered as a probabilistic decision that factors in both costs and benefits of reporting \cite{allen_reporting_2007}. 
+The decision to report can be considered as a probabilistic decision that factors in both costs and benefits of reporting \cite{allen_reporting_2007}. Consider the simple model of the decision a victim makes:
 
+$$
+P(report_t) = \beta_0 + \beta_1 coverage + \varepsilon
+$$
 
+Where $report_t$ is a binary indicator of whether the victim will report their assault to the police in time period $t$, $coverage$ is a measure of news coverage of sexual assault related news - in my case, approximated with Google search volume - and $\varepsilon$ is an error term that includes other factors that might affect the decision to report, such as relation to the perpetrator or whether the event was violent. This paper hopes to estimate the sign of $\beta_1$ by considering the effect of coverage on total report numbers. 
 
-\begin{itemize}
-    \item Discussion of why someone might not report, fueled by \citeA{allen_reporting_2007} (where we see that a social safety net helps ease the reporting decision among other things) and \citeA{du_mont_role_2003} as well as any other papers I find about this
-    \item Pull that discussion into a more formal discussion of the costs and uncertainty that one faces in reporting, and how coverage of sexual assault might affect that in one way or another: by lowering or raising expected cost of social stigma, by inspiring and perhaps increasing expected benefit, the idea that reporting can help reduce sexual assault. More here, need to come up with as exhaustive a list as I can, as this is important.
-    \item Also discuss possible expectations about subgroups. 
-\end{itemize}
+It is not clear what we should expect the sign of $\beta_1$ to be. Coverage of sexual assault stories might decrease the social stigma that victims see associated with reporting a sexual assault, and thus ease the reporting decision for them. It might inspire victims to see other victims step forward. It might simply remind victims that they can report their assualt as a crime. These ideas are what lie behind the \#metoo movement, where a high-profile set of allegations against Harvey Weinstein encouraged a number of other victims to come forward and discuss their assaults. However, we might expect effects in the other direction too. Victims might see the way that prominent reporters of sexual assault are treated - for example, the flurry of derision directed at Christine Blasey Ford by those in even the highest seats of power - and conclude that the costs of reporting are higher than they initially thought. They might feel that reporting their assault in the wake of a high profile case could reduce the chance of people believing them. \todo{Any other reasons?}
 
-My initial regressions are time series regressions. They are at the daily level, and are of the form: 
+The data that I use allows the examination of subgroups by age, race and by whether the incident involved alcohol, so it is worth considering how we might expect effects to vary across these categories. Regardless of the sign of effect, we might expect the magnitude to be greater for younger than for older victims for a number of reasons. Young people are bigger consumers of media than older people \todo{Need source} and so might be more likely to read about prominent allegations in the news. It also seems reasonable to assume that for any of the possible effects discussed above, magnitudes would diminish after the first time a victim saw coverage related to sexual assault. \todo{Is there another reason that older people might not find it? Might not find inspiration/less optimism about the process/something?} There is no clear prediction to be made about how the effect might vary across races. One might expect the effect to be more positive among incidents that don't involve alcohol than those that do, as in those events the victims generally have greater ancillary evidence \cite{allen_reporting_2007}, although this prediction is not very strong. \todo{In general need this to be worded much better and include more evidence from other papers.}
+
+A significant issue with this type of study is that I have no sense of how numbers of actual assaults are changing over time. This could mean that an increase in reports of sexual assaults is being driven by an increase in the reporting of assaults or the number of actual assaults. These two outcomes would have very different meanings and would lead to very different policy responses. It is thus very important to attempt to correct for this. I attempt to do this in my paper by dropping all events whose incident and report-dates are the same - that is, events that are reported on the day that they are committed. Using this measure of reports, if we see high search volume days having high numbers of reports, it is reasonable to assume that the increase is not being driven by increases in actual assaults (as these assaults would have had to happen during the high trend, i.e. on that day, and thus they would not have been counted). This is not a perfect correction. Many incidents only have report dates, presumably because the victim wasn't sure or didn't want to report the date that the incident occurred on \todo{Include percentage that do/don't}. Some of these may have occurred on the day they were reported, and so my strategy of deletion may not be complete.
+
+In order to estimate the sign and magnitude of $\beta_1$ discussed above, I run a series of time series regressions and supplement these results with instrumental variable analysis. My initial regressions are time series regressions at the daily level, and are of the form: 
 
 $$ 
 y_{t} = \beta_{0} + \sum_{b=-7}^{7} \delta_{b} x_{t+b} + \gamma_{t} + \varepsilon_{t}
@@ -167,45 +152,47 @@ $$
 
 Where $y_{t}$ is the outcome variable in question; $x_{t+b}$ is the independent variable in question along with a set of leads and lags, and $\gamma{t}$ is a vector including day-of-week, week-of-year and year fixed-effects. These fixed effects should take care of most seasonality in the data. I include 7 leads and lags as a way to account for events happening in close proximity to each other without reducing degrees of freedom unnecessarily.
 
-To accompany these time series results, I find events that are plausibly exogenous shocks to the volume of coverage of sexual assault-related topics, and use these shocks to instrument for the effect of an increase in such coverage on numbers of reports of sexual assault. These events are collected using Google's "Related Queries" function, that collects searches that are made in conjunction with the term in question over a specified time period. I look at times at which the Google Trend for 'sexual assault' is above 60\% of its 6-month maximum for the 9 years in question, which gives 563 days. For each day, I look for distinct related queries. For example, on November 19, 2014, 'Bill Cosby' is the top related query, as he is for the next several days. I count only the first occurrence of these terms as a distinct 'high profile event.' 
+To accompany these time series results, I find events that are plausibly exogenous shocks to the volume of coverage of sexual assault-related topics, and use these shocks to instrument for the effect of an increase in such coverage on numbers of reports of sexual assault. These events are collected using Google's "Related Queries" function, that collects searches that are made in conjunction with the term in question over a specified time period. I look at times at which the Google Trend for 'sexual assault' is above 60\% of its 6-month maximum for the 9 years in question, which gives 563 days. For each day, I look for distinct related queries. For example, on November 19, 2014, 'Bill Cosby' is the top related query, as he is for the next several days. I count only the first occurrence of these terms as a distinct 'high profile event.' To use these events as instruments for the Google Trend, they must be correlated with the Google Trend and uncorrelated with the error term. I analyse the first requirement in the results section. 
 
-To use these events as instruments for the Google Trend, they must be correlated with the Google Trend and uncorrelated with the error term. To test the effect of these 'high profile events' on the Google Trend, I graph the response of the Trend before and after an event takes place, including fixed effects for year, week of year and day of week. This is shown in Figure~\ref{figure:events_trend}. As can be seen, these events have sizable effects on the Google Trend for 'sexual assault' that last for about 3 days. Thus they look to be good examples of random positive shocks to the google trend. To check whether reports seem to be impacted by these events occurring, I look at reports to police before and after these events in three day bins, including the same fixed effects as above. This is shown in Figure~\ref{figure:events_police_binned}. We see that reports do indeed increase around the date of an event, albeit with large standard errors. 
+The second requirement - that these events are uncorrelated with the error term - requires some qualitative justification, as components of the error term are inherently unobservable. This requirement can be reworded as: high profile events cannot affect report rates through any avenue except through intensity of news coverage, here measured by search volume. Is it possible that these events affect reporting in other ways? I argue that it is not likely in any significant way. It is possible that these events themselves involve reports to police on the days of news coverage - i.e. that an accuser of a prominent case would report to the police and this would be counted in that day's reports - but this could not contribute in any significant way to total daily reports, given that more than 100 reports of rape are filed every day. Any other avenue \todo{Need better word, there's an econ word for this. Need another example of an avenue too.} would likely be caught in the proxy of search volume. Thus this assumption about the instrument seems valid.
 
-\begin{figure}
-\includegraphics[width=\linewidth]{figures/events_trend.eps}
-\caption{Google Trends before and after High Profile Events} \label{figure:events_trend}
-\end{figure}
+I use these events in a number of two stage least squares regressions. To take advantage of the 3 day window of significant effects on the Google Trend and reduce the standard errors of results, I bin results into the three day period including the event and two lag variables. I use two different methods of two-stage least squares regressions to obtain results. The first uses a binary variable $event\_bin$ as the instrument, which is 1 if a high-profile event occurred in the past 3 days and 0 otherwise. The second uses dummy for each individual event's bin as the instrument. This means that while the first method obtains an estimate using the variation in trend and reports between event- and non-event- dates, the second uses the variation between events. I shall refer to these as IV Specification 1 and IV Specification 2 for the rest of the paper.  \todo{Outline here the first stage (different for each?) and the second stage, in equations}
 
-\begin{figure}
-\includegraphics[width=\linewidth]{figures/events_police_binned.eps}
-\caption{Reports to the FBI before and after High Profile Events, Binned} \label{figure:events_police_binned}
-\end{figure}
-
-\todo{Should have a discussion here about why this is plausibly exogenous, why it is not correlated with the error term, and why that is useful}
-
-I use these events in a number of two stage least squares regressions. To take advantage of the 3 day window of significant effects on the Google Trend and reduce the standard errors of results, I bin results into the three day period including the event and two lag variables.
-
-\todo{Outline here the first stage (different for each?) and the second stage, in equations}
-
-My panel data regressions are of the form: \todo{Remove if not showing, or at least check over}
+The first stage for the first IV specification is thus modeled as:
 
 $$ 
-y_{i,t} = \beta_{0} + \sum_{b=-7}^{7} \delta_{b} x_{i,t+b} + \alpha_{i} + \gamma_{t} + \varepsilon_{i,t}
+trend_{t} = \delta_{0} + \delta_1 event\_bin_t + \epsilon_{t}
 $$
 
-Where $y_{i,t}$ is the outcome variable in question; $x_{i,t+b}$ is the independent variable in question along with a set of leads and lags, $\alpha_{i}$ is a fixed effect at the level of the panel, usually by state or by school, and $\gamma{t}$ is a vector including year fixed-effects, as well as day-of-week and week-of-year fixed effects if the data is at the daily level.
-
-My event study regressions are of the form: \todo{LIKELY DELETE}
+And for the second IV specification is modeled as:
 
 $$ 
-y_{t} = \beta_{0} + \sum_{b=-7}^{7} \delta_{b} x_{t+b} + \gamma_{t} + \varepsilon_{t}
+trend_{t} = \delta_{0} + \delta_1 events\_factor_t + \epsilon_{t}
 $$
 
-Where $y_{t}$ is the outcome variable in question; $x_{t+b}$ is a dummy for the event in question along with a set of leads and lags, and $\gamma{t}$ is a vector including day-of-week, week-of-year and year fixed-effects.
+Where $events\_factor$ is a vector of dummy variables for each individual event. The second stage for both regressions is then:
+
+$$ 
+reports_{t} = \beta_{0} + \beta_1 \hat{trend} + \varepsilon_{t}
+$$
+
+Where $\hat{trend}$ is the predicted values of the given first stage. \todo{Add in fixed effects where they are used}
+
+To consider variation by state, I run a panel regression of the form:
+
+$$ 
+reports_{i,t} = \beta_{0} + \sum_{b=-7}^{7} \delta_{b} trend_{i,t+b} + \alpha_{i} + \gamma_{t} + \varepsilon_{i,t}
+$$
+
+Where $reports_{i,t}$ are reports in state $i$ on date $t$; $trend_{i,t+b}$ is the relative search volume in state $i$ on date $t$ along with a set of leads and lags, $\alpha_{i}$ is a fixed effect at the level of the state, and $\gamma{t}$ is a vector including year fixed-effects, day-of-week and week-of-year fixed effects. \todo{All results section needs to be changed to log form}
 
 \section{Results}
 
-I begin by running a time-series regression of reports of sexual assault to the FBI by report-date on national Google Trends for 'sexual assault'\todo{How best to note that it is in log form? once at the start? In every graph, in axes, in title?}. The results of this are shown in Figure~\ref{figure:police_trends_daily_logboth}. There is a clear, statistically significant effect on the first lag variable. I show this effect, as well as the same effect broken down by subgroups of age and race of the victim and whether the event was reported as involving alcohol, in the first column of Table~\ref{table:combinedtable}. To complement this time series analysis, I perform the same subgroup analysis with two different instrumental variable specifications as discussed in the methodology section, shown in columns 2 and 3 of Table~\ref{table:combinedtable}.
+I begin by running a time-series regression of reports of sexual assault to the FBI by report-date on national Google Trends for 'sexual assault'\todo{How best to note that it is in log form? once at the start? In every graph, in axes, in title?}. The results of this are shown in Figure~\ref{figure:police_trends_daily_logboth}. There is a clear, statistically significant effect on the first lag variable. I show this effect, as well as the same effect broken down by subgroups of age and race of the victim and whether the event was reported as involving alcohol, in the first column of Table~\ref{table:combinedtable}. 
+
+To complement this time series analysis, I perform the same subgroup analysis with two different instrumental variable specifications as discussed in the methodology section. 
+
+To test the effect of these 'high profile events' on the Google Trend, I graph the response of the Trend before and after an event takes place, including fixed effects for year, week of year and day of week. This is shown in Figure~\ref{figure:events_trend}. As can be seen, these events have sizable effects on the Google Trend for 'sexual assault' that last for about 3 days. Thus they look to be good examples of random positive shocks to the google trend. To check whether reports seem to be impacted by these events occurring, I look at reports to police before and after these events in three day bins, including the same fixed effects as above. This is shown in Figure~\ref{figure:events_police_binned}. We see that reports do indeed increase around the date of an event, albeit with large standard errors.  The results of the instrumental variable regressions are shown in columns 2 and 3 of Table~\ref{table:combinedtable}. 
 
 \begin{figure}
 \includegraphics[width=\linewidth]{figures/police_trend_daily_logboth.eps}
@@ -217,75 +204,41 @@ I begin by running a time-series regression of reports of sexual assault to the 
 \input{figures/combinedtable.tex}
 \end{table}
 
-All three specifications give positive coefficients for the overall effect, ranging in magnitude from 0.0568 to 0.219. To contextualize this, the mean daily number of reports per day from 2008 to 2016 was 110. \todo{Would median be more appropriate here?} According to the low estimate, a 1\% increase in the search volume for 'sexual assault' for a day leads to an increase of 0.062 reports, while the high estimate gives an increase of 0.24 reports. Given that the NIBRS data only covers 1/4 of the US, if we assume a homogenous effect across the country, these estimates become 0.25 and 0.96 reports respectively.
+\begin{figure}
+\includegraphics[width=\linewidth]{figures/events_trend.eps}
+\caption{Google Trends before and after High Profile Events} \label{figure:events_trend}
+\end{figure}
 
-To give further context, the increases in search volume depicted in Figure~\ref{figure:events_trend} give an average increase in search volume of 42\% over the day of the event and the two days following. Given these increases, one of these events occurring will result in a spike of between 31 and 121 reports nationally, according to my low and high estimates respectively. For 'big allegations,' these estimates are 46 and 178 reports nationally. \todo{Explain how I picked big allegations}
+\begin{figure}
+\includegraphics[width=\linewidth]{figures/events_police_binned.eps}
+\caption{Reports to the FBI before and after High Profile Events, Binned} \label{figure:events_police_binned}
+\end{figure}
 
-This increase appears to be driven by white reporters under 20 and to a lesser extent under 30, reporting incidents that did not involve alcohol. There are, however, significant limitations with this sub-group analysis. \todo{Beef up paragraph, explain that most null results likely because of lower n, explain what we can maybe see, i.e. young, white, non-alc victims definitely affected, all likely more than proportionally. Middle age people do not look like they are affected as much.}
+All three specifications give positive coefficients for the overall effect, ranging in magnitude from 0.0568 to 0.219. To contextualize this, the mean daily number of reports per day from 2008 to 2016 was 110. \todo{Would median be more appropriate here?} According to the low estimate, a 1\% increase in the search volume for 'sexual assault' for a day leads to an increase of 0.062 reports, while the high estimate gives an increase of 0.24 reports. Given that the NIBRS data only covers 1/4 of the US, if we assume a homogeneous effect across the country, these estimates become 0.25 and 0.96 reports respectively.
 
-I next look at variation in effect by state, to try to determine whether states with relatively higher trends on a given day have higher numbers of reports. \todo{Bad sentence here} I consider this using both a normal panel regression and using the same instrument as in Model 2 above. \footnote{I could not use the Model 3 with the panel dataset as there were two many collinearity issues.} Results are shown in Table~\ref{table:state_daily}. I fail to find significant results using either model, indicating that coverage at a more local level may not have the effects that national coverage does.
+To give further context, the increases in search volume depicted in Figure~\ref{figure:events_trend} give an average increase in search volume of 42\% over the day of the event and the two days following. Given these increases, one of these events occurring will result in a spike of between 31 and 121 reports nationally, according to my low and high estimates respectively. For events where the google trend was above 80\% of the 6-month maximum for 3 days (i.e. very large events), these estimates are 46 and 178 reports nationally.
+
+This increase appears to be driven by young reporters, as predicted above. Depending on the specification, there is also a significant effect (higher than the effect for young people) among reporters over 50, something non hypothesized. All specifications agree on only small positive or even some negative effects for victims between 20 and 50, although none of the effects are statistically significant. White reporters increase more than average under all specifications, and for the naive time series so do Black reporters, although the IV models fail to find significance here. Events with no alcohol involved increase at greater rates than average for all models, with events involving alcohol having null effects. There are, however, significant limitations with this sub-group analysis. As in the summary statistics table, most victims are young, white and reporting events that did not involve alcohol. It is perhaps not surprising, then, that these are the categories where we find statistical significance. Without more observations, it is difficult to say whether we are seeing differences in groups or simply large standard errors for subgroups with lower numbers of observations.
+
+I next look at variation in effect by state, to try to determine whether states with relatively higher trends on a given day have higher numbers of reports. \todo{Bad sentence here} I consider this using the  panel regression outlined above. Results are shown in Table~\ref{table:state_daily}. I fail to find significant results, indicating that coverage at a more local level may not have the effects that national coverage does. Again, however, this may be a case of individual states not having enough observations to give significance.
 
 \begin{table}[]
 \caption{Effect of increases in state Google Trend on reports of sexual assault} \label{table:state_daily}
 \input{figures/state_daily_reports_trend_iv.tex}
 \end{table}
 
-\section{Extra figures and results}
-
-Below I look at incident dates of incidents reported within a month after a high profile event, compared to the same for a sample of placebo dates. Trying to work out how to interpret this, and add error bars. \todo{Probably refer to this in conclusion under next possible steps}
-
-\begin{figure}
-\includegraphics[width=\linewidth]{figures/idt_analysis_2.eps}
-\end{figure}
-
-
-Bring up school reporting again? Don't think so. If I did my narrative would go something like this:
-\begin{itemize}
-    \item Maybe we also see effects for much more local cases
-    \item Potential evidencefor this: school reporting after title IX cases
-    \item Show huge increase in reports at schools after title IX cases get opened there, explain that the cases are very salient as shown in \citeA{lindo_any_2018}
-    \item However, looking closer this doesn't seem to hold up especially well
-    \item Figure showing that effect is only on the first case, not subsequent ones
-    \item Figures showing no increase in nearby schools or police stations (still need to rerun this, especially daily police) - maybe there is a small increase
-\end{itemize}
-If not, should have somewhere that school data was not feasible for x reasons (?)
+\clearpage
 \section{Conclusion}
 
-Then spend some time discussing a similar thing but for potential perpetators - expected cost of assault. Obviously even more than the other one this is a behaviour that is tough to rationalize, but it's not wild to think (and one would seriously hope) that at the margin these people can be influenced one way or another
-    \item Talk about the two in tandem, and again why hopefully reporting affects the second, and thus is important. If possible, this link would be great to try to estimate, but very difficult given the nature of the data. 
+Then spend some time discussing a similar thing but for potential perpetrators - expected cost of assault. Obviously even more than the other one this is a behaviour that is tough to rationalize, but it's not wild to think (and one would seriously hope) that at the margin these people can be influenced one way or another
 
-\clearpage
-\section{To Discuss}
+Talk about the two in tandem, and again why hopefully reporting affects the second, and thus is important. If possible, this link would be great to try to estimate, but very difficult given the nature of the data. 
 
-\begin{itemize}
-    \item IDT analysis graph - hopefully. Otherwise methodology of it. Probably just qualitative. I'm found of using it as a way to discuss possible next steps.
-    \item Talk about local/national T9 results with P Bayer. Bad news for my other results - other mechanisms? Although not the same type of event
-    \item Talk about methodology on trend. Log? Original Trend?
-    \item Best tables? Just one with overall effect, subgroups, columns are naive, instrument, log, log instrument? or something?
-    \item Tables/Figures draft approx sequence
-    \item Should make numbers national equivalent in tables? 
-    \item Should I run with year interactions/something to check changing effect? Not that many years?
-    \item IRF? Not sure I see what would be different than the graphs I have already
-    \item Intro/Background/how to break up? How long intro?
-    \item Summary statistics? What would be interesting?
-\end{itemize}
+Discuss whether any of these might be false reports. Hopefully have data to back it up.
 
+Discuss how this may be people coming forward more quickly, not just new reports, which are still interesting but not as meaningful.
 
-\clearpage 
-\section{Next Steps}
-
-\begin{itemize}
-    \item Run state fixed effects with weights by population (once decided) as well as state cases
-    \item Finish idt\_analysis. Graph
-    \item Do same for 50/100/200 random generated time segments depending on time the above takes, compare shapes
-    \item Check results on population1 - use if not ridiculous
-    \item Calculate average event effect, equivalent to the US. Note the assumption in homogeneous effect.
-    \item Find any more 
-    \item Write a paragraph on future work. More on perpetrator behavior. More on whether increased reports are true new reports or just earlier reports.
-    \item Put in methodology/somewhere about how this may be people reporting more quickly, not new reports. Assume some are new at least.
-    \item Include state panel data with date fixed effects somewhere - null
-    \item Look for more high-profile cases for event study. Go back before 2008, re-go-over already done dates
-\end{itemize}
+Discuss potential next steps.
 
 
 % The appendix command is issued once, prior to all appendices, if any.
@@ -304,9 +257,6 @@ Then spend some time discussing a similar thing but for potential perpetators - 
 \caption{High Profile Events, collected using Google Related Trends on high-trend days}
 \input{figures/hpevents.tex}
 \end{table}
-
-\clearpage
-\chapter{States included in FBI reporting}
 
 
 \end{document}
