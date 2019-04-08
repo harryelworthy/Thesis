@@ -2625,6 +2625,48 @@ Duplicates in terms of all variables
 . collapse (sum) rape* (firstnm) idt rdt, by(ino) fast
 
 . 
+. preserve
+
+. g has_rdt = 0
+
+. replace has_rdt = 1 if rdt != .
+(27,747 real changes made)
+
+. g has_idt = 0
+
+. replace has_idt = 1 if idt != .
+(129,279 real changes made)
+
+. collapse (count) rape, by(has_idt has_rdt) fast
+
+. save "clean/rdt_numbers", replace
+file clean/rdt_numbers.dta saved
+
+. restore
+
+. 
+. preserve
+
+. drop if rdt == .
+(128,075 observations deleted)
+
+. drop if idt == .
+(26,543 observations deleted)
+
+. g same_day = 0
+
+. replace same_day = 1 if rdt == idt
+(19 real changes made)
+
+. collapse (count) rape, by(same_day) fast
+
+. save "clean/sameday_numbers", replace
+(note: file clean/sameday_numbers.dta not found)
+file clean/sameday_numbers.dta saved
+
+. restore
+
+. 
 . compress
   variable idt was float now int
   variable rdt was float now int
@@ -2633,9 +2675,13 @@ Duplicates in terms of all variables
   (2,804,796 bytes saved)
 
 . 
-. collapse (sum) rape*  population1, by(rdt) fast
-variable population1 not found
-r(111);
+. collapse (sum) rape* , by(rdt) fast
 
+. 
+. save "clean/police_arrest", replace
+file clean/police_arrest.dta saved
+
+. 
+. 
+. 
 end of do-file
-r(111);

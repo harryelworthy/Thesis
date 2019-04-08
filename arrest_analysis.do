@@ -256,8 +256,8 @@ save "clean/rdt_numbers", replace
 restore
 
 preserve
-drop if rdt = .
-drop if idt = .
+drop if rdt == .
+drop if idt == .
 g same_day = 0
 replace same_day = 1 if rdt == idt
 collapse (count) rape, by(same_day) fast

@@ -1464,6 +1464,8 @@ merge 1:1 date using "processed/trends_events"
 
 
 g log_trend = log(value)
+g log_report_arrest = log(rape_arrest)
+g log_report_nonarrest = log(rape - rape_arrest)
 
 tsset date
 g dow = dow(date)
@@ -1514,3 +1516,52 @@ eststo: qui ivregress 2sls percent_arrest i.wy i.dow (log_trend = event_bin)
 eststo: qui ivregress 2sls percent_arrest i.wy (log_trend = i.ei)
 
 esttab using "figures/arrest_table.tex", se ar2 drop(*wy* *dow* _cons *ev_d* *lead* *year* *woy* *dow*) star(+ 0.10 * 0.05 ** 0.01 *** 0.001) replace
+
+estimates clear
+
+rename log_trend ev_d
+rename lead1 log_trend
+
+
+* OVERALL EFFECT
+
+* First Form
+estimates clear
+* Drop leads for actual regression
+eststo: qui reg log_report_arrest ev_d log_trend lead* i.year i.woy i.dow
+
+rename log_trend lead1
+rename ev_d log_trend
+
+
+* Second Form
+eststo: qui ivregress 2sls log_report_arrest i.wy i.dow (log_trend = event_bin)
+
+* Third form
+eststo: qui ivregress 2sls log_report_arrest i.wy (log_trend = i.ei)
+
+esttab, se ar2 drop(*wy* *dow* _cons *ev_d* *lead* *year* *woy* *dow*) star(+ 0.10 * 0.05 ** 0.01 *** 0.001) replace
+
+rename log_trend ev_d
+rename lead1 log_trend
+
+
+* OVERALL EFFECT
+
+* First Form
+estimates clear
+* Drop leads for actual regression
+eststo: qui reg log_report_nonarrest ev_d log_trend lead* i.year i.woy i.dow
+
+rename log_trend lead1
+rename ev_d log_trend
+
+
+* Second Form
+eststo: qui ivregress 2sls log_report_nonarrest i.wy i.dow (log_trend = event_bin)
+
+* Third form
+eststo: qui ivregress 2sls log_report_nonarrest i.wy (log_trend = i.ei)
+
+esttab, se ar2 drop(*wy* *dow* _cons *ev_d* *lead* *year* *woy* *dow*) star(+ 0.10 * 0.05 ** 0.01 *** 0.001) replace
+
