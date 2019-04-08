@@ -1437,3 +1437,80 @@ eststo: qui xtivreg log_reports i.wy i.dow (log_trend = event_bin), fe [aweight=
 
 
 esttab using "figures/state_daily_reports_trend_iv.tex", se ar2 keep(log_trend) replace
+
+
+
+
+
+
+***** ARREST ANALYSIS
+
+clear
+clear matrix
+clear mata
+set maxvar 10000
+set matsize 10000
+set emptycells drop
+
+
+use "clean/police_arrest"
+g percent_arrest = rape_arrest/rape
+rename rdt date
+merge 1:1 date using "clean/high_profile_events"
+replace event_date = 0 if event_date == .
+drop _merge
+
+merge 1:1 date using "processed/trends_events"
+
+
+g log_trend = log(value)
+
+tsset date
+g dow = dow(date)
+g woy = week(date)
+g year = year(date)
+g my = mofd(date)
+g wy = wofd(date)
+g twy = cond(mod(wy, 2) == 0, wy, wy - 1)
+
+forv i = 1(1)8{
+	g elag`i' = event_date[_n-`i']
+	g elead`i' = event_date[_n+`i']
+}
+
+forv i = 1(1)8{
+	g e2lag`i' = name[_n-`i']
+	g e2lead`i' = name[_n+`i']
+}
+
+gen event_bin = event_date + elag1 + elag2
+g event_bin2 = name + e2lag1 + e2lag2
+encode event_bin2, gen(ei)
+replace ei = 0 if ei == .
+
+* LAGS FOR TREND
+forv i = 1(1)7{
+	g lag`i' = log_trend[_n-`i']
+	g lead`i' = log_trend[_n+`i']
+}
+rename log_trend ev_d
+rename lead1 log_trend
+
+* OVERALL EFFECT
+
+* First Form
+estimates clear
+* Drop leads for actual regression
+eststo: qui reg percent_arrest ev_d log_trend lead* i.year i.woy i.dow
+
+rename log_trend lead1
+rename ev_d log_trend
+
+
+* Second Form
+eststo: qui ivregress 2sls percent_arrest i.wy i.dow (log_trend = event_bin)
+
+* Third form
+eststo: qui ivregress 2sls percent_arrest i.wy (log_trend = i.ei)
+
+esttab using "figures/arrest_table.tex", se ar2 drop(*wy* *dow* _cons *ev_d* *lead* *year* *woy* *dow*) star(+ 0.10 * 0.05 ** 0.01 *** 0.001) replace
