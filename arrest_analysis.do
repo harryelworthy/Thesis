@@ -246,6 +246,24 @@ duplicates drop
 
 collapse (sum) rape* (firstnm) idt rdt, by(ino) fast
 
+preserve
+g has_rdt = 0
+replace has_rdt = 1 if rdt != .
+g has_idt = 0
+replace has_idt = 1 if idt != .
+collapse (count) rape, by(has_idt has_rdt) fast
+save "clean/rdt_numbers", replace
+restore
+
+preserve
+drop if rdt = .
+drop if idt = .
+g same_day = 0
+replace same_day = 1 if rdt == idt
+collapse (count) rape, by(same_day) fast
+save "clean/sameday_numbers", replace
+restore
+
 compress
 
 collapse (sum) rape* , by(rdt) fast
