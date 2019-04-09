@@ -553,10 +553,10 @@
 }
 \def\ps@headings{
   \leftskip=0pt\rightskip=0pt
-  \let\@oddfoot\@empty
-  \let\@evenfoot\@empty
-  \def\@oddhead{{\small\textit{\MakeUppercase{ \hfil\@shortTitle\hfil\thepage}}}}
-  \def\@evenhead{{\small\textit{\MakeUppercase{\thepage\hfil}}}}
+  \def\@oddfoot{{\small\textit{\MakeUppercase{\hfil\thepage}}}}
+  \let\@evenhead\@empty
+  \let\@oddhead\@empty
+  \def\@evenfoot{{\small\textit{\MakeUppercase{\hfil\thepage}}}}
 }
 
 \if@JEP
@@ -697,26 +697,33 @@
 \setlength{\abstractWidth}{\textwidth}
 \addtolength{\abstractWidth}{-2\abstractIndent}
 \newcommand\@maketitle{%
-  \pagestyle{headings}
-  \thispagestyle{titlepage}
-  \begin{@twocolumnfalse}
-    \begin{center}%
-      \null\vskip\abovetitleskip
-      {\titlesize\sffamily\textbf{\@title} \par}%
-      \vskip 16pt%
-      {\authorsize\textit{By \ }\textsc{\@author}\par}
-      \draftDate
-      \vskip 24pt%
-    \end{center}%
-  \gdef\@JELKey{
-    \ifx\@JEL\@blank\else \par JEL: \@JEL\par \fi
-    \ifx\@Keywords\@blank\else Keywords: \@Keywords\par \fi}
-% these lines not indented to prevent unwanted space	  
-\noindent{\abstractbodysize\itshape\hspace{\abstractIndent}
-\parbox{\abstractWidth}{\noindent\@abstract\@JELKey\par}}
-    \vskip 24pt%
-  \end{@twocolumnfalse}
-  \par
+  \newpage
+  \thispagestyle{empty}
+  \null
+  \normalbaselines
+  \begin{center}%
+    {\openup 2pc \LARGE \textbf{\@title} \par}%
+    \vskip 1em%
+    {\large \textbf{Harry Elworthy} \par }%
+    {\large Professor Patrick Bayer, Faculty Advisor \par }%
+    \vskip 1em%
+	\vfill 
+	\par
+	\vspace{1em plus 5em minus 1em}
+   \par \normalbaselines \noindent
+   \vfill
+   \vfill
+   \vskip 5em%
+    {\normalsize \textit{
+      Honors Thesis submitted in partial fulfillment of the requirements for Graduation with Distinction in Economics in Trinity College of Duke University.} \par Duke University \par Durham, North Carolina}
+
+  \number\year
+  \end{center}% 
+  \clearpage
+
+  % Everyone gets a copyright! Yay!
+  \@copyrightpage
+
 }
 
 \if@PP
@@ -798,7 +805,7 @@
 % AER section numbering
 \setcounter{secnumdepth}{2}
 \renewcommand\thepart{\@Roman\c@part}
-\renewcommand\thesection{\@Roman\c@section}
+\renewcommand\thesection{\@section}
 \renewcommand\thesubsection{\@Alph\c@subsection}
 \renewcommand\thesubsubsection{\@arabic\c@subsubsection}
 \renewcommand\theparagraph{\thesubsubsection}
@@ -807,7 +814,7 @@
 \renewcommand\p@subsubsection{\thesubsection.}
 \renewcommand\p@paragraph{\thesubsubsection.}
 \renewcommand\p@subparagraph{\theparagraph.}
-\def\@seccntformat#1{\csname the#1\endcsname.\quad}
+\def\@seccntformat#1{\csname the#1\endcsname \quad}
 
 \if@PP
   \setcounter{secnumdepth}{2}
