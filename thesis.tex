@@ -236,17 +236,12 @@ The data does not allow me to investigate the impact that this reporting has on 
 
 \begin{figure}
 \includegraphics[width=\linewidth]{figures/police_trend_daily_logboth.eps}
-\caption{Time-Series Regression of FBI Reports of Sexual Assault on Google Trends for 'sexual assault', both variables in log form} \label{figure:police_trends_daily_logboth}
-\end{figure}
-
-\begin{figure}
-\includegraphics[width=\linewidth]{figures/police_trend_daily_logboth.eps}
-\caption{Time-Series Regression of FBI Reports of Sexual Assault on Google Trends for 'sexual assault', both variables in log form} \label{figure:police_trends_daily_logboth}
+\caption{Time-series regression of FBI reports of sexual assault on search volume for 'sexual assault', both variables in log form} \label{figure:police_trends_daily_logboth}
 \end{figure}
 
 \begin{figure}
 \includegraphics[width=\linewidth]{figures/events_trend.eps}
-\caption{Google Trends before and after High Profile Events} \label{figure:events_trend}
+\caption{Search volume before and after high profile events, log form.} \label{figure:events_trend}
 \end{figure}
 
 \begin{figure}
@@ -257,8 +252,19 @@ The data does not allow me to investigate the impact that this reporting has on 
 \clearpage
 
 \begin{table}[]
+\caption{Average daily reports of sexual assaults of different natures} \label{table:summary}
+\input{figures/summary.tex}
+\begin{tablenotes}
+This is for the states that report to the NIBRS, which hold about 25\% of the national population.
+\end{tablenotes}
+\end{table}
+
+\begin{table}[]
 \caption{Combined results of effect of increases in Google Trend on reports of sexual assault} \label{table:combinedtable}
 \input{figures/combinedtable.tex}
+\begin{tablenotes}
+N is for the first regression.
+\end{tablenotes}
 \end{table}
 
 \begin{table}[]
