@@ -738,7 +738,7 @@ forv i = 1(1)7{
 }
 
 eststo: qui reg value lead7 lead6 lead5 lead4 lead3 lead2 lead1 event_date lag* i.year i.woy i.dow
-coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("Google Trends before and after High-Profile Events") xlabel(1 "-7" 2 "-6" 3 "-5" 4 "-4" 5 "-3" 6 "-2" 7 "-1" 8 "0" 9 "1" 10 "2" 11 "3" 12 "4" 13 "5" 14 "6" 15 "7") xtitle("Days surrounding event at t=0") ytitle("Relative Google Trend") yline(0)
+coefplot(est1), vertical drop(*year* *woy* *dow _cons) yline(0) title("Search Volume before and after High-Profile Events") xlabel(1 "-7" 2 "-6" 3 "-5" 4 "-4" 5 "-3" 6 "-2" 7 "-1" 8 "0" 9 "1" 10 "2" 11 "3" 12 "4" 13 "5" 14 "6" 15 "7") xtitle("Days surrounding event at t=0") ytitle("log(volume)") yline(0)
 graph export "figures/events_trend.eps", as(eps) replace
 
 forv i = 1(1)7{
@@ -1255,7 +1255,7 @@ rename lead1 log_trend
 
 * First Form
 eststo: qui reg log_reports lag7 lag6 lag5 lag4 lag3 lag2 lag1 ev_d log_trend lead* i.year i.woy i.dow
-coefplot(est1), vertical drop(*year* *woy* *dow _cons) title("Reports to Police vs. Trends, Daily") xlabel(1 "-7" 2 "-6" 3 "-5" 4 "-4" 5 "-3" 6 "-2" 7 "-1" 8 "0" 9 "1" 10 "2" 11 "3" 12 "4" 13 "5" 14 "6" 15 "7") xtitle("Days surrounding event at t=0") ytitle("Estimated effect of Google Trends on Reports") yline(0)
+coefplot(est1), vertical drop(*year* *woy* *dow _cons) title("Reports to Police vs. Search Volume, Daily") xlabel(1 "-7" 2 "-6" 3 "-5" 4 "-4" 5 "-3" 6 "-2" 7 "-1" 8 "0" 9 "1" 10 "2" 11 "3" 12 "4" 13 "5" 14 "6" 15 "7") xtitle("Days surrounding event at t=0") ytitle("Estimated effect of Search Volume on Reports") yline(0)
 graph export "figures/police_trend_daily_logboth.eps", as(eps) replace
 estimates clear
 * Drop leads for actual regression
