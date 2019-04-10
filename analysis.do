@@ -926,7 +926,7 @@ eststo: qui reg rape lead_bin2 lead_bin1 event_bin lag_bin* i.year i.woy i.dow
 *eststo: qui reg rape lead_bin4 lead_bin3 lead_bin2 lead_bin1 event_bin lag_bin* i.wy
 *eststo: qui reg rape lead_bin4 lead_bin3 lead_bin2 lead_bin1 event_bin lag_bin* i.twy
 test event_bin
-coefplot(est1), vertical drop(*year* *woy* *dow *my* *wy* _cons) yline(0) title("Reports to Police  before and after High-Profile Events, Binned") xlabel(1 "-2" 2 "-1" 3 "0" 4 "1" 5 "2") xtitle("3 day bins surrounding event, with t=0 being event date and two lags") ytitle("Reports to Police") yline(0)
+coefplot(est1), vertical drop(*year* *woy* *dow *my* *wy* _cons) yline(0) title("Reports to Police before and after High-Profile Events, Binned") xlabel(1 "-2" 2 "-1" 3 "0" 4 "1" 5 "2") xtitle("3 day bins surrounding event, with t=0 being event date and two lags") ytitle("Reports to Police") yline(0)
 graph export "figures/events_police_binned.eps", as(eps) replace
 
 esttab, se ar2 drop(*year* *dow* *woy* *my* )
